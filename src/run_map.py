@@ -17,7 +17,7 @@ import fixtures
 from gpml_ref import Path, match
 from suite import CASES
 from engines_adapters import (AgeAdapter, BoltAdapter, DuckPGQAdapter,
-                              EngineError, KuzuAdapter)
+                              EngineError, KuzuAdapter, SamyamaAdapter)
 
 REPEATS = 3
 
@@ -42,6 +42,7 @@ DECLARED_MODE = {
     "apache-age": "TRAIL",
     "kuzu": "WALK",
     "duckpgq": None,        # None = the dialect *is* the standard; no second axis
+    "samyama-graph": "TRAIL",
 }
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -122,6 +123,10 @@ def build_engines(workdir):
                                   "user=postgres password=postgres"))
     except Exception as e:
         print(f"  apache-age unavailable: {e}", file=sys.stderr)
+    try:
+        engines.append(SamyamaAdapter())
+    except Exception as e:
+        print(f"  samyama-graph unavailable: {e}", file=sys.stderr)
     return engines
 
 

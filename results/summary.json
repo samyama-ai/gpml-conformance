@@ -1,7 +1,9 @@
 {
   "n_constructs": 17,
-  "n_engines": 5,
-  "n_cells": 85,
+  "n_engines": 6,
+  "n_engines_external": 5,
+  "n_cells": 102,
+  "n_cells_external": 85,
   "repeats": 3,
   "conforms": 40,
   "diverges": 15,
@@ -33,13 +35,16 @@
   },
   "nondeterministic_selector_cells": 2,
   "constructs_measured": 14,
-  "metamorphic_violations_total": 39,
+  "metamorphic_violations_total": 63,
+  "metamorphic_violations_external": 39,
+  "metamorphic_violations_ours": 24,
   "metamorphic_violations_by_engine": {
     "kuzu": 6,
     "duckpgq": 33,
     "neo4j": 0,
     "memgraph": 0,
-    "apache-age": 0
+    "apache-age": 0,
+    "samyama-graph": 24
   },
   "metamorphic_clean_engines": [
     "neo4j",
@@ -51,7 +56,8 @@
     "duckpgq": "1.4.1",
     "neo4j": "Neo4j Kernel 5.26.30",
     "memgraph": "Memgraph 5.9.0",
-    "apache-age": "age 1.8.0"
+    "apache-age": "age 1.8.0",
+    "samyama-graph": "samyama 1.7.1"
   },
   "per_engine": {
     "kuzu": {
@@ -93,6 +99,14 @@
       "inexpressible": 5,
       "s1": 0.1818,
       "s2": 0.6667
+    },
+    "samyama-graph": {
+      "conforms": 8,
+      "diverges": 4,
+      "rejects": 0,
+      "inexpressible": 5,
+      "s1": 0.3333,
+      "s2": 1.0
     }
   }
 }

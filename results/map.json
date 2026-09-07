@@ -24,6 +24,11 @@
       "name": "apache-age",
       "dialect": "cypher",
       "version": "age 1.8.0"
+    },
+    {
+      "name": "samyama-graph",
+      "dialect": "cypher",
+      "version": "samyama 1.7.1"
     }
   ],
   "repeats": 3,
@@ -118,6 +123,24 @@
       }
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "mode-walk-bounded",
+      "engine": "samyama-graph",
+      "verdict": "DIVERGES",
+      "detail": "expected {('m', 'n'): 2, ('m', 'm'): 2}, observed {('m', 'n'): 1, ('m', 'm'): 1}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "reference": {
+        "m->n": 2,
+        "m->m": 2
+      }
+    },
+    {
       "declared_mode": "WALK",
       "verdict_vs_declared": "CONFORMS",
       "detail_vs_declared": "",
@@ -197,6 +220,24 @@
       }
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "mode-trail-bounded",
+      "engine": "samyama-graph",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "reference": {
+        "m->n": 1,
+        "m->m": 1
+      }
+    },
+    {
       "case": "mode-acyclic-bounded",
       "engine": "kuzu",
       "verdict": "INEXPRESSIBLE",
@@ -228,6 +269,12 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "case": "mode-acyclic-bounded",
+      "engine": "samyama-graph",
+      "verdict": "INEXPRESSIBLE",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
       "case": "mode-simple-bounded",
       "engine": "kuzu",
       "verdict": "INEXPRESSIBLE",
@@ -255,6 +302,12 @@
     {
       "case": "mode-simple-bounded",
       "engine": "apache-age",
+      "verdict": "INEXPRESSIBLE",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "mode-simple-bounded",
+      "engine": "samyama-graph",
       "verdict": "INEXPRESSIBLE",
       "detail": "no surface syntax in this dialect"
     },
@@ -322,6 +375,20 @@
       "detail_vs_declared": "",
       "case": "walk-revisits-same-edge",
       "engine": "apache-age",
+      "verdict": "DIVERGES",
+      "detail": "expected {('u', 'u'): 1}, observed {}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, y.eid AS t",
+      "observed": {},
+      "reference": {
+        "u->u": 1
+      }
+    },
+    {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "walk-revisits-same-edge",
+      "engine": "samyama-graph",
       "verdict": "DIVERGES",
       "detail": "expected {('u', 'u'): 1}, observed {}",
       "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, y.eid AS t",
@@ -431,6 +498,26 @@
       }
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "DIVERGES",
+      "detail_vs_declared": "expected {('a', 'a'): 1, ('a', 'b'): 2, ('a', 'c'): 2}, observed {('a', 'a'): 1, ('a', 'b'): 1, ('a', 'c'): 1}",
+      "case": "quant-zero-lower-bound",
+      "engine": "samyama-graph",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a', 'a'): 1, ('a', 'b'): 2, ('a', 'c'): 2}, observed {('a', 'a'): 1, ('a', 'b'): 1, ('a', 'c'): 1}",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "reference": {
+        "a->a": 1,
+        "a->b": 2,
+        "a->c": 2
+      }
+    },
+    {
       "declared_mode": "WALK",
       "verdict_vs_declared": "CONFORMS",
       "detail_vs_declared": "",
@@ -500,6 +587,22 @@
       "detail_vs_declared": "",
       "case": "quant-zero-zero",
       "engine": "apache-age",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1
+      },
+      "reference": {
+        "a->a": 1
+      }
+    },
+    {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "quant-zero-zero",
+      "engine": "samyama-graph",
       "verdict": "CONFORMS",
       "detail": "",
       "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
@@ -591,6 +694,22 @@
       }
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "parallel-edges",
+      "engine": "samyama-graph",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->b": 2
+      },
+      "reference": {
+        "a->b": 2
+      }
+    },
+    {
       "declared_mode": "WALK",
       "verdict_vs_declared": "CONFORMS",
       "detail_vs_declared": "",
@@ -670,6 +789,24 @@
       }
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "self-loop-trail",
+      "engine": "samyama-graph",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN u.eid AS s, v.eid AS t",
+      "observed": {
+        "x->x": 2,
+        "x->y": 2
+      },
+      "reference": {
+        "x->x": 2,
+        "x->y": 2
+      }
+    },
+    {
       "case": "self-loop-acyclic",
       "engine": "kuzu",
       "verdict": "INEXPRESSIBLE",
@@ -697,6 +834,12 @@
     {
       "case": "self-loop-acyclic",
       "engine": "apache-age",
+      "verdict": "INEXPRESSIBLE",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "self-loop-acyclic",
+      "engine": "samyama-graph",
       "verdict": "INEXPRESSIBLE",
       "detail": "no surface syntax in this dialect"
     },
@@ -791,6 +934,24 @@
       }
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "direction-any",
+      "engine": "samyama-graph",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "b->a": 2,
+        "b->c": 1
+      },
+      "reference": {
+        "b->a": 2,
+        "b->c": 1
+      }
+    },
+    {
       "declared_mode": "WALK",
       "verdict_vs_declared": "CONFORMS",
       "detail_vs_declared": "",
@@ -871,6 +1032,22 @@
       }
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "direction-left",
+      "engine": "samyama-graph",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "b->a": 2
+      },
+      "reference": {
+        "b->a": 2
+      }
+    },
+    {
       "case": "interior-node-unconstrained",
       "engine": "kuzu",
       "verdict": "REJECTS",
@@ -922,6 +1099,22 @@
       "verdict": "REJECTS",
       "detail": "SyntaxError: syntax error at or near \":\"\nLINE 1: ...cypher('cfgraph', $$ MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHE...\n                                                             ^\n",
       "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, y.eid AS t"
+    },
+    {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "interior-node-unconstrained",
+      "engine": "samyama-graph",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "p->r": 1
+      },
+      "reference": {
+        "p->r": 1
+      }
     },
     {
       "declared_mode": "WALK",
@@ -1011,6 +1204,26 @@
       }
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "selector-all-shortest",
+      "engine": "samyama-graph",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..3]->(y:N) WHERE x.name='a' WITH x, y, min(length(p)) AS m MATCH q=(x)-[:E*1..3]->(y) WHERE length(q)=m RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->b": 2,
+        "a->c": 2,
+        "a->a": 2
+      }
+    },
+    {
       "case": "selector-any-shortest",
       "engine": "kuzu",
       "verdict": "INEXPRESSIBLE",
@@ -1050,6 +1263,12 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "case": "selector-any-shortest",
+      "engine": "samyama-graph",
+      "verdict": "INEXPRESSIBLE",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
       "case": "selector-any",
       "engine": "kuzu",
       "verdict": "INEXPRESSIBLE",
@@ -1085,6 +1304,12 @@
     {
       "case": "selector-any",
       "engine": "apache-age",
+      "verdict": "INEXPRESSIBLE",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "selector-any",
+      "engine": "samyama-graph",
       "verdict": "INEXPRESSIBLE",
       "detail": "no surface syntax in this dialect"
     },
@@ -1154,6 +1379,22 @@
       "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN a.eid AS s, b.eid AS t",
       "observed": {
         "a6->a2": 3
+      },
+      "reference": {
+        "a6->a2": 3
+      }
+    },
+    {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "DIVERGES",
+      "detail_vs_declared": "expected {('a6', 'a2'): 3}, observed {('a6', 'a2'): 1}",
+      "case": "paper-trail-unbounded",
+      "engine": "samyama-graph",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a6', 'a2'): 3}, observed {('a6', 'a2'): 1}",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN a.eid AS s, b.eid AS t",
+      "observed": {
+        "a6->a2": 1
       },
       "reference": {
         "a6->a2": 3

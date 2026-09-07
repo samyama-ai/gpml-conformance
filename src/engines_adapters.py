@@ -225,3 +225,118 @@ class AgeAdapter:
                 pass
             raise EngineError(f"{type(ex).__name__}: {ex}") from ex
         return _counter([(str(a).strip('"'), str(b).strip('"')) for a, b in rows])
+
+
+class SamyamaAdapter:
+    """Samyama-Graph, over its HTTP query endpoint.
+
+    This is the authors' own engine. It is measured by the same suite as every other
+    row and excluded from the paper's headline statistics; see the conflict-of-interest
+    note in README.md.
+
+    It owns its server process and restarts it with --ephemeral for every fixture,
+    rather than resetting a shared instance with `MATCH (n) DETACH DELETE n`. During
+    development a long-lived shared instance was found holding hundreds of edges with
+    dangling endpoints, which silently contaminated every measurement taken against it.
+    We could not reduce that to a reproducible defect -- DETACH DELETE resets correctly
+    in isolation across all six fixtures -- so no bug is claimed. A fresh process is
+    simply the only reset whose semantics are unambiguous, and the measurement should
+    not rest on one we could not explain.
+    """
+    name = "samyama-graph"
+    dialect = "cypher"
+
+    def __init__(self, binary: str | None = None, port: int = 8099,
+                 resp_port: int = 6399):
+        import os
+        import urllib.request
+        self._urllib = urllib.request
+        self.binary = binary or os.environ.get(
+            "SAMYAMA_BIN",
+            os.path.expanduser("~/projects/graph_ws/samyama-graph/target/release/samyama"))
+        if not os.path.exists(self.binary):
+            raise FileNotFoundError(self.binary)
+        self.port, self.resp_port = port, resp_port
+        self.base_url = f"http://localhost:{port}"
+        self.proc = None
+        self._start()
+        self.version = self._version()
+
+    # -- process ------------------------------------------------------------
+    def _start(self):
+        import subprocess, time
+        self._stop()
+        self.proc = subprocess.Popen(
+            [self.binary, "--port", str(self.resp_port),
+             "--http-port", str(self.port), "--ephemeral"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            start_new_session=True)
+        for _ in range(120):
+            time.sleep(0.25)
+            try:
+                self._post("RETURN 1")
+                return
+            except Exception:
+                continue
+        raise EngineError("samyama did not become ready")
+
+    def _stop(self):
+        import time
+        if getattr(self, "proc", None) is not None:
+            self.proc.terminate()
+            try:
+                self.proc.wait(timeout=10)
+            except Exception:
+                self.proc.kill()
+            self.proc = None
+            time.sleep(0.3)
+
+    def __del__(self):
+        try:
+            self._stop()
+        except Exception:
+            pass
+
+    # -- protocol -----------------------------------------------------------
+    def _post(self, query: str):
+        import json as _json
+        req = self._urllib.Request(
+            f"{self.base_url}/api/query",
+            data=_json.dumps({"query": query}).encode(),
+            headers={"Content-Type": "application/json"})
+        with self._urllib.urlopen(req, timeout=30) as r:
+            return _json.loads(r.read().decode())
+
+    def _version(self):
+        try:
+            return f"samyama {self._post('RETURN 1')['engine_version']}"
+        except Exception:
+            return "unknown"
+
+    def load(self, g: PropertyGraph, primary: str, edge_label: str):
+        self._start()          # a fresh --ephemeral process is the only trusted reset
+        for n in g.nodes.values():
+            labels = "".join(f":{l}" for l in sorted(n.labels))
+            props = ", ".join(f'{k}: "{v}"' for k, v in n.props)
+            sep = ", " if props else ""
+            self._post(f'CREATE (x{labels} {{eid: "{n.id}"{sep}{props}}})')
+        for e in g.edges.values():
+            lbl = sorted(e.labels)[0] if e.labels else "REL"
+            self._post(f'MATCH (a),(b) WHERE a.eid="{e.src}" AND b.eid="{e.dst}" '
+                       f'CREATE (a)-[:{lbl} {{eid:"{e.id}"}}]->(b)')
+        got = len(self._post(
+            'MATCH (x)-[r]->(y) RETURN x.eid, y.eid').get("records") or [])
+        if got != len(g.edges):
+            raise EngineError(
+                f"load verification failed: {got} edges present, {len(g.edges)} expected")
+
+    def run(self, q: str) -> Answer:
+        # Samyama's Cypher wants double-quoted string literals.
+        q = q.replace("'", '"')
+        try:
+            res = self._post(q)
+        except Exception as ex:
+            raise EngineError(f"{type(ex).__name__}: {ex}") from ex
+        if isinstance(res, dict) and res.get("error"):
+            raise EngineError(str(res["error"])[:300])
+        return _counter(res.get("records") or [])

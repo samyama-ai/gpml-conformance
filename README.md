@@ -19,7 +19,7 @@ Two questions, both previously unmeasured:
 | `src/gpml_ref.py` | The reference semantics. Restrictors (WALK/TRAIL/ACYCLIC/SIMPLE), selectors (ALL/ANY/ALL SHORTEST/ANY SHORTEST), quantified segments. Consults no engine. |
 | `src/suite.py` | 17 conformance cases: the abstract pattern plus the natural rendering in each dialect. |
 | `src/metamorphic.py` | Three relations that hold under *every* path mode, so they need no reference at all. |
-| `src/engines_adapters.py` | Adapters for Kùzu, DuckPGQ, Neo4j, Memgraph, Apache AGE. |
+| `src/engines_adapters.py` | Adapters for Kùzu, DuckPGQ, Neo4j, Memgraph, Apache AGE, and Samyama-Graph. |
 | `tests/` | Gate B: the reference must reproduce the worked answers published in the standard's reference exposition. |
 | `reproducers/` | Standalone minimal reproducers for each engine defect found. |
 | `RESULTS.md` | Generated. The map and the statistics. |
@@ -89,6 +89,12 @@ claim about performance.
 This work was produced at Samyama, which develops a property-graph engine. That engine
 is measured by the same suite, reported as one row, and excluded from the headline
 statistics. No engine's output was used to derive any expected answer.
+
+For what that is worth in practice: Samyama-Graph 1.7.1 diverges on four constructs
+with a silence ratio of 1.00, the joint worst here, and the metamorphic layer records 24
+violations against it — more than Kùzu's six. Two of its divergences are departures
+from the path mode we document ourselves, and they are filed against our own tracker
+with the reproducer in `reproducers/samyama-zero-lower-bound.py`.
 
 ## Licence
 

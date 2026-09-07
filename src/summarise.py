@@ -8,6 +8,10 @@ from suite import CASES
 
 BYID = {c.id: c for c in CASES}
 
+# The authors' own engine. It is measured by the same suite and shown as a row, but it
+# is excluded from every headline statistic; see the conflict-of-interest note.
+OURS = {"samyama-graph"}
+
 SYM = {"CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": "–",
        "NONDETERMINISTIC": "?"}
 
@@ -44,7 +48,9 @@ def main():
     acc = {e: Counter() for e in engines}
     for c in m["cells"]:
         acc[c["engine"]][c["verdict"]] += 1
-    tot = Counter(c["verdict"] for c in m["cells"])
+    external = [c for c in m["cells"] if c["engine"] not in OURS]
+    tot = Counter(c["verdict"] for c in external)
+    ext_engines = [e for e in engines if e not in OURS]
 
     L.append("## S1 — divergence rate, and S2 — silence ratio\n")
     L.append("S1 is divergences over the cells the engine answered. S2 is divergences "
@@ -58,13 +64,14 @@ def main():
         den = a["DIVERGES"] + a["REJECTS"]
         s1 = f"{a['DIVERGES']/answered:.2f}" if answered else "n/a"
         s2 = f"{a['DIVERGES']/den:.2f}" if den else "n/a"
-        L.append(f"| {e} | {a['CONFORMS']} | {a['DIVERGES']} | {a['REJECTS']} | "
+        star = " *(ours — excluded from the totals)*" if e in OURS else ""
+        L.append(f"| {e}{star} | {a['CONFORMS']} | {a['DIVERGES']} | {a['REJECTS']} | "
                  f"{a['INEXPRESSIBLE']} | {s1} | {s2} |")
     answered = tot["CONFORMS"] + tot["DIVERGES"]
     den = tot["DIVERGES"] + tot["REJECTS"]
-    L.append(f"| **all** | {tot['CONFORMS']} | {tot['DIVERGES']} | {tot['REJECTS']} | "
-             f"{tot['INEXPRESSIBLE']} | **{tot['DIVERGES']/answered:.2f}** | "
-             f"**{tot['DIVERGES']/den:.2f}** |")
+    L.append(f"| **all five external engines** | {tot['CONFORMS']} | {tot['DIVERGES']} | "
+             f"{tot['REJECTS']} | {tot['INEXPRESSIBLE']} | "
+             f"**{tot['DIVERGES']/answered:.2f}** | **{tot['DIVERGES']/den:.2f}** |")
 
     L.append("\n## Attribution: language difference or implementation defect?\n")
     L.append("A divergence from the ISO reference is only a defect if the engine also "
@@ -73,7 +80,7 @@ def main():
     L.append("| construct | engine | vs ISO reference | vs engine's declared mode |")
     L.append("|---|---|---|---|")
     spec = impl = 0
-    for c in m["cells"]:
+    for c in external:
         if c["verdict"] != "DIVERGES":
             continue
         vd = c.get("verdict_vs_declared")
@@ -99,7 +106,7 @@ def main():
     L.append("|---|---:|---|")
     for c in CASES:
         classes = defaultdict(list)
-        for e in engines:
+        for e in ext_engines:
             cell = grid[(c.id, e)]
             if cell["verdict"] in ("CONFORMS", "DIVERGES"):
                 classes[json.dumps(cell.get("observed"), sort_keys=True)].append(e)
@@ -132,7 +139,7 @@ def main():
     classes_per_construct = {}
     for c in CASES:
         cl = set()
-        for e in engines:
+        for e in ext_engines:
             cell = grid[(c.id, e)]
             if cell["verdict"] in ("CONFORMS", "DIVERGES"):
                 cl.add(json.dumps(cell.get("observed"), sort_keys=True))
@@ -141,7 +148,9 @@ def main():
     summary = {
         "n_constructs": len(CASES),
         "n_engines": len(engines),
+        "n_engines_external": len(ext_engines),
         "n_cells": len(m["cells"]),
+        "n_cells_external": len(external),
         "repeats": m["repeats"],
         "conforms": tot["CONFORMS"],
         "diverges": tot["DIVERGES"],
@@ -159,11 +168,15 @@ def main():
         # NC3: cells whose case uses a nondeterministic selector, scored against the
         # admissible set and the per-partition count rather than one chosen path.
         "nondeterministic_selector_cells": sum(
-            1 for c in m["cells"]
+            1 for c in external
             if "ANY" in BYID[c["case"]].ref.selector
             and c["verdict"] in ("CONFORMS", "DIVERGES")),
         "constructs_measured": len(classes_per_construct),
         "metamorphic_violations_total": len(mm["violations"]),
+        "metamorphic_violations_external": sum(
+            1 for v in mm["violations"] if v["engine"] not in OURS),
+        "metamorphic_violations_ours": sum(
+            1 for v in mm["violations"] if v["engine"] in OURS),
         "metamorphic_violations_by_engine": {e: per.get(e, 0) for e in engines},
         "metamorphic_clean_engines": [e for e in engines if per.get(e, 0) == 0],
         "engines": {e["name"]: e["version"] for e in m["engines"]},
