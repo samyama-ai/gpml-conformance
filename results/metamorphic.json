@@ -1,0 +1,739 @@
+{
+  "pairs": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      0,
+      4
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      4
+    ]
+  ],
+  "violations": [
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "a->a": 4,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "right_answer": {
+        "a->a": 3,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "kuzu",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "a->a": 4,
+        "a->b": 6,
+        "a->c": 2
+      },
+      "right_answer": {
+        "a->a": 3,
+        "a->b": 6,
+        "a->c": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "kuzu",
+      "start": "a"
+    },
+    {
+      "relation": "M1 upper-bound monotonicity",
+      "left": "{0,1}",
+      "right": "{0,2}",
+      "left_answer": {
+        "a->b": 2
+      },
+      "right_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "explanation": "widening the upper bound dropped an answer, which no path mode allows",
+      "fixture": "micro",
+      "engine": "duckpgq",
+      "start": "a"
+    },
+    {
+      "relation": "M1 upper-bound monotonicity",
+      "left": "{1,1}",
+      "right": "{1,2}",
+      "left_answer": {
+        "a->b": 2
+      },
+      "right_answer": {
+        "a->b": 1,
+        "a->c": 1
+      },
+      "explanation": "widening the upper bound dropped an answer, which no path mode allows",
+      "fixture": "micro",
+      "engine": "duckpgq",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,1}",
+      "right": "{0,0} + {1,1}",
+      "left_answer": {
+        "a->b": 2
+      },
+      "right_answer": {
+        "a->b": 4
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "duckpgq",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "right_answer": {
+        "a->b": 4,
+        "a->c": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "duckpgq",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{1,2}",
+      "right": "{1,1} + {2,2}",
+      "left_answer": {
+        "a->b": 1,
+        "a->c": 1
+      },
+      "right_answer": {
+        "a->b": 2,
+        "a->c": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "duckpgq",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "right_answer": {
+        "a->b": 4,
+        "a->c": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "duckpgq",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{1,3}",
+      "right": "{1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "a->b": 1,
+        "a->c": 1
+      },
+      "right_answer": {
+        "a->b": 2,
+        "a->c": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "duckpgq",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "right_answer": {
+        "a->b": 4,
+        "a->c": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "duckpgq",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{1,4}",
+      "right": "{1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "a->b": 1,
+        "a->c": 1
+      },
+      "right_answer": {
+        "a->b": 2,
+        "a->c": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "duckpgq",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "m->m": 4,
+        "m->n": 2
+      },
+      "right_answer": {
+        "m->m": 3,
+        "m->n": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "cycle2",
+      "engine": "kuzu",
+      "start": "m"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,1}",
+      "right": "{0,0} + {1,1}",
+      "left_answer": {
+        "m->n": 1
+      },
+      "right_answer": {
+        "m->n": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "cycle2",
+      "engine": "duckpgq",
+      "start": "m"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "right_answer": {
+        "m->n": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "cycle2",
+      "engine": "duckpgq",
+      "start": "m"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "right_answer": {
+        "m->n": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "cycle2",
+      "engine": "duckpgq",
+      "start": "m"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "right_answer": {
+        "m->n": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "cycle2",
+      "engine": "duckpgq",
+      "start": "m"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "x->x": 6,
+        "x->y": 2
+      },
+      "right_answer": {
+        "x->x": 4,
+        "x->y": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "kuzu",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "x->x": 12,
+        "x->y": 4
+      },
+      "right_answer": {
+        "x->x": 7,
+        "x->y": 4
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "kuzu",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "x->x": 22,
+        "x->y": 7
+      },
+      "right_answer": {
+        "x->x": 12,
+        "x->y": 7
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "kuzu",
+      "start": "x"
+    },
+    {
+      "relation": "M1 upper-bound monotonicity",
+      "left": "{1,1}",
+      "right": "{1,2}",
+      "left_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->y": 1
+      },
+      "explanation": "widening the upper bound dropped an answer, which no path mode allows",
+      "fixture": "loop",
+      "engine": "duckpgq",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,1}",
+      "right": "{0,0} + {1,1}",
+      "left_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 2,
+        "x->y": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "duckpgq",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 2,
+        "x->y": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "duckpgq",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{1,2}",
+      "right": "{1,1} + {2,2}",
+      "left_answer": {
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "duckpgq",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 2,
+        "x->y": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "duckpgq",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{1,3}",
+      "right": "{1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "duckpgq",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 2,
+        "x->y": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "duckpgq",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{1,4}",
+      "right": "{1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "duckpgq",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,1}",
+      "right": "{0,0} + {1,1}",
+      "left_answer": {
+        "u->v": 1
+      },
+      "right_answer": {
+        "u->v": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "single",
+      "engine": "duckpgq",
+      "start": "u"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "u->u": 1,
+        "u->v": 1
+      },
+      "right_answer": {
+        "u->v": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "single",
+      "engine": "duckpgq",
+      "start": "u"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "u->u": 1,
+        "u->v": 1
+      },
+      "right_answer": {
+        "u->v": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "single",
+      "engine": "duckpgq",
+      "start": "u"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "u->u": 1,
+        "u->v": 1
+      },
+      "right_answer": {
+        "u->v": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "single",
+      "engine": "duckpgq",
+      "start": "u"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,1}",
+      "right": "{0,0} + {1,1}",
+      "left_answer": {
+        "p->q": 1
+      },
+      "right_answer": {
+        "p->q": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "tagged",
+      "engine": "duckpgq",
+      "start": "p"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "p->p": 1,
+        "p->q": 1,
+        "p->r": 1
+      },
+      "right_answer": {
+        "p->q": 2,
+        "p->r": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "tagged",
+      "engine": "duckpgq",
+      "start": "p"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "p->p": 1,
+        "p->q": 1,
+        "p->r": 1
+      },
+      "right_answer": {
+        "p->q": 2,
+        "p->r": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "tagged",
+      "engine": "duckpgq",
+      "start": "p"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "p->p": 1,
+        "p->q": 1,
+        "p->r": 1
+      },
+      "right_answer": {
+        "p->q": 2,
+        "p->r": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "tagged",
+      "engine": "duckpgq",
+      "start": "p"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,1}",
+      "right": "{0,0} + {1,1}",
+      "left_answer": {
+        "a6->a3": 1,
+        "a6->a5": 1
+      },
+      "right_answer": {
+        "a6->a3": 2,
+        "a6->a5": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "fig1",
+      "engine": "duckpgq",
+      "start": "a6"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 1,
+        "a6->a5": 1,
+        "a6->a6": 1
+      },
+      "right_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 2,
+        "a6->a5": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "fig1",
+      "engine": "duckpgq",
+      "start": "a6"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 1,
+        "a6->a4": 1,
+        "a6->a5": 1,
+        "a6->a6": 1
+      },
+      "right_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 2,
+        "a6->a4": 1,
+        "a6->a5": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "fig1",
+      "engine": "duckpgq",
+      "start": "a6"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 1,
+        "a6->a4": 1,
+        "a6->a5": 1,
+        "a6->a6": 1
+      },
+      "right_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 2,
+        "a6->a4": 1,
+        "a6->a5": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "fig1",
+      "engine": "duckpgq",
+      "start": "a6"
+    }
+  ]
+}

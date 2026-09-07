@@ -1,0 +1,5 @@
+duckdb==1.4.1
+kuzu==0.11.3
+neo4j>=5.20
+psycopg2-binary>=2.9
+pytest>=8.0
