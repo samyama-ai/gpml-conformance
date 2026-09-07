@@ -93,7 +93,8 @@ statistics. No engine's output was used to derive any expected answer.
 For what that is worth in practice: Samyama-Graph 1.7.1 diverges on four constructs
 with a silence ratio of 1.00, the joint worst here, and the metamorphic layer records 24
 violations against it — more than Kùzu's six. Two of its divergences are departures
-from the path mode we document ourselves, and they are filed against our own tracker
+from the path mode we document ourselves, and they are filed
+publicly as [samyama-graph#1140](https://github.com/samyama-ai/samyama-graph/issues/1140)
 with the reproducer in `reproducers/samyama-zero-lower-bound.py`.
 
 ## Licence
