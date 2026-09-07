@@ -8,7 +8,7 @@ property-graph engines against it.
 Two questions, both previously unmeasured:
 
 1. **When five engines run the same standard-defined pattern, do they return the same
-   answer?** For 8 of 17 constructs, no.
+   answer?** For 7 of 17 constructs, no.
 2. **When they disagree, is the user told?** 60% of the time, no: the query runs and
    returns a different multiset, with no error.
 

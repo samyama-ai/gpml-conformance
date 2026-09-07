@@ -6,6 +6,8 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(HERE, "src"))
 from suite import CASES
 
+BYID = {c.id: c for c in CASES}
+
 SYM = {"CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": "–",
        "NONDETERMINISTIC": "?"}
 
@@ -123,6 +125,63 @@ def main():
     dest = os.path.join(HERE, "RESULTS.md")
     open(dest, "w").write("\n".join(L) + "\n")
     print(f"wrote {dest}")
+
+    # Every number quoted in the paper, as a machine-readable key. The paper's
+    # claims registry resolves against this file, so a number cannot drift from the
+    # measurement that produced it.
+    classes_per_construct = {}
+    for c in CASES:
+        cl = set()
+        for e in engines:
+            cell = grid[(c.id, e)]
+            if cell["verdict"] in ("CONFORMS", "DIVERGES"):
+                cl.add(json.dumps(cell.get("observed"), sort_keys=True))
+        if cl:
+            classes_per_construct[c.id] = len(cl)
+    summary = {
+        "n_constructs": len(CASES),
+        "n_engines": len(engines),
+        "n_cells": len(m["cells"]),
+        "repeats": m["repeats"],
+        "conforms": tot["CONFORMS"],
+        "diverges": tot["DIVERGES"],
+        "rejects": tot["REJECTS"],
+        "inexpressible": tot["INEXPRESSIBLE"],
+        "nondeterministic": tot["NONDETERMINISTIC"],
+        "s1_divergence_rate": round(tot["DIVERGES"] / answered, 4),
+        "s2_silence_ratio": round(tot["DIVERGES"] / den, 4),
+        "disagreements": den,
+        "divergences_specified": spec,
+        "divergences_defect": impl,
+        "constructs_multi_class": sum(1 for v in classes_per_construct.values() if v > 1),
+        "constructs_single_class": sum(1 for v in classes_per_construct.values() if v == 1),
+        "classes_per_construct": classes_per_construct,
+        # NC3: cells whose case uses a nondeterministic selector, scored against the
+        # admissible set and the per-partition count rather than one chosen path.
+        "nondeterministic_selector_cells": sum(
+            1 for c in m["cells"]
+            if "ANY" in BYID[c["case"]].ref.selector
+            and c["verdict"] in ("CONFORMS", "DIVERGES")),
+        "constructs_measured": len(classes_per_construct),
+        "metamorphic_violations_total": len(mm["violations"]),
+        "metamorphic_violations_by_engine": {e: per.get(e, 0) for e in engines},
+        "metamorphic_clean_engines": [e for e in engines if per.get(e, 0) == 0],
+        "engines": {e["name"]: e["version"] for e in m["engines"]},
+        "per_engine": {
+            e: {
+                "conforms": acc[e]["CONFORMS"], "diverges": acc[e]["DIVERGES"],
+                "rejects": acc[e]["REJECTS"], "inexpressible": acc[e]["INEXPRESSIBLE"],
+                "s1": (round(acc[e]["DIVERGES"] /
+                             (acc[e]["CONFORMS"] + acc[e]["DIVERGES"]), 4)
+                       if acc[e]["CONFORMS"] + acc[e]["DIVERGES"] else None),
+                "s2": (round(acc[e]["DIVERGES"] /
+                             (acc[e]["DIVERGES"] + acc[e]["REJECTS"]), 4)
+                       if acc[e]["DIVERGES"] + acc[e]["REJECTS"] else None),
+            } for e in engines},
+    }
+    sdest = os.path.join(HERE, "results", "summary.json")
+    json.dump(summary, open(sdest, "w"), indent=2)
+    print(f"wrote {sdest}")
 
 
 if __name__ == "__main__":

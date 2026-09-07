@@ -1,0 +1,98 @@
+{
+  "n_constructs": 17,
+  "n_engines": 5,
+  "n_cells": 85,
+  "repeats": 3,
+  "conforms": 40,
+  "diverges": 15,
+  "rejects": 10,
+  "inexpressible": 20,
+  "nondeterministic": 0,
+  "s1_divergence_rate": 0.2727,
+  "s2_silence_ratio": 0.6,
+  "disagreements": 25,
+  "divergences_specified": 9,
+  "divergences_defect": 6,
+  "constructs_multi_class": 7,
+  "constructs_single_class": 7,
+  "classes_per_construct": {
+    "mode-walk-bounded": 3,
+    "mode-trail-bounded": 2,
+    "walk-revisits-same-edge": 2,
+    "quant-zero-lower-bound": 2,
+    "quant-zero-zero": 2,
+    "parallel-edges": 1,
+    "self-loop-trail": 2,
+    "direction-any": 1,
+    "direction-left": 1,
+    "interior-node-unconstrained": 1,
+    "selector-all-shortest": 1,
+    "selector-any-shortest": 1,
+    "selector-any": 1,
+    "paper-trail-unbounded": 2
+  },
+  "nondeterministic_selector_cells": 2,
+  "constructs_measured": 14,
+  "metamorphic_violations_total": 39,
+  "metamorphic_violations_by_engine": {
+    "kuzu": 6,
+    "duckpgq": 33,
+    "neo4j": 0,
+    "memgraph": 0,
+    "apache-age": 0
+  },
+  "metamorphic_clean_engines": [
+    "neo4j",
+    "memgraph",
+    "apache-age"
+  ],
+  "engines": {
+    "kuzu": "0.11.3",
+    "duckpgq": "1.4.1",
+    "neo4j": "Neo4j Kernel 5.26.30",
+    "memgraph": "Memgraph 5.9.0",
+    "apache-age": "age 1.8.0"
+  },
+  "per_engine": {
+    "kuzu": {
+      "conforms": 8,
+      "diverges": 3,
+      "rejects": 1,
+      "inexpressible": 5,
+      "s1": 0.2727,
+      "s2": 0.75
+    },
+    "duckpgq": {
+      "conforms": 3,
+      "diverges": 6,
+      "rejects": 8,
+      "inexpressible": 0,
+      "s1": 0.6667,
+      "s2": 0.4286
+    },
+    "neo4j": {
+      "conforms": 10,
+      "diverges": 2,
+      "rejects": 0,
+      "inexpressible": 5,
+      "s1": 0.1667,
+      "s2": 1.0
+    },
+    "memgraph": {
+      "conforms": 10,
+      "diverges": 2,
+      "rejects": 0,
+      "inexpressible": 5,
+      "s1": 0.1667,
+      "s2": 1.0
+    },
+    "apache-age": {
+      "conforms": 9,
+      "diverges": 2,
+      "rejects": 1,
+      "inexpressible": 5,
+      "s1": 0.1818,
+      "s2": 0.6667
+    }
+  }
+}
