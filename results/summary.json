@@ -37,6 +37,51 @@
   "constructs_measured": 14,
   "metamorphic_violations_total": 39,
   "metamorphic_violations_external": 39,
+  "s2b": {
+    "kuzu": {
+      "divergences": 3,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": false,
+      "irrelevant": 0
+    },
+    "duckpgq": {
+      "divergences": 6,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": false,
+      "irrelevant": 0
+    },
+    "neo4j": {
+      "divergences": 2,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": true,
+      "irrelevant": 0
+    },
+    "memgraph": {
+      "divergences": 2,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": true,
+      "irrelevant": 12
+    },
+    "apache-age": {
+      "divergences": 2,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": true,
+      "irrelevant": 0
+    },
+    "samyama-graph": {
+      "divergences": 2,
+      "spoke": 2,
+      "s2b": 0.0,
+      "channel": true,
+      "irrelevant": 0
+    }
+  },
+  "s2b_external": 1.0,
   "metamorphic_violations_ours": 0,
   "snapshot_2026_09_07": {
     "kuzu": {

@@ -167,10 +167,12 @@ def main():
                 cells.append(dict(case=case.id, engine=eng.name, verdict="LOAD_FAILED", surface=surface,
                                   detail=str(e)[:300], query=query))
                 continue
-            answers, err = [], None
+            answers, diags, err = [], None, None
             for _ in range(REPEATS):
                 try:
-                    answers.append(eng.run(query).pairs)
+                    a = eng.run(query)
+                    answers.append(a.pairs)
+                    diags = a.diagnostics
                 except EngineError as e:
                     err = str(e)[:300]
                     break
@@ -193,6 +195,11 @@ def main():
                 declared_verdict = "CONFORMS" if dok else "DIVERGES"
                 declared_detail = dwhy
             cells.append(dict(
+                # A list of what the engine said alongside the answer; None means
+                # this adapter has no way to ask, which is not the same fact as an
+                # engine that was asked and said nothing.
+                diagnostics=diags,
+                diagnostics_supported=(diags is not None),
                 declared_mode=DECLARED_MODE.get(eng.name),
                 verdict_vs_declared=declared_verdict,
                 detail_vs_declared=declared_detail,

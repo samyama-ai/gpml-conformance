@@ -18,15 +18,19 @@ class EngineError(Exception):
 
 @dataclass
 class Answer:
-    pairs: Counter          # multiset of (s, t)
+    pairs: Counter                       # multiset of (s, t)
     raw_rows: int
+    # Diagnostics the engine attached to the result: warnings, notices,
+    # notifications. `None` means this adapter cannot ask -- which is a different
+    # fact from an empty list, and the map records the difference.
+    diagnostics: Optional[list] = None
 
 
-def _counter(rows) -> Answer:
+def _counter(rows, diagnostics=None) -> Answer:
     c = Counter()
     for r in rows:
         c[(str(r[0]), str(r[1]))] += 1
-    return Answer(c, len(rows))
+    return Answer(c, len(rows), diagnostics)
 
 
 # --------------------------------------------------------------------------
@@ -77,7 +81,8 @@ class KuzuAdapter:
         rows = []
         while r.has_next():
             rows.append(r.get_next())
-        return _counter(rows)
+        # Kuzu 0.11 exposes no warning or notification channel on a query result.
+        return _counter(rows, None)
 
 
 class DuckPGQAdapter:
@@ -117,7 +122,8 @@ class DuckPGQAdapter:
             rows = self.con.execute(q).fetchall()
         except Exception as ex:
             raise EngineError(f"{type(ex).__name__}: {ex}") from ex
-        return _counter(rows)
+        # DuckDB's Python API exposes no per-statement warning channel.
+        return _counter(rows, None)
 
 
 class BoltAdapter:
@@ -155,10 +161,23 @@ class BoltAdapter:
     def run(self, q: str) -> Answer:
         try:
             with self.driver.session() as s:
-                rows = [tuple(r.values()) for r in s.run(q)]
+                res = s.run(q)
+                rows = [tuple(r.values()) for r in res]
+                diags = []
+                try:
+                    summary = res.consume()
+                    for n in (summary.notifications or []):
+                        diags.append({
+                            "code": n.get("code", ""),
+                            "title": n.get("title", ""),
+                            "description": n.get("description", ""),
+                            "severity": n.get("severity", ""),
+                        })
+                except Exception:
+                    diags = None          # driver or server too old to ask
         except Exception as ex:
             raise EngineError(f"{type(ex).__name__}: {ex}") from ex
-        return _counter(rows)
+        return _counter(rows, diags)
 
 
 class AgeAdapter:
@@ -216,15 +235,18 @@ class AgeAdapter:
         # AGE wraps Cypher in a SQL function and needs an explicit column list.
         wrapped = (f"SELECT * FROM cypher('cfgraph', $$ {q} $$) AS (s agtype, t agtype)")
         try:
+            del self.conn.notices[:]      # notices accumulate on the connection
             self.cur.execute(wrapped)
             rows = self.cur.fetchall()
+            diags = [{"code": "", "title": "", "description": n.strip(),
+                      "severity": "NOTICE"} for n in self.conn.notices]
         except Exception as ex:
             try:
                 self.conn.rollback()
             except Exception:
                 pass
             raise EngineError(f"{type(ex).__name__}: {ex}") from ex
-        return _counter([(str(a).strip('"'), str(b).strip('"')) for a, b in rows])
+        return _counter([(str(a).strip('"'), str(b).strip('"')) for a, b in rows], diags)
 
 
 class SamyamaAdapter:
@@ -364,4 +386,8 @@ class SamyamaAdapter:
             raise EngineError(f"{type(ex).__name__}: {ex}") from ex
         if isinstance(res, dict) and res.get("error"):
             raise EngineError(str(res["error"])[:300])
-        return _counter(res.get("records") or [])
+        diags = [{"code": n.get("code", ""), "title": n.get("title", ""),
+                  "description": n.get("description", ""),
+                  "severity": n.get("severity", "")}
+                 for n in (res.get("notifications") or [])]
+        return _counter(res.get("records") or [], diags)

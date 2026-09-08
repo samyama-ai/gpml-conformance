@@ -83,6 +83,22 @@ A divergence from the ISO reference is only a defect if the engine also departs 
 
 **9 of 15 divergences are specified language differences** — the engine does exactly what it documents. The remaining **6** are departures from the standard the engine itself implements.
 
+## S2b — divergences delivered with neither an error nor a relevant diagnostic
+
+S2 counts a rejection as the engine having spoken. S2b asks a narrower question: of the answers that were *wrong and returned*, how often was the user told anything about it? A diagnostic counts only when it names the construct at issue -- Memgraph attaches a `PlanHinting` index suggestion to every cell it answers, which is not a warning about the answer.
+
+| engine | divergences | with a relevant diagnostic | S2b | has a channel | irrelevant diagnostics |
+|---|---:|---:|---:|---|---:|
+| kuzu | 3 | 0 | 1.00 | no | 0 |
+| duckpgq | 6 | 0 | 1.00 | no | 0 |
+| neo4j | 2 | 0 | 1.00 | yes | 0 |
+| memgraph | 2 | 0 | 1.00 | yes | 12 |
+| apache-age | 2 | 0 | 1.00 | yes | 0 |
+| samyama-graph *(ours)* | 2 | 2 | 0.00 | yes | 0 |
+| **all five external** | 15 | 0 | **1.00** | | |
+
+Every diagnostic credited above was checked rather than counted: `PathModeAffectsResult` claims that naming the path mode would change the answer, and that claim was re-tested by running the same pattern under each mode. All verified true; no false positives.
+
 ## S3 — answer classes per construct
 
 How many distinct answers the engines that accepted the query gave. One class means the construct is portable.

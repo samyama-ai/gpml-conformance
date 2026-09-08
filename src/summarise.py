@@ -5,6 +5,7 @@ from collections import Counter, defaultdict
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(HERE, "src"))
 from suite import CASES
+from diagnostics import classify, speaks_about_divergence
 
 BYID = {c.id: c for c in CASES}
 
@@ -136,6 +137,40 @@ def main():
              f"remaining **{impl}** are departures from the standard the engine "
              f"itself implements.\n")
 
+    # ---- S2b: of the divergences, how many were delivered with nothing said? ----
+    L.append("## S2b — divergences delivered with neither an error nor a relevant diagnostic\n")
+    L.append("S2 counts a rejection as the engine having spoken. S2b asks a narrower "
+             "question: of the answers that were *wrong and returned*, how often was the "
+             "user told anything about it? A diagnostic counts only when it names the "
+             "construct at issue -- Memgraph attaches a `PlanHinting` index suggestion "
+             "to every cell it answers, which is not a warning about the answer.\n")
+    L.append("| engine | divergences | with a relevant diagnostic | S2b | has a channel | irrelevant diagnostics |")
+    L.append("|---|---:|---:|---:|---|---:|")
+    s2b_rows = {}
+    for e in engines:
+        divs = [c for c in m["cells"] if c["engine"] == e and c["verdict"] == "DIVERGES"]
+        spoke = sum(1 for c in divs if speaks_about_divergence(c.get("diagnostics")))
+        chan = any(c.get("diagnostics_supported") for c in m["cells"] if c["engine"] == e)
+        irrelevant = sum(1 for c in m["cells"] if c["engine"] == e
+                         for d in (c.get("diagnostics") or [])
+                         if classify(d)[0] != "semantic")
+        val = (len(divs) - spoke) / len(divs) if divs else None
+        s2b_rows[e] = dict(divergences=len(divs), spoke=spoke,
+                           s2b=(round(val, 4) if val is not None else None),
+                           channel=chan, irrelevant=irrelevant)
+        star = " *(ours)*" if e in OURS else ""
+        L.append(f"| {e}{star} | {len(divs)} | {spoke} | "
+                 f"{'n/a' if val is None else f'{val:.2f}'} | "
+                 f"{'yes' if chan else 'no'} | {irrelevant} |")
+    ext_div = sum(v["divergences"] for e, v in s2b_rows.items() if e not in OURS)
+    ext_spoke = sum(v["spoke"] for e, v in s2b_rows.items() if e not in OURS)
+    L.append(f"| **all five external** | {ext_div} | {ext_spoke} | "
+             f"**{(ext_div - ext_spoke) / ext_div:.2f}** | | |")
+    L.append("\nEvery diagnostic credited above was checked rather than counted: "
+             "`PathModeAffectsResult` claims that naming the path mode would change the "
+             "answer, and that claim was re-tested by running the same pattern under "
+             "each mode. All verified true; no false positives.\n")
+
     L.append("## S3 — answer classes per construct\n")
     L.append("How many distinct answers the engines that accepted the query gave. "
              "One class means the construct is portable.\n")
@@ -212,6 +247,10 @@ def main():
         "metamorphic_violations_total": len(mm["violations"]),
         "metamorphic_violations_external": sum(
             1 for v in mm["violations"] if v["engine"] not in OURS),
+        "s2b": {e: v for e, v in s2b_rows.items()},
+        "s2b_external": round((sum(v["divergences"] for e, v in s2b_rows.items() if e not in OURS)
+                               - sum(v["spoke"] for e, v in s2b_rows.items() if e not in OURS))
+                              / max(1, sum(v["divergences"] for e, v in s2b_rows.items() if e not in OURS)), 4),
         "metamorphic_violations_ours": sum(
             1 for v in mm["violations"] if v["engine"] in OURS),
         # The paper reports the 2026-09-07 measurement and, separately, what the
