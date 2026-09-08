@@ -38,6 +38,46 @@
   "metamorphic_violations_total": 39,
   "metamorphic_violations_external": 39,
   "metamorphic_violations_ours": 0,
+  "snapshot_2026_09_07": {
+    "kuzu": {
+      "CONFORMS": 8,
+      "DIVERGES": 3,
+      "INEXPRESSIBLE": 5,
+      "REJECTS": 1,
+      "metamorphic": 6
+    },
+    "duckpgq": {
+      "DIVERGES": 6,
+      "REJECTS": 8,
+      "CONFORMS": 3,
+      "metamorphic": 33
+    },
+    "neo4j": {
+      "DIVERGES": 2,
+      "CONFORMS": 10,
+      "INEXPRESSIBLE": 5,
+      "metamorphic": 0
+    },
+    "memgraph": {
+      "DIVERGES": 2,
+      "CONFORMS": 10,
+      "INEXPRESSIBLE": 5,
+      "metamorphic": 0
+    },
+    "apache-age": {
+      "DIVERGES": 2,
+      "CONFORMS": 9,
+      "INEXPRESSIBLE": 5,
+      "REJECTS": 1,
+      "metamorphic": 0
+    },
+    "samyama-graph": {
+      "DIVERGES": 4,
+      "CONFORMS": 8,
+      "INEXPRESSIBLE": 5,
+      "metamorphic": 24
+    }
+  },
   "metamorphic_violations_by_engine": {
     "kuzu": 6,
     "duckpgq": 33,

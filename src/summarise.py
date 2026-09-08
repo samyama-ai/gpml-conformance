@@ -16,6 +16,23 @@ SYM = {"CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": "�
        "NONDETERMINISTIC": "?", "LOAD_FAILED": "∅"}
 
 
+def _snapshot_summary():
+    """Per-engine verdict counts from the frozen 2026-09-07 map, if present."""
+    p = os.path.join(HERE, "results", "snapshots", "map-2026-09-07.json")
+    if not os.path.exists(p):
+        return None
+    snap = json.load(open(p))
+    out = {}
+    for c in snap["cells"]:
+        out.setdefault(c["engine"], Counter())[c["verdict"]] += 1
+    mp = os.path.join(HERE, "results", "snapshots", "metamorphic-2026-09-07.json")
+    meta = Counter()
+    if os.path.exists(mp):
+        for v in json.load(open(mp))["violations"]:
+            meta[v["engine"]] += 1
+    return {e: {**dict(v), "metamorphic": meta.get(e, 0)} for e, v in out.items()}
+
+
 def main():
     m = json.load(open(os.path.join(HERE, "results", "map.json")))
     mm = json.load(open(os.path.join(HERE, "results", "metamorphic.json")))
@@ -197,6 +214,10 @@ def main():
             1 for v in mm["violations"] if v["engine"] not in OURS),
         "metamorphic_violations_ours": sum(
             1 for v in mm["violations"] if v["engine"] in OURS),
+        # The paper reports the 2026-09-07 measurement and, separately, what the
+        # same suite scores after the defects it found were fixed. Both must be
+        # checkable, so the frozen snapshot is summarised alongside the live run.
+        "snapshot_2026_09_07": _snapshot_summary(),
         "metamorphic_violations_by_engine": {e: per.get(e, 0) for e in engines},
         "metamorphic_clean_engines": [e for e in engines if per.get(e, 0) == 0],
         "engines": {e["name"]: e["version"] for e in m["engines"]},
