@@ -35,21 +35,22 @@
   },
   "nondeterministic_selector_cells": 2,
   "constructs_measured": 14,
-  "metamorphic_violations_total": 63,
+  "metamorphic_violations_total": 39,
   "metamorphic_violations_external": 39,
-  "metamorphic_violations_ours": 24,
+  "metamorphic_violations_ours": 0,
   "metamorphic_violations_by_engine": {
     "kuzu": 6,
     "duckpgq": 33,
     "neo4j": 0,
     "memgraph": 0,
     "apache-age": 0,
-    "samyama-graph": 24
+    "samyama-graph": 0
   },
   "metamorphic_clean_engines": [
     "neo4j",
     "memgraph",
-    "apache-age"
+    "apache-age",
+    "samyama-graph"
   ],
   "engines": {
     "kuzu": "0.11.3",
@@ -101,11 +102,11 @@
       "s2": 0.6667
     },
     "samyama-graph": {
-      "conforms": 8,
-      "diverges": 4,
+      "conforms": 15,
+      "diverges": 2,
       "rejects": 0,
-      "inexpressible": 5,
-      "s1": 0.3333,
+      "inexpressible": 0,
+      "s1": 0.1176,
       "s2": 1.0
     }
   }

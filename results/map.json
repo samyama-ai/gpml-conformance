@@ -269,10 +269,22 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": null,
+      "detail_vs_declared": "",
       "case": "mode-acyclic-bounded",
       "engine": "samyama-graph",
-      "verdict": "INEXPRESSIBLE",
-      "detail": "no surface syntax in this dialect"
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ACYCLIC (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->b": 2,
+        "a->c": 2
+      }
     },
     {
       "case": "mode-simple-bounded",
@@ -306,10 +318,24 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": null,
+      "detail_vs_declared": "",
       "case": "mode-simple-bounded",
       "engine": "samyama-graph",
-      "verdict": "INEXPRESSIBLE",
-      "detail": "no surface syntax in this dialect"
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH SIMPLE (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->b": 2,
+        "a->c": 2,
+        "a->a": 2
+      }
     },
     {
       "declared_mode": "WALK",
@@ -499,17 +525,17 @@
     },
     {
       "declared_mode": "TRAIL",
-      "verdict_vs_declared": "DIVERGES",
-      "detail_vs_declared": "expected {('a', 'a'): 1, ('a', 'b'): 2, ('a', 'c'): 2}, observed {('a', 'a'): 1, ('a', 'b'): 1, ('a', 'c'): 1}",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
       "case": "quant-zero-lower-bound",
       "engine": "samyama-graph",
-      "verdict": "DIVERGES",
-      "detail": "expected {('a', 'a'): 1, ('a', 'b'): 2, ('a', 'c'): 2}, observed {('a', 'a'): 1, ('a', 'b'): 1, ('a', 'c'): 1}",
+      "verdict": "CONFORMS",
+      "detail": "",
       "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "a->a": 1,
-        "a->b": 1,
-        "a->c": 1
+        "a->b": 2,
+        "a->c": 2
       },
       "reference": {
         "a->a": 1,
@@ -838,10 +864,20 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": null,
+      "detail_vs_declared": "",
       "case": "self-loop-acyclic",
       "engine": "samyama-graph",
-      "verdict": "INEXPRESSIBLE",
-      "detail": "no surface syntax in this dialect"
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ACYCLIC (u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN u.eid AS s, v.eid AS t",
+      "observed": {
+        "x->y": 1
+      },
+      "reference": {
+        "x->y": 1
+      }
     },
     {
       "declared_mode": "WALK",
@@ -1263,10 +1299,20 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
       "case": "selector-any-shortest",
       "engine": "samyama-graph",
-      "verdict": "INEXPRESSIBLE",
-      "detail": "no surface syntax in this dialect"
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ANY SHORTEST (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "reference": null
     },
     {
       "case": "selector-any",
@@ -1308,10 +1354,20 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
       "case": "selector-any",
       "engine": "samyama-graph",
-      "verdict": "INEXPRESSIBLE",
-      "detail": "no surface syntax in this dialect"
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "reference": null
     },
     {
       "declared_mode": "WALK",
@@ -1386,15 +1442,15 @@
     },
     {
       "declared_mode": "TRAIL",
-      "verdict_vs_declared": "DIVERGES",
-      "detail_vs_declared": "expected {('a6', 'a2'): 3}, observed {('a6', 'a2'): 1}",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
       "case": "paper-trail-unbounded",
       "engine": "samyama-graph",
-      "verdict": "DIVERGES",
-      "detail": "expected {('a6', 'a2'): 3}, observed {('a6', 'a2'): 1}",
+      "verdict": "CONFORMS",
+      "detail": "",
       "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN a.eid AS s, b.eid AS t",
       "observed": {
-        "a6->a2": 1
+        "a6->a2": 3
       },
       "reference": {
         "a6->a2": 3

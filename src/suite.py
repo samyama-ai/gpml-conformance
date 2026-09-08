@@ -46,6 +46,12 @@ class Case:
     # build the "engine's own declared semantics" reference, so the two forms stay
     # comparable.
     cypher_bound: Optional[int] = None
+    # A rendering for engines whose dialect is openCypher *plus* the GQL restrictor
+    # and selector prefixes. When this work started no engine had them, so every such
+    # cell scored INEXPRESSIBLE. Samyama-Graph gained them in response to this suite
+    # (samyama-ai/samyama-graph#1141), so those cells can now be measured rather than
+    # excused. Engines that declare support get this text; the rest still get `cypher`.
+    cypher_gql: Optional[str] = None
 
 
 def _p(start, segs, restrictor="WALK", selector="ALL"):
@@ -89,6 +95,7 @@ CASES: list[Case] = [
         fixture="micro",
         ref=_p(start_named("a"), [seg(1, 3)], "ACYCLIC", "ALL"),
         cypher=None,
+        cypher_gql="MATCH ACYCLIC (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
         pgq="FROM GRAPH_TABLE(g MATCH ACYCLIC (x:N)-[e:E]->{1,3}(y:N) WHERE x.name='a' "
             "COLUMNS (x.eid AS s, y.eid AS t)) SELECT s, t",
         note="No openCypher surface syntax.",
@@ -99,6 +106,7 @@ CASES: list[Case] = [
         fixture="micro",
         ref=_p(start_named("a"), [seg(1, 3)], "SIMPLE", "ALL"),
         cypher=None,
+        cypher_gql="MATCH SIMPLE (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
         pgq="FROM GRAPH_TABLE(g MATCH SIMPLE (x:N)-[e:E]->{1,3}(y:N) WHERE x.name='a' "
             "COLUMNS (x.eid AS s, y.eid AS t)) SELECT s, t",
         note="SIMPLE differs from ACYCLIC only when the path closes a cycle; on "
@@ -176,6 +184,7 @@ CASES: list[Case] = [
         fixture="loop",
         ref=_p(start_named("x"), [seg(1, 2)], "ACYCLIC", "ALL"),
         cypher=None,
+        cypher_gql="MATCH ACYCLIC (u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN u.eid AS s, v.eid AS t",
         pgq="FROM GRAPH_TABLE(g MATCH ACYCLIC (u:N)-[e:E]->{1,2}(v:N) WHERE u.name='x' "
             "COLUMNS (u.eid AS s, v.eid AS t)) SELECT s, t",
         note="",
@@ -244,6 +253,7 @@ CASES: list[Case] = [
         fixture="micro",
         ref=_p(start_named("a"), [seg(1, 3)], "WALK", "ANY SHORTEST"),
         cypher=None,
+        cypher_gql="MATCH ANY SHORTEST (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
         pgq="FROM GRAPH_TABLE(g MATCH ANY SHORTEST (x:N)-[e:E]->{1,3}(y:N) "
             "WHERE x.name='a' COLUMNS (x.eid AS s, y.eid AS t)) SELECT s, t",
         note="Nondeterministic in which path, deterministic in how many. Scored "
@@ -256,6 +266,7 @@ CASES: list[Case] = [
         fixture="micro",
         ref=_p(start_named("a"), [seg(1, 3)], "WALK", "ANY"),
         cypher=None,
+        cypher_gql="MATCH ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
         pgq="FROM GRAPH_TABLE(g MATCH ANY (x:N)-[e:E]->{1,3}(y:N) "
             "WHERE x.name='a' COLUMNS (x.eid AS s, y.eid AS t)) SELECT s, t",
         note="",

@@ -21,21 +21,21 @@ Each cell is one exact multiset comparison, repeated 3 times to confirm the engi
 |---|---|---|---|---|---|---|
 | `mode-walk-bounded` | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
 | `mode-trail-bounded` | ✗ | ! | ✓ | ✓ | ✓ | ✓ |
-| `mode-acyclic-bounded` | – | ! | – | – | – | – |
-| `mode-simple-bounded` | – | ! | – | – | – | – |
+| `mode-acyclic-bounded` | – | ! | – | – | – | ✓ |
+| `mode-simple-bounded` | – | ! | – | – | – | ✓ |
 | `walk-revisits-same-edge` | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| `quant-zero-lower-bound` | ✓ | ✗ | ✓ | ✓ | ✓ | ✗ |
+| `quant-zero-lower-bound` | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ |
 | `quant-zero-zero` | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ |
 | `parallel-edges` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `self-loop-trail` | ✗ | ! | ✓ | ✓ | ✓ | ✓ |
-| `self-loop-acyclic` | – | ! | – | – | – | – |
+| `self-loop-acyclic` | – | ! | – | – | – | ✓ |
 | `direction-any` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `direction-left` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `interior-node-unconstrained` | ! | ! | ✓ | ✓ | ! | ✓ |
 | `selector-all-shortest` | ✓ | ! | ✓ | ✓ | ✓ | ✓ |
-| `selector-any-shortest` | – | ✗ | – | – | – | – |
-| `selector-any` | – | ✗ | – | – | – | – |
-| `paper-trail-unbounded` | ✗ | ! | ✓ | ✓ | ✓ | ✗ |
+| `selector-any-shortest` | – | ✗ | – | – | – | ✓ |
+| `selector-any` | – | ✗ | – | – | – | ✓ |
+| `paper-trail-unbounded` | ✗ | ! | ✓ | ✓ | ✓ | ✓ |
 
 ✓ conforms  ✗ diverges  ! rejects  – inexpressible in that dialect
 
@@ -50,7 +50,7 @@ S1 is divergences over the cells the engine answered. S2 is divergences over div
 | neo4j | 10 | 2 | 0 | 5 | 0.17 | 1.00 |
 | memgraph | 10 | 2 | 0 | 5 | 0.17 | 1.00 |
 | apache-age | 9 | 2 | 1 | 5 | 0.18 | 0.67 |
-| samyama-graph *(ours — excluded from the totals)* | 8 | 4 | 0 | 5 | 0.33 | 1.00 |
+| samyama-graph *(ours — excluded from the totals)* | 15 | 2 | 0 | 0 | 0.12 | 1.00 |
 | **all five external engines** | 40 | 15 | 10 | 20 | **0.27** | **0.60** |
 
 ## Attribution: language difference or implementation defect?
@@ -109,7 +109,7 @@ These need no reference semantics: they hold under WALK, TRAIL, ACYCLIC and SIMP
 | neo4j | 0 | — |
 | memgraph | 0 | — |
 | apache-age | 0 | — |
-| samyama-graph | 24 | M2 lower-bound monotonicity, M3 range decomposition |
+| samyama-graph | 0 | — |
 
-Total: **63 violations** across 6 graphs. Minimal reproducers are in `reproducers/`.
+Total: **39 violations** across 6 graphs. Minimal reproducers are in `reproducers/`.
 

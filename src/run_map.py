@@ -44,6 +44,11 @@ DECLARED_MODE = {
     "duckpgq": None,        # None = the dialect *is* the standard; no second axis
     "samyama-graph": "TRAIL",
 }
+
+# Engines whose dialect is openCypher plus the GQL restrictor and selector prefixes.
+# They are given `case.cypher_gql` where it exists, so a construct their dialect can
+# express is measured rather than scored INEXPRESSIBLE.
+SUPPORTS_GQL_PREFIXES = {"samyama-graph"}
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -143,7 +148,12 @@ def main():
         primary = fixtures.PRIMARY_LABEL[case.fixture]
         edge_label = fixtures.EDGE_LABEL[case.fixture]
         for eng in engines:
-            query = case.cypher if eng.dialect == "cypher" else case.pgq
+            if eng.dialect == "cypher":
+                query = case.cypher
+                if eng.name in SUPPORTS_GQL_PREFIXES and case.cypher_gql:
+                    query = case.cypher_gql
+            else:
+                query = case.pgq
             if query is None:
                 cells.append(dict(case=case.id, engine=eng.name, verdict="INEXPRESSIBLE",
                                   detail="no surface syntax in this dialect"))
