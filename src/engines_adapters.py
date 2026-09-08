@@ -263,9 +263,26 @@ class SamyamaAdapter:
         self.version = self._version()
 
     # -- process ------------------------------------------------------------
+    def _port_is_free(self) -> bool:
+        import socket
+        with socket.socket() as sk:
+            sk.settimeout(0.5)
+            return sk.connect_ex(("127.0.0.1", self.port)) != 0
+
     def _start(self):
         import subprocess, time
         self._stop()
+        # Wait for the port to actually be released. Without this the new process
+        # loses the bind race and dies, the readiness probe below then succeeds
+        # against the *old* server, and every fixture loads into one accumulating
+        # store -- which is exactly the "restart" that silently did nothing.
+        for _ in range(80):
+            if self._port_is_free():
+                break
+            time.sleep(0.25)
+        else:
+            raise EngineError(f"port {self.port} never freed; a stale samyama is "
+                              f"holding it")
         self.proc = subprocess.Popen(
             [self.binary, "--port", str(self.resp_port),
              "--http-port", str(self.port), "--ephemeral"],
@@ -275,10 +292,18 @@ class SamyamaAdapter:
             time.sleep(0.25)
             try:
                 self._post("RETURN 1")
-                return
+                break
             except Exception:
                 continue
-        raise EngineError("samyama did not become ready")
+        else:
+            raise EngineError("samyama did not become ready")
+        # A fresh --ephemeral store is empty. If it is not, we are talking to a
+        # server we did not start, and nothing measured against it means anything.
+        for q, what in (("MATCH (n) RETURN n", "node"), ("MATCH ()-[r]->() RETURN r", "edge")):
+            n = len(self._post(q).get("records") or [])
+            if n:
+                raise EngineError(f"a freshly started --ephemeral store already holds "
+                                  f"{n} {what}(s); this is not the process we started")
 
     def _stop(self):
         import time
