@@ -13,7 +13,7 @@ BYID = {c.id: c for c in CASES}
 OURS = {"samyama-graph"}
 
 SYM = {"CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": "–",
-       "NONDETERMINISTIC": "?"}
+       "NONDETERMINISTIC": "?", "LOAD_FAILED": "∅"}
 
 
 def main():
@@ -41,9 +41,29 @@ def main():
     L.append("| construct | " + " | ".join(engines) + " |")
     L.append("|---" * (len(engines) + 1) + "|")
     for c in CASES:
-        row = " | ".join(SYM[grid[(c.id, e)]["verdict"]] for e in engines)
+        cells = [grid[(c.id, e)] for e in engines]
+        row = " | ".join(
+            SYM[x["verdict"]] + ("\u2020" if x.get("surface") == "vendor-extension" else "")
+            for x in cells)
         L.append(f"| `{c.id}` | {row} |")
-    L.append("\n✓ conforms  ✗ diverges  ! rejects  – inexpressible in that dialect\n")
+    L.append("\n\u2713 conforms  \u2717 diverges  ! rejects  \u2013 inexpressible in that dialect  "
+             "\u2205 engine failed to load the fixture\n")
+
+    vend = [c for c in m["cells"] if c.get("surface") == "vendor-extension"]
+    if vend:
+        by_eng = Counter(c["engine"] for c in vend)
+        L.append("\u2020 answered through a **vendor extension**: syntax that engine has and "
+                 "the common dialect does not. Such a cell says the engine can express "
+                 "and compute the construct; it does not say the construct is portable, "
+                 "and it is not evidence about the dialect the other engines share. "
+                 "Counted here so a vendor cannot raise its score merely by extending "
+                 "its own syntax without the reader seeing it.\n")
+        L.append("| engine | cells answered via a vendor extension |")
+        L.append("|---|---:|")
+        for e in engines:
+            if by_eng.get(e):
+                L.append(f"| {e} | {by_eng[e]} |")
+        L.append("")
 
     acc = {e: Counter() for e in engines}
     for c in m["cells"]:

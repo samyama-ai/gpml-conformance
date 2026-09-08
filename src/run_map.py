@@ -150,18 +150,21 @@ def main():
         for eng in engines:
             if eng.dialect == "cypher":
                 query = case.cypher
+                surface = "common-dialect"
                 if eng.name in SUPPORTS_GQL_PREFIXES and case.cypher_gql:
-                    query = case.cypher_gql
+                    query, surface = case.cypher_gql, "vendor-extension"
             else:
                 query = case.pgq
+                surface = "common-dialect"
             if query is None:
                 cells.append(dict(case=case.id, engine=eng.name, verdict="INEXPRESSIBLE",
+                                  surface=surface,
                                   detail="no surface syntax in this dialect"))
                 continue
             try:
                 eng.load(g, primary, edge_label)
             except Exception as e:
-                cells.append(dict(case=case.id, engine=eng.name, verdict="LOAD_FAILED",
+                cells.append(dict(case=case.id, engine=eng.name, verdict="LOAD_FAILED", surface=surface,
                                   detail=str(e)[:300], query=query))
                 continue
             answers, err = [], None
@@ -172,12 +175,12 @@ def main():
                     err = str(e)[:300]
                     break
             if err is not None:
-                cells.append(dict(case=case.id, engine=eng.name, verdict="REJECTS",
+                cells.append(dict(case=case.id, engine=eng.name, verdict="REJECTS", surface=surface,
                                   detail=err, query=query))
                 continue
             if any(a != answers[0] for a in answers[1:]):
                 cells.append(dict(case=case.id, engine=eng.name,
-                                  verdict="NONDETERMINISTIC",
+                                  verdict="NONDETERMINISTIC", surface=surface,
                                   detail=[dict(a) for a in answers], query=query))
                 continue
             ok, why = check(res, case, answers[0])
@@ -193,7 +196,7 @@ def main():
                 declared_mode=DECLARED_MODE.get(eng.name),
                 verdict_vs_declared=declared_verdict,
                 detail_vs_declared=declared_detail,
-                case=case.id, engine=eng.name,
+                case=case.id, engine=eng.name, surface=surface,
                 verdict="CONFORMS" if ok else "DIVERGES",
                 detail=why, query=query,
                 observed={f"{k[0]}->{k[1]}": v for k, v in sorted(answers[0].items())},

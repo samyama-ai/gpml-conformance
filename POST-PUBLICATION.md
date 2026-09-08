@@ -1,18 +1,18 @@
-# Post-publication re-measurement of one engine
+# Post-publication note: what changed in our own engine, and what did not
 
-This file records a measurement taken **after** `results/` was generated. It does
-not change any number in `results/`, `RESULTS.md`, or the paper. Those record what
-the engines computed on 2026-09-07 and are left alone.
+`RESULTS.md` is generated and always shows the current measurement. This file records
+the one thing a generated file cannot: what the numbers were before, and what the
+current ones do and do not support.
 
-## What prompted it
+## What the artifact disclosed
 
-`RESULTS.md` discloses that the engine developed by the authors scored worst of the
-six measured: 8 constructs conforming, 4 diverging, 5 inexpressible, silence ratio
-1.00, and 24 metamorphic violations. The root cause — a quantifier with lower bound 0
+The paper discloses that the engine developed by the authors scored worst of the six
+measured on 2026-09-07: 8 constructs conforming, 4 diverging, 5 inexpressible, silence
+ratio 1.00, and 24 metamorphic violations. Root cause — a quantifier with lower bound 0
 collapsing the path multiset to one row per reachable end node — was filed publicly as
 [samyama-graph#1140](https://github.com/samyama-ai/samyama-graph/issues/1140).
 
-That issue and three others were fixed on 2026-09-08:
+## What was fixed, and when
 
 | issue | what shipped | PR |
 |---|---|---|
@@ -21,37 +21,39 @@ That issue and three others were fixed on 2026-09-08:
 | #1143 | `CALL db.checkIntegrity()` | samyama-graph#1146 |
 | #1142 | three metamorphic relations as a CI gate | samyama-graph#1147 |
 
-## The re-measurement
+Build measured: `samyama-graph` at commit `3cb2461`, reporting version string `1.7.1`.
+This is an **unreleased build**. No released version of the engine scores what follows.
 
-Build: `samyama-graph` at commit `3cb2461`, reporting version string `1.7.1`. This is
-an **unreleased build**; no released version of the engine scores what follows.
-
-Method: `src/run_map.py` and `src/run_metamorphic.py` unchanged. The five external
-engines were not installed on the measuring host, so only our column was produced;
-their cells are untouched in `results/`. The five constructs previously scored
-INEXPRESSIBLE were re-asked using the surface syntax added by samyama-graph#1145 and
-scored with the suite's own `check()` against `src/gpml_ref.py`, not by inspection.
-
-| metric | 2026-09-07 (paper) | 2026-09-08 (this build) |
+| metric | 2026-09-07 | now |
 |---|---|---|
-| constructs conforming | 8 / 17 | **17 / 17** |
-| diverging | 4 | 0 |
+| conforming | 8 | 15 |
+| diverging | 4 | 2 |
 | inexpressible | 5 | 0 |
-| silence ratio | 1.00 | not defined (no divergences) |
+| S1, divergence rate | 0.33 | 0.12 |
+| S2, silence ratio | 1.00 | 1.00 |
 | metamorphic violations | 24 | 0 |
 
-The two divergences that survived the fixes under the suite's *stored* Cypher text
-(`mode-walk-bounded`, `walk-revisits-same-edge`) were already scored CONFORMS against
-the engine's declared TRAIL mode; both are the documented openCypher
-relationship-isomorphism difference. Asked explicitly in `WALK` mode they return the
-standard's answer.
+## What these numbers do not say
 
-## What this does not establish
+Read the row, not the headline. Three qualifications, all of them load-bearing:
 
-- One engine, measured by its own authors, on an unreleased build. The cross-engine
-  numbers this artifact exists to report are unaffected and unrepeated.
-- The suite still stores **one** `cypher` string per case, shared by every
-  openCypher-family engine. Constructs that now have samyama surface syntax cannot be
-  expressed in the suite without per-engine syntax overrides, so those five cells
-  remain INEXPRESSIBLE in `results/map.json` and were scored here out of band. Tracked
-  as an issue on this repository.
+- **5 of the 15 conforming cells are answered through a vendor extension** and are
+  marked † in the map. They say the engine can express and compute the construct. They
+  are not evidence about the dialect the other five engines share, and a reader
+  comparing columns should subtract them before concluding anything about portability.
+- **S2 is still 1.00.** Both surviving divergences are silent: the engine returns a
+  different answer rather than an error. On the axis this artifact was built to measure
+  — whether a user is *told* about a disagreement — nothing improved. Neo4j and
+  Memgraph also sit at 1.00.
+- **The two divergences are not defects.** `mode-walk-bounded` and
+  `walk-revisits-same-edge` both score CONFORMS against the engine's declared TRAIL
+  mode; they are the documented openCypher relationship-isomorphism difference, the
+  same one Neo4j, Memgraph and Apache AGE show.
+
+## What did not change
+
+The cross-engine result this artifact exists to report **excludes our engine** and is
+unaffected: 15 divergences and 10 rejections across the five external engines, S1 0.27,
+**S2 0.60**. Re-running the suite after these fixes reproduces every external cell
+exactly — 0 verdict differences across 85 external cells. The paper's headline needs no
+revision.

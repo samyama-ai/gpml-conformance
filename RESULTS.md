@@ -21,23 +21,29 @@ Each cell is one exact multiset comparison, repeated 3 times to confirm the engi
 |---|---|---|---|---|---|---|
 | `mode-walk-bounded` | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
 | `mode-trail-bounded` | ✗ | ! | ✓ | ✓ | ✓ | ✓ |
-| `mode-acyclic-bounded` | – | ! | – | – | – | ✓ |
-| `mode-simple-bounded` | – | ! | – | – | – | ✓ |
+| `mode-acyclic-bounded` | – | ! | – | – | – | ✓† |
+| `mode-simple-bounded` | – | ! | – | – | – | ✓† |
 | `walk-revisits-same-edge` | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
 | `quant-zero-lower-bound` | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ |
 | `quant-zero-zero` | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ |
 | `parallel-edges` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `self-loop-trail` | ✗ | ! | ✓ | ✓ | ✓ | ✓ |
-| `self-loop-acyclic` | – | ! | – | – | – | ✓ |
+| `self-loop-acyclic` | – | ! | – | – | – | ✓† |
 | `direction-any` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `direction-left` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `interior-node-unconstrained` | ! | ! | ✓ | ✓ | ! | ✓ |
 | `selector-all-shortest` | ✓ | ! | ✓ | ✓ | ✓ | ✓ |
-| `selector-any-shortest` | – | ✗ | – | – | – | ✓ |
-| `selector-any` | – | ✗ | – | – | – | ✓ |
+| `selector-any-shortest` | – | ✗ | – | – | – | ✓† |
+| `selector-any` | – | ✗ | – | – | – | ✓† |
 | `paper-trail-unbounded` | ✗ | ! | ✓ | ✓ | ✓ | ✓ |
 
-✓ conforms  ✗ diverges  ! rejects  – inexpressible in that dialect
+✓ conforms  ✗ diverges  ! rejects  – inexpressible in that dialect  ∅ engine failed to load the fixture
+
+† answered through a **vendor extension**: syntax that engine has and the common dialect does not. Such a cell says the engine can express and compute the construct; it does not say the construct is portable, and it is not evidence about the dialect the other engines share. Counted here so a vendor cannot raise its score merely by extending its own syntax without the reader seeing it.
+
+| engine | cells answered via a vendor extension |
+|---|---:|
+| samyama-graph | 5 |
 
 ## S1 — divergence rate, and S2 — silence ratio
 

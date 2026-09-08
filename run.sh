@@ -26,9 +26,17 @@ for _ in $(seq 1 60); do
 import sys
 sys.path.insert(0, "src")
 from engines_adapters import BoltAdapter, AgeAdapter
-BoltAdapter("neo4j", "bolt://localhost:7688", ("neo4j", "testpassword123"))
-BoltAdapter("memgraph", "bolt://localhost:7689", None)
-AgeAdapter("host=localhost port=5433 dbname=postgres user=postgres password=postgres")
+# Opening a connection is not readiness. Neo4j accepts Bolt before the database is
+# writable, so a connect-only probe returns success and the first two cases of the
+# run then score LOAD_FAILED. Each engine must complete a write and a read.
+for a in (BoltAdapter("neo4j", "bolt://localhost:7688", ("neo4j", "testpassword123")),
+          BoltAdapter("memgraph", "bolt://localhost:7689", None),
+          AgeAdapter("host=localhost port=5433 dbname=postgres "
+                     "user=postgres password=postgres")):
+    from gpml_ref import PropertyGraph
+    import fixtures
+    a.load(fixtures.FIXTURES["single"](), fixtures.PRIMARY_LABEL["single"],
+           fixtures.EDGE_LABEL["single"])
 PROBE
   then break; fi
   sleep 2
