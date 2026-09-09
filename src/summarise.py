@@ -11,7 +11,7 @@ BYID = {c.id: c for c in CASES}
 
 # The authors' own engine. It is measured by the same suite and shown as a row, but it
 # is excluded from every headline statistic; see the conflict-of-interest note.
-OURS = {"samyama-graph"}
+OURS = {"samyama-graph", "samyama-graph-dev"}
 
 # Two Neo4j releases are measured. Counting both in one aggregate would weight that
 # vendor twice, so the headline is computed over **one row per product**, taking the

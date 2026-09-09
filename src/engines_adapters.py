@@ -269,7 +269,8 @@ class SamyamaAdapter:
     dialect = "cypher"
 
     def __init__(self, binary: str | None = None, port: int = 8099,
-                 resp_port: int = 6399):
+                 resp_port: int = 6399, name: str | None = None,
+                 build: str | None = None):
         import os
         import urllib.request
         self._urllib = urllib.request
@@ -278,6 +279,13 @@ class SamyamaAdapter:
             os.path.expanduser("~/projects/graph_ws/samyama-graph/target/release/samyama"))
         if not os.path.exists(self.binary):
             raise FileNotFoundError(self.binary)
+        if name:
+            self.name = name
+        # Which build this is. The binary reports the same version string for the
+        # release tag and for the development head, so the git description is the
+        # only thing that tells them apart -- and the paper's table reports the
+        # release, like every other row.
+        self.build = build or "unspecified"
         self.port, self.resp_port = port, resp_port
         self.base_url = f"http://localhost:{port}"
         self.proc = None
@@ -356,9 +364,10 @@ class SamyamaAdapter:
 
     def _version(self):
         try:
-            return f"samyama {self._post('RETURN 1')['engine_version']}"
+            v = self._post("RETURN 1")["engine_version"]
         except Exception:
             return "unknown"
+        return f"samyama {v} ({self.build})"
 
     def load(self, g: PropertyGraph, primary: str, edge_label: str):
         self._start()          # a fresh --ephemeral process is the only trusted reset

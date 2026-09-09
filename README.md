@@ -88,16 +88,14 @@ claim about performance.
 
 ## Conflict of interest
 
-This work was produced at Samyama, which develops a property-graph engine. That engine
-is measured by the same suite, reported as one row, and excluded from the headline
-statistics. No engine's output was used to derive any expected answer.
+This work was produced at Samyama, which develops one of the engines measured. The
+comparison measures **the release, `v1.7.1`** — every other row is a published release
+too — and both our rows are excluded from every aggregate. No engine's output derives
+any expected answer.
 
-For what that is worth in practice: Samyama-Graph 1.7.1 diverges on four constructs
-with a silence ratio of 1.00, the joint worst here, and the metamorphic layer records 24
-violations against it — more than Kùzu's six. Two of its divergences are departures
-from the path mode we document ourselves, and they are filed
-publicly as [samyama-graph#1140](https://github.com/samyama-ai/samyama-graph/issues/1140)
-with the reproducer in `reproducers/samyama-zero-lower-bound.py`.
+`v1.7.1` predates every fix this suite prompted, so the row shows the engine as shipped,
+which scores worse than our development head. That is deliberate. See
+[`OUR-ENGINE.md`](OUR-ENGINE.md) for the issues, the builds, and the standing caveat.
 
 ## Licence
 
