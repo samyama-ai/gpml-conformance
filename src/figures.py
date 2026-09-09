@@ -42,6 +42,11 @@ def load():
 def fig_map(m, path):
     engines = [e["name"] for e in m["engines"]]
     grid = {(c["case"], c["engine"]): c["verdict"] for c in m["cells"]}
+    # Which cells the engine could only answer through the standard's restrictor and
+    # selector keywords, rather than the dialect every openCypher engine shares. Three
+    # engines now need this for some construct, so leaving it off the figure would let
+    # a column look uniformly green without saying what syntax bought it.
+    surf = {(c["case"], c["engine"]): c.get("surface") for c in m["cells"]}
     ncase, neng = len(CASES), len(engines)
     fig, ax = plt.subplots(figsize=(1.15 * neng + 3.6, 0.34 * ncase + 1.5))
     for i, c in enumerate(CASES):
@@ -54,6 +59,10 @@ def fig_map(m, path):
             ax.text(j + 0.5, y + 0.5, GLYPH[v], ha="center", va="center",
                     color="white" if v != "INEXPRESSIBLE" else "#4A5260",
                     fontsize=10, fontweight="bold")
+            if surf.get((c.id, e)) == "gql-prefix":
+                ax.text(j + 0.90, y + 0.80, "†", ha="right", va="top",
+                        color="white" if v != "INEXPRESSIBLE" else "#4A5260",
+                        fontsize=9)
     ax.set_xlim(0, neng)
     ax.set_ylim(0, ncase)
     ax.set_xticks([j + 0.5 for j in range(neng)])
@@ -64,10 +73,12 @@ def fig_map(m, path):
     for s in ax.spines.values():
         s.set_visible(False)
     ax.tick_params(length=0)
-    ax.legend(handles=[Patch(facecolor=COLOR[k], label=f"{GLYPH[k]}  {k.lower()}")
-                       for k in ("CONFORMS", "DIVERGES", "REJECTS", "INEXPRESSIBLE")],
-              loc="upper center", bbox_to_anchor=(0.5, -0.02), ncol=4,
-              frameon=False, fontsize=8.5)
+    handles = [Patch(facecolor=COLOR[k], label=f"{GLYPH[k]}  {k.lower()}")
+               for k in ("CONFORMS", "DIVERGES", "REJECTS", "INEXPRESSIBLE")]
+    handles.append(Patch(facecolor="white", edgecolor="#D9DDE3",
+                         label="†  answered only via the GQL prefix keywords"))
+    ax.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, -0.02),
+              ncol=5, frameon=False, fontsize=8.5)
     fig.tight_layout()
     fig.savefig(path, dpi=200, bbox_inches="tight")
     plt.close(fig)

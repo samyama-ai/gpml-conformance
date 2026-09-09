@@ -13,8 +13,42 @@ BYID = {c.id: c for c in CASES}
 # is excluded from every headline statistic; see the conflict-of-interest note.
 OURS = {"samyama-graph"}
 
+# Two Neo4j releases are measured. Counting both in one aggregate would weight that
+# vendor twice, so the headline is computed over **one row per product**, taking the
+# newest version measured. `SUPERSEDED` names the rows shown but excluded from the
+# aggregate for that reason -- not because they are uninteresting: the drift between
+# them is reported separately, and is the only evidence here about whether the field
+# is converging on the standard.
+#
+# All three aggregates are written to summary.json so the choice is visible and the
+# paper's claims registry can resolve whichever it quotes.
+SUPERSEDED = {"neo4j"}          # superseded by neo4j-2026 in the headline set
+
 SYM = {"CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": "–",
        "NONDETERMINISTIC": "?", "LOAD_FAILED": "∅"}
+
+
+def _aggregates(m):
+    """S1 and S2 under each engine set worth naming."""
+    sets = {
+        "headline_newest_per_product": lambda e: e not in OURS and e not in SUPERSEDED,
+        "all_external_rows": lambda e: e not in OURS,
+        "as_published_5_engines": lambda e: e in {"kuzu", "duckpgq", "neo4j",
+                                                  "memgraph", "apache-age"},
+    }
+    out = {}
+    for name, keep in sets.items():
+        t = Counter(c["verdict"] for c in m["cells"] if keep(c["engine"]))
+        answered = t["CONFORMS"] + t["DIVERGES"]
+        den = t["DIVERGES"] + t["REJECTS"]
+        out[name] = {
+            "engines": sorted({c["engine"] for c in m["cells"] if keep(c["engine"])}),
+            "conforms": t["CONFORMS"], "diverges": t["DIVERGES"],
+            "rejects": t["REJECTS"], "inexpressible": t["INEXPRESSIBLE"],
+            "s1": round(t["DIVERGES"] / answered, 4) if answered else None,
+            "s2": round(t["DIVERGES"] / den, 4) if den else None,
+        }
+    return out
 
 
 def _snapshot_summary():
@@ -86,9 +120,11 @@ def main():
     acc = {e: Counter() for e in engines}
     for c in m["cells"]:
         acc[c["engine"]][c["verdict"]] += 1
-    external = [c for c in m["cells"] if c["engine"] not in OURS]
+    external = [c for c in m["cells"]
+                if c["engine"] not in OURS and c["engine"] not in SUPERSEDED]
     tot = Counter(c["verdict"] for c in external)
-    ext_engines = [e for e in engines if e not in OURS]
+    ext_engines = [e for e in engines
+                   if e not in OURS and e not in SUPERSEDED]
 
     L.append("## S1 — divergence rate, and S2 — silence ratio\n")
     L.append("S1 is divergences over the cells the engine answered. S2 is divergences "
@@ -251,6 +287,10 @@ def main():
         "s2b_external": round((sum(v["divergences"] for e, v in s2b_rows.items() if e not in OURS)
                                - sum(v["spoke"] for e, v in s2b_rows.items() if e not in OURS))
                               / max(1, sum(v["divergences"] for e, v in s2b_rows.items() if e not in OURS)), 4),
+        # The same statistics under each defensible engine set, so the headline's
+        # choice is checkable rather than asserted. `headline` is one row per
+        # product at its newest measured version; the others are stated for contrast.
+        "aggregates": _aggregates(m),
         "metamorphic_violations_ours": sum(
             1 for v in mm["violations"] if v["engine"] in OURS),
         # The paper reports the 2026-09-07 measurement and, separately, what the

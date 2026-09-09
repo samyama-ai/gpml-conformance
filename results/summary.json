@@ -1,19 +1,19 @@
 {
   "n_constructs": 17,
   "n_engines": 7,
-  "n_engines_external": 6,
+  "n_engines_external": 5,
   "n_cells": 119,
-  "n_cells_external": 102,
+  "n_cells_external": 85,
   "repeats": 3,
-  "conforms": 56,
-  "diverges": 17,
+  "conforms": 44,
+  "diverges": 15,
   "rejects": 11,
-  "inexpressible": 18,
+  "inexpressible": 15,
   "nondeterministic": 0,
-  "s1_divergence_rate": 0.2329,
-  "s2_silence_ratio": 0.6071,
-  "disagreements": 28,
-  "divergences_specified": 11,
+  "s1_divergence_rate": 0.2542,
+  "s2_silence_ratio": 0.5769,
+  "disagreements": 26,
+  "divergences_specified": 9,
   "divergences_defect": 6,
   "constructs_multi_class": 9,
   "constructs_single_class": 7,
@@ -35,7 +35,7 @@
     "selector-any": 2,
     "paper-trail-unbounded": 2
   },
-  "nondeterministic_selector_cells": 6,
+  "nondeterministic_selector_cells": 4,
   "constructs_measured": 16,
   "metamorphic_violations_total": 39,
   "metamorphic_violations_external": 39,
@@ -91,6 +91,54 @@
     }
   },
   "s2b_external": 1.0,
+  "aggregates": {
+    "headline_newest_per_product": {
+      "engines": [
+        "apache-age",
+        "duckpgq",
+        "kuzu",
+        "memgraph",
+        "neo4j-2026"
+      ],
+      "conforms": 44,
+      "diverges": 15,
+      "rejects": 11,
+      "inexpressible": 15,
+      "s1": 0.2542,
+      "s2": 0.5769
+    },
+    "all_external_rows": {
+      "engines": [
+        "apache-age",
+        "duckpgq",
+        "kuzu",
+        "memgraph",
+        "neo4j",
+        "neo4j-2026"
+      ],
+      "conforms": 56,
+      "diverges": 17,
+      "rejects": 11,
+      "inexpressible": 18,
+      "s1": 0.2329,
+      "s2": 0.6071
+    },
+    "as_published_5_engines": {
+      "engines": [
+        "apache-age",
+        "duckpgq",
+        "kuzu",
+        "memgraph",
+        "neo4j"
+      ],
+      "conforms": 42,
+      "diverges": 15,
+      "rejects": 10,
+      "inexpressible": 18,
+      "s1": 0.2632,
+      "s2": 0.6
+    }
+  },
   "metamorphic_violations_ours": 0,
   "snapshot_2026_09_07": {
     "kuzu": {
