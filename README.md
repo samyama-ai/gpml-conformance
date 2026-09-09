@@ -18,6 +18,7 @@ Two questions, both previously unmeasured:
 |---|---|
 | `src/gpml_ref.py` | The reference semantics. Restrictors (WALK/TRAIL/ACYCLIC/SIMPLE), selectors (ALL/ANY/ALL SHORTEST/ANY SHORTEST), quantified segments. Consults no engine. |
 | `src/suite.py` | 17 conformance cases: the abstract pattern plus the natural rendering in each dialect. |
+| `src/level2.py`, `src/run_level2.py` | Compares multisets of **edge sequences**, not just endpoint pairs — the resolution the headline comparison gives up. |
 | `src/diagnostics.py` | Classifies what an engine said beside an answer, and re-tests whether the claim was true. |
 | `src/metamorphic.py` | Three relations that hold under *every* path mode, so they need no reference at all. |
 | `src/engines_adapters.py` | Adapters for Kùzu, DuckPGQ, Neo4j, Memgraph, Apache AGE, and Samyama-Graph. |

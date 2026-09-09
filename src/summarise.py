@@ -28,6 +28,27 @@ SYM = {"CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": "�
        "NONDETERMINISTIC": "?", "LOAD_FAILED": "∅"}
 
 
+def _level2_summary():
+    """Does comparing edge sequences find divergence that endpoint pairs miss?"""
+    p = os.path.join(HERE, "results", "level2.json")
+    if not os.path.exists(p):
+        return None
+    d = json.load(open(p))
+    pair = Counter((c["level1"], c["level2"]) for c in d["cells"])
+    return {
+        "comparable_cells": len(d["cells"]),
+        "conforms_both": pair[("CONFORMS", "CONFORMS")],
+        "diverges_both": pair[("DIVERGES", "DIVERGES")],
+        # The question the paper's stated limitation asks: how many cells look
+        # identical at endpoint level and differ once you compare the paths?
+        "refined_by_level2": pair[("CONFORMS", "DIVERGES")],
+        # The reverse would mean level 2 is less strict than level 1, which cannot
+        # happen if both are computed correctly. Checked, not assumed.
+        "contradicts_level1": pair[("DIVERGES", "CONFORMS")],
+        "not_projectable": pair[("CONFORMS", "REJECTS")] + pair[("DIVERGES", "REJECTS")],
+    }
+
+
 def _aggregates(m):
     """S1 and S2 under each engine set worth naming."""
     sets = {
@@ -291,6 +312,7 @@ def main():
         # choice is checkable rather than asserted. `headline` is one row per
         # product at its newest measured version; the others are stated for contrast.
         "aggregates": _aggregates(m),
+        "level2": _level2_summary(),
         "metamorphic_violations_ours": sum(
             1 for v in mm["violations"] if v["engine"] in OURS),
         # The paper reports the 2026-09-07 measurement and, separately, what the

@@ -1,0 +1,1127 @@
+{
+  "cells": [
+    {
+      "case": "mode-walk-bounded",
+      "engine": "kuzu",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[e:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, rels(e) AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-walk-bounded",
+      "engine": "neo4j",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1',): 1, ('e1', 'e2'): 1, ('e1', 'e2', 'e1'): 1, ('e1', 'e2', 'e1', 'e2'): 1}, observed {('e1',): 1, ('e1', 'e2'): 1}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-walk-bounded",
+      "engine": "neo4j-2026",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1',): 1, ('e1', 'e2'): 1, ('e1', 'e2', 'e1'): 1, ('e1', 'e2', 'e1', 'e2'): 1}, observed {('e1',): 1, ('e1', 'e2'): 1}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-walk-bounded",
+      "engine": "memgraph",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1',): 1, ('e1', 'e2'): 1, ('e1', 'e2', 'e1'): 1, ('e1', 'e2', 'e1', 'e2'): 1}, observed {('e1',): 1, ('e1', 'e2'): 1}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-walk-bounded",
+      "engine": "apache-age",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1',): 1, ('e1', 'e2'): 1, ('e1', 'e2', 'e1'): 1, ('e1', 'e2', 'e1', 'e2'): 1}, observed {('e1',): 1, ('e1', 'e2'): 1}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-walk-bounded",
+      "engine": "samyama-graph",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1',): 1, ('e1', 'e2'): 1, ('e1', 'e2', 'e1'): 1, ('e1', 'e2', 'e1', 'e2'): 1}, observed {('e1',): 1, ('e1', 'e2'): 1}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-trail-bounded",
+      "engine": "kuzu",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1',): 1, ('e1', 'e2'): 1}, observed {('e1', 'e2', 'e1', 'e2'): 1, ('e1', 'e2'): 1, ('e1', 'e2', 'e1'): 1, ('e1',): 1}",
+      "query": "MATCH p=(x:N)-[e:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, rels(e) AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-trail-bounded",
+      "engine": "neo4j",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-trail-bounded",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-trail-bounded",
+      "engine": "memgraph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-trail-bounded",
+      "engine": "apache-age",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-trail-bounded",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-acyclic-bounded",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=ACYCLIC (x:N) (()-[:E]->()){1,3} (y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "mode-acyclic-bounded",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=ACYCLIC (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "mode-simple-bounded",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=SIMPLE (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e1 e3 e4": 1,
+        "e2": 1,
+        "e2 e3": 1,
+        "e2 e3 e4": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e1 e3 e4": 1,
+        "e2": 1,
+        "e2 e3": 1,
+        "e2 e3 e4": 1
+      }
+    },
+    {
+      "case": "walk-revisits-same-edge",
+      "engine": "kuzu",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[e:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, rels(e) AS t",
+      "observed": {
+        "e1 e1": 1
+      },
+      "reference": {
+        "e1 e1": 1
+      }
+    },
+    {
+      "case": "walk-revisits-same-edge",
+      "engine": "neo4j",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1', 'e1'): 1}, observed {}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {},
+      "reference": {
+        "e1 e1": 1
+      }
+    },
+    {
+      "case": "walk-revisits-same-edge",
+      "engine": "neo4j-2026",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1', 'e1'): 1}, observed {}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {},
+      "reference": {
+        "e1 e1": 1
+      }
+    },
+    {
+      "case": "walk-revisits-same-edge",
+      "engine": "memgraph",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1', 'e1'): 1}, observed {}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {},
+      "reference": {
+        "e1 e1": 1
+      }
+    },
+    {
+      "case": "walk-revisits-same-edge",
+      "engine": "apache-age",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1', 'e1'): 1}, observed {}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {},
+      "reference": {
+        "e1 e1": 1
+      }
+    },
+    {
+      "case": "walk-revisits-same-edge",
+      "engine": "samyama-graph",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1', 'e1'): 1}, observed {}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {},
+      "reference": {
+        "e1 e1": 1
+      }
+    },
+    {
+      "case": "quant-zero-lower-bound",
+      "engine": "kuzu",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[e:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, rels(e) AS t",
+      "observed": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "quant-zero-lower-bound",
+      "engine": "neo4j",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "quant-zero-lower-bound",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "quant-zero-lower-bound",
+      "engine": "memgraph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "quant-zero-lower-bound",
+      "engine": "apache-age",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "quant-zero-lower-bound",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "quant-zero-zero",
+      "engine": "kuzu",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[e:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, rels(e) AS t",
+      "observed": {
+        "": 1
+      },
+      "reference": {
+        "": 1
+      }
+    },
+    {
+      "case": "quant-zero-zero",
+      "engine": "neo4j",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1
+      },
+      "reference": {
+        "": 1
+      }
+    },
+    {
+      "case": "quant-zero-zero",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1
+      },
+      "reference": {
+        "": 1
+      }
+    },
+    {
+      "case": "quant-zero-zero",
+      "engine": "memgraph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1
+      },
+      "reference": {
+        "": 1
+      }
+    },
+    {
+      "case": "quant-zero-zero",
+      "engine": "apache-age",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1
+      },
+      "reference": {
+        "": 1
+      }
+    },
+    {
+      "case": "quant-zero-zero",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1
+      },
+      "reference": {
+        "": 1
+      }
+    },
+    {
+      "case": "parallel-edges",
+      "engine": "kuzu",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[e:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, rels(e) AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "parallel-edges",
+      "engine": "neo4j",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "parallel-edges",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "parallel-edges",
+      "engine": "memgraph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "parallel-edges",
+      "engine": "apache-age",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "parallel-edges",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "self-loop-trail",
+      "engine": "kuzu",
+      "level2": "REJECTS",
+      "level1": "DIVERGES",
+      "detail": "RuntimeError: Binder exception: Variable x is not in scope.",
+      "query": "MATCH p=(u:N)-[e:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, rels(e) AS t"
+    },
+    {
+      "case": "self-loop-trail",
+      "engine": "neo4j",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "CypherSyntaxError: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Variable `x` not defined (line 1, column 56 (offset: 55))\n\"MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-trail",
+      "engine": "neo4j-2026",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "CypherSyntaxError: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Variable `x` not defined (line 1, column 56 (offset: 55))\n\"MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-trail",
+      "engine": "memgraph",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "ClientError: {neo4j_code: Memgraph.ClientError.MemgraphError.MemgraphError} {message: Unbound variable: x.} {gql_status: 50N42} {gql_status_description: error: general processing exception - unexpecte",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-trail",
+      "engine": "apache-age",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "UndefinedColumn: could not find rte for x\nLINE 1: ... p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s...\n                                                             ^\nHINT:  variable x do",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-trail",
+      "engine": "samyama-graph",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "HTTPError: HTTP Error 400: Bad Request",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-acyclic",
+      "engine": "neo4j-2026",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "CypherSyntaxError: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Variable `x` not defined (line 1, column 72 (offset: 71))\n\"MATCH p=ACYCLIC (u:N) (()-[:E]->()){1,2} (v:N) WHERE u.name=",
+      "query": "MATCH p=ACYCLIC (u:N) (()-[:E]->()){1,2} (v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-acyclic",
+      "engine": "samyama-graph",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "HTTPError: HTTP Error 400: Bad Request",
+      "query": "MATCH p=ACYCLIC (u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "direction-any",
+      "engine": "kuzu",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[e:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, rels(e) AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      }
+    },
+    {
+      "case": "direction-any",
+      "engine": "neo4j",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      }
+    },
+    {
+      "case": "direction-any",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      }
+    },
+    {
+      "case": "direction-any",
+      "engine": "memgraph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      }
+    },
+    {
+      "case": "direction-any",
+      "engine": "apache-age",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      }
+    },
+    {
+      "case": "direction-any",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      }
+    },
+    {
+      "case": "direction-left",
+      "engine": "kuzu",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[e:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, rels(e) AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "direction-left",
+      "engine": "neo4j",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "direction-left",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "direction-left",
+      "engine": "memgraph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "direction-left",
+      "engine": "apache-age",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "direction-left",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "interior-node-unconstrained",
+      "engine": "neo4j",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "interior-node-unconstrained",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "interior-node-unconstrained",
+      "engine": "memgraph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "interior-node-unconstrained",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "selector-all-shortest",
+      "engine": "kuzu",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "RuntimeError: Binder exception: Variable e is not in scope.",
+      "query": "MATCH p=(x:N)-[e:E*1..3]->(y:N) WHERE x.name='a' WITH x, y, min(length(p)) AS m MATCH q=(x)-[:E*1..3]->(y) WHERE length(q)=m RETURN x.eid AS s, rels(e) AS t"
+    },
+    {
+      "case": "selector-any-shortest",
+      "engine": "neo4j",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=ANY SHORTEST (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e2": 1,
+        "e2 e3": 1,
+        "e2 e3 e4": 1
+      },
+      "reference": null
+    },
+    {
+      "case": "selector-any-shortest",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=ANY SHORTEST (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e2": 1,
+        "e2 e3": 1,
+        "e2 e3 e4": 1
+      },
+      "reference": null
+    },
+    {
+      "case": "selector-any-shortest",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=ANY SHORTEST (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e1 e3 e4": 1
+      },
+      "reference": null
+    },
+    {
+      "case": "selector-any",
+      "engine": "neo4j",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e2": 1,
+        "e2 e3": 1,
+        "e2 e3 e4": 1
+      },
+      "reference": null
+    },
+    {
+      "case": "selector-any",
+      "engine": "neo4j-2026",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e2": 1,
+        "e2 e3": 1,
+        "e2 e3 e4": 1
+      },
+      "reference": null
+    },
+    {
+      "case": "selector-any",
+      "engine": "samyama-graph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e1 e3 e4": 1
+      },
+      "reference": null
+    },
+    {
+      "case": "paper-trail-unbounded",
+      "engine": "kuzu",
+      "level2": "REJECTS",
+      "level1": "DIVERGES",
+      "detail": "RuntimeError: Binder exception: Variable x is not in scope.",
+      "query": "MATCH p=(a:Account)-[e:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, rels(e) AS t"
+    },
+    {
+      "case": "paper-trail-unbounded",
+      "engine": "neo4j",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "CypherSyntaxError: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Variable `x` not defined (line 1, column 100 (offset: 99))\n\"MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.o",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "paper-trail-unbounded",
+      "engine": "neo4j-2026",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "CypherSyntaxError: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Variable `x` not defined (line 1, column 100 (offset: 99))\n\"MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.o",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "paper-trail-unbounded",
+      "engine": "memgraph",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "ClientError: {neo4j_code: Memgraph.ClientError.MemgraphError.MemgraphError} {message: Unbound variable: x.} {gql_status: 50N42} {gql_status_description: error: general processing exception - unexpecte",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "paper-trail-unbounded",
+      "engine": "apache-age",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "UndefinedColumn: could not find rte for x\nLINE 1: ... WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s...\n                                                             ^\nHINT:  variable x do",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "paper-trail-unbounded",
+      "engine": "samyama-graph",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "HTTPError: HTTP Error 400: Bad Request",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    }
+  ],
+  "refined": []
+}

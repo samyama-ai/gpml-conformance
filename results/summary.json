@@ -139,6 +139,14 @@
       "s2": 0.6
     }
   },
+  "level2": {
+    "comparable_cells": 76,
+    "conforms_both": 50,
+    "diverges_both": 11,
+    "refined_by_level2": 0,
+    "contradicts_level1": 0,
+    "not_projectable": 15
+  },
   "metamorphic_violations_ours": 0,
   "snapshot_2026_09_07": {
     "kuzu": {
