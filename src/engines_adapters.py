@@ -363,11 +363,18 @@ class SamyamaAdapter:
             return _json.loads(r.read().decode())
 
     def _version(self):
+        """Report the build first, the self-reported version second.
+
+        The build label comes from the git tag and is authoritative. The
+        `engine_version` field is only supplementary -- and older releases do not
+        return it at all, so falling back to "unknown" would have labelled the
+        release row with no version while the development row carried one.
+        """
         try:
-            v = self._post("RETURN 1")["engine_version"]
+            v = self._post("RETURN 1").get("engine_version")
         except Exception:
-            return "unknown"
-        return f"samyama {v} ({self.build})"
+            v = None
+        return f"samyama {self.build}" + (f" (reports {v})" if v else "")
 
     def load(self, g: PropertyGraph, primary: str, edge_label: str):
         self._start()          # a fresh --ephemeral process is the only trusted reset
