@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import fixtures
 from gpml_ref import Path, match
 from suite import CASES
+from capabilities import probe
 from engines_adapters import (AgeAdapter, BoltAdapter, DuckPGQAdapter,
                               EngineError, KuzuAdapter, SamyamaAdapter)
 
@@ -42,13 +43,37 @@ DECLARED_MODE = {
     "apache-age": "TRAIL",
     "kuzu": "WALK",
     "duckpgq": None,        # None = the dialect *is* the standard; no second axis
+    "neo4j-2026": "TRAIL",
     "samyama-graph": "TRAIL",
 }
 
-# Engines whose dialect is openCypher plus the GQL restrictor and selector prefixes.
-# They are given `case.cypher_gql` where it exists, so a construct their dialect can
-# express is measured rather than scored INEXPRESSIBLE.
-SUPPORTS_GQL_PREFIXES = {"samyama-graph"}
+def pick_cypher_rendering(case, cap):
+    """Which spelling of this construct does this engine get, and what is it called?
+
+    A hardcoded engine list used to decide this. Two engines now take the standard's
+    prefixes and they disagree about the quantifier spelling, so the choice is made
+    from a probe of the engine (src/capabilities.py) recorded in the map beside the
+    result it explains.
+
+    `common-dialect` is the rendering every openCypher engine can take. `gql-prefix`
+    uses the standard's restrictor and selector keywords, which not every engine has
+    -- it is a dialect-version difference, and since Neo4j 2026.04 it is no longer
+    peculiar to one vendor.
+    """
+    if cap is None or not cap.takes_prefixes():
+        return case.cypher, "common-dialect"
+    wants_restrictor = case.ref.restrictor != "WALK"
+    if wants_restrictor:
+        if cap.restrictor_legacy and case.cypher_gql:
+            return case.cypher_gql, "gql-prefix"
+        if cap.restrictor_qpp and case.cypher_qpp:
+            return case.cypher_qpp, "gql-prefix"
+    else:
+        if cap.selector_legacy and case.cypher_gql:
+            return case.cypher_gql, "gql-prefix"
+        if cap.selector_qpp and case.cypher_qpp:
+            return case.cypher_qpp, "gql-prefix"
+    return case.cypher, "common-dialect"
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -117,6 +142,11 @@ def build_engines(workdir):
         print(f"  duckpgq unavailable: {e}", file=sys.stderr)
     for name, uri, auth in [
         ("neo4j", "bolt://localhost:7688", ("neo4j", "testpassword123")),
+        # Neo4j's calendar-versioned line. 5.26 predates the GQL conformance work,
+        # so measuring only it answers a question about a two-year-old release
+        # rather than about the product. The paper's own limitations section names
+        # this rerun as the obvious next measurement.
+        ("neo4j-2026", "bolt://localhost:7690", ("neo4j", "testpassword123")),
         ("memgraph", "bolt://localhost:7689", None),
     ]:
         try:
@@ -141,6 +171,13 @@ def main():
     engines = build_engines(workdir)
     print(f"engines: {[e.name for e in engines]}")
 
+    # Ask each engine which spelling of the standard's path prefixes it parses,
+    # before measuring anything, and keep the answer in the map.
+    caps = {e.name: probe(e) for e in engines}
+    for n, c in caps.items():
+        if c.takes_prefixes():
+            print(f"  {n}: GQL prefixes {c.as_dict()}")
+
     cells = []
     for case in CASES:
         res, _ = reference_pairs(case)
@@ -149,10 +186,7 @@ def main():
         edge_label = fixtures.EDGE_LABEL[case.fixture]
         for eng in engines:
             if eng.dialect == "cypher":
-                query = case.cypher
-                surface = "common-dialect"
-                if eng.name in SUPPORTS_GQL_PREFIXES and case.cypher_gql:
-                    query, surface = case.cypher_gql, "vendor-extension"
+                query, surface = pick_cypher_rendering(case, caps.get(eng.name))
             else:
                 query = case.pgq
                 surface = "common-dialect"
@@ -213,7 +247,8 @@ def main():
             ))
 
     out = dict(
-        engines=[dict(name=e.name, dialect=e.dialect, version=str(e.version))
+        engines=[dict(name=e.name, dialect=e.dialect, version=str(e.version),
+                      gql_syntax=caps[e.name].as_dict())
                  for e in engines],
         repeats=REPEATS,
         cells=cells,

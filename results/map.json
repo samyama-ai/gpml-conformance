@@ -3,32 +3,86 @@
     {
       "name": "kuzu",
       "dialect": "cypher",
-      "version": "0.11.3"
+      "version": "0.11.3",
+      "gql_syntax": {
+        "restrictor_legacy": false,
+        "restrictor_qpp": false,
+        "selector_legacy": false,
+        "selector_qpp": false,
+        "named_path_after_prefix": false
+      }
     },
     {
       "name": "duckpgq",
       "dialect": "pgq",
-      "version": "1.4.1"
+      "version": "1.4.1",
+      "gql_syntax": {
+        "restrictor_legacy": false,
+        "restrictor_qpp": false,
+        "selector_legacy": false,
+        "selector_qpp": false,
+        "named_path_after_prefix": false
+      }
     },
     {
       "name": "neo4j",
       "dialect": "cypher",
-      "version": "Neo4j Kernel 5.26.30"
+      "version": "Neo4j Kernel 5.26.30",
+      "gql_syntax": {
+        "restrictor_legacy": false,
+        "restrictor_qpp": false,
+        "selector_legacy": true,
+        "selector_qpp": true,
+        "named_path_after_prefix": false
+      }
+    },
+    {
+      "name": "neo4j-2026",
+      "dialect": "cypher",
+      "version": "Neo4j Kernel 2026.04.0",
+      "gql_syntax": {
+        "restrictor_legacy": false,
+        "restrictor_qpp": true,
+        "selector_legacy": true,
+        "selector_qpp": true,
+        "named_path_after_prefix": false
+      }
     },
     {
       "name": "memgraph",
       "dialect": "cypher",
-      "version": "Memgraph 5.9.0"
+      "version": "Memgraph 5.9.0",
+      "gql_syntax": {
+        "restrictor_legacy": false,
+        "restrictor_qpp": false,
+        "selector_legacy": false,
+        "selector_qpp": false,
+        "named_path_after_prefix": false
+      }
     },
     {
       "name": "apache-age",
       "dialect": "cypher",
-      "version": "age 1.8.0"
+      "version": "age 1.8.0",
+      "gql_syntax": {
+        "restrictor_legacy": false,
+        "restrictor_qpp": false,
+        "selector_legacy": false,
+        "selector_qpp": false,
+        "named_path_after_prefix": false
+      }
     },
     {
       "name": "samyama-graph",
       "dialect": "cypher",
-      "version": "samyama 1.7.1"
+      "version": "samyama 1.7.1",
+      "gql_syntax": {
+        "restrictor_legacy": true,
+        "restrictor_qpp": false,
+        "selector_legacy": true,
+        "selector_qpp": false,
+        "named_path_after_prefix": false
+      }
     }
   ],
   "repeats": 3,
@@ -82,6 +136,27 @@
       "detail_vs_declared": "",
       "case": "mode-walk-bounded",
       "engine": "neo4j",
+      "surface": "common-dialect",
+      "verdict": "DIVERGES",
+      "detail": "expected {('m', 'n'): 2, ('m', 'm'): 2}, observed {('m', 'n'): 1, ('m', 'm'): 1}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "reference": {
+        "m->n": 2,
+        "m->m": 2
+      }
+    },
+    {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "mode-walk-bounded",
+      "engine": "neo4j-2026",
       "surface": "common-dialect",
       "verdict": "DIVERGES",
       "detail": "expected {('m', 'n'): 2, ('m', 'm'): 2}, observed {('m', 'n'): 1, ('m', 'm'): 1}",
@@ -223,6 +298,27 @@
       }
     },
     {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "mode-trail-bounded",
+      "engine": "neo4j-2026",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "reference": {
+        "m->n": 1,
+        "m->m": 1
+      }
+    },
+    {
       "diagnostics": [
         {
           "code": "PlanHinting",
@@ -322,6 +418,27 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": null,
+      "detail_vs_declared": "",
+      "case": "mode-acyclic-bounded",
+      "engine": "neo4j-2026",
+      "surface": "gql-prefix",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ACYCLIC (x:N) (()-[:E]->()){1,3} (y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->b": 2,
+        "a->c": 2
+      }
+    },
+    {
       "case": "mode-acyclic-bounded",
       "engine": "memgraph",
       "verdict": "INEXPRESSIBLE",
@@ -343,7 +460,7 @@
       "detail_vs_declared": "",
       "case": "mode-acyclic-bounded",
       "engine": "samyama-graph",
-      "surface": "vendor-extension",
+      "surface": "gql-prefix",
       "verdict": "CONFORMS",
       "detail": "",
       "query": "MATCH ACYCLIC (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
@@ -380,6 +497,14 @@
     },
     {
       "case": "mode-simple-bounded",
+      "engine": "neo4j-2026",
+      "verdict": "REJECTS",
+      "surface": "gql-prefix",
+      "detail": "CypherSyntaxError: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Invalid input '(': expected a graph pattern (line 1, column 14 (offset: 13))\n\"MATCH SIMPLE (x:N) (()-[:E]->()){1,3} (y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t\"\n              ^} {gql_status: 42001} {gql_status_",
+      "query": "MATCH SIMPLE (x:N) (()-[:E]->()){1,3} (y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
+    },
+    {
+      "case": "mode-simple-bounded",
       "engine": "memgraph",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
@@ -400,7 +525,7 @@
       "detail_vs_declared": "",
       "case": "mode-simple-bounded",
       "engine": "samyama-graph",
-      "surface": "vendor-extension",
+      "surface": "gql-prefix",
       "verdict": "CONFORMS",
       "detail": "",
       "query": "MATCH SIMPLE (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
@@ -459,6 +584,23 @@
       "detail_vs_declared": "",
       "case": "walk-revisits-same-edge",
       "engine": "neo4j",
+      "surface": "common-dialect",
+      "verdict": "DIVERGES",
+      "detail": "expected {('u', 'u'): 1}, observed {}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, y.eid AS t",
+      "observed": {},
+      "reference": {
+        "u->u": 1
+      }
+    },
+    {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "walk-revisits-same-edge",
+      "engine": "neo4j-2026",
       "surface": "common-dialect",
       "verdict": "DIVERGES",
       "detail": "expected {('u', 'u'): 1}, observed {}",
@@ -587,6 +729,29 @@
       "detail_vs_declared": "",
       "case": "quant-zero-lower-bound",
       "engine": "neo4j",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->a": 1,
+        "a->b": 2,
+        "a->c": 2
+      }
+    },
+    {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "quant-zero-lower-bound",
+      "engine": "neo4j-2026",
       "surface": "common-dialect",
       "verdict": "CONFORMS",
       "detail": "",
@@ -736,6 +901,25 @@
       }
     },
     {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "quant-zero-zero",
+      "engine": "neo4j-2026",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1
+      },
+      "reference": {
+        "a->a": 1
+      }
+    },
+    {
       "diagnostics": [
         {
           "code": "PlanHinting",
@@ -845,6 +1029,25 @@
       "detail_vs_declared": "",
       "case": "parallel-edges",
       "engine": "neo4j",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->b": 2
+      },
+      "reference": {
+        "a->b": 2
+      }
+    },
+    {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "parallel-edges",
+      "engine": "neo4j-2026",
       "surface": "common-dialect",
       "verdict": "CONFORMS",
       "detail": "",
@@ -971,6 +1174,27 @@
       }
     },
     {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "self-loop-trail",
+      "engine": "neo4j-2026",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN u.eid AS s, v.eid AS t",
+      "observed": {
+        "x->x": 2,
+        "x->y": 2
+      },
+      "reference": {
+        "x->x": 2,
+        "x->y": 2
+      }
+    },
+    {
       "diagnostics": [
         {
           "code": "PlanHinting",
@@ -1070,6 +1294,25 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": null,
+      "detail_vs_declared": "",
+      "case": "self-loop-acyclic",
+      "engine": "neo4j-2026",
+      "surface": "gql-prefix",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ACYCLIC (u:N) (()-[:E]->()){1,2} (v:N) WHERE u.name='x' RETURN u.eid AS s, v.eid AS t",
+      "observed": {
+        "x->y": 1
+      },
+      "reference": {
+        "x->y": 1
+      }
+    },
+    {
       "case": "self-loop-acyclic",
       "engine": "memgraph",
       "verdict": "INEXPRESSIBLE",
@@ -1091,7 +1334,7 @@
       "detail_vs_declared": "",
       "case": "self-loop-acyclic",
       "engine": "samyama-graph",
-      "surface": "vendor-extension",
+      "surface": "gql-prefix",
       "verdict": "CONFORMS",
       "detail": "",
       "query": "MATCH ACYCLIC (u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN u.eid AS s, v.eid AS t",
@@ -1152,6 +1395,27 @@
       "detail_vs_declared": "",
       "case": "direction-any",
       "engine": "neo4j",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "b->a": 2,
+        "b->c": 1
+      },
+      "reference": {
+        "b->a": 2,
+        "b->c": 1
+      }
+    },
+    {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "direction-any",
+      "engine": "neo4j-2026",
       "surface": "common-dialect",
       "verdict": "CONFORMS",
       "detail": "",
@@ -1293,6 +1557,25 @@
       }
     },
     {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "direction-left",
+      "engine": "neo4j-2026",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "b->a": 2
+      },
+      "reference": {
+        "b->a": 2
+      }
+    },
+    {
       "diagnostics": [
         {
           "code": "PlanHinting",
@@ -1380,6 +1663,25 @@
       "detail_vs_declared": "",
       "case": "interior-node-unconstrained",
       "engine": "neo4j",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "p->r": 1
+      },
+      "reference": {
+        "p->r": 1
+      }
+    },
+    {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "interior-node-unconstrained",
+      "engine": "neo4j-2026",
       "surface": "common-dialect",
       "verdict": "CONFORMS",
       "detail": "",
@@ -1499,6 +1801,29 @@
       }
     },
     {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "selector-all-shortest",
+      "engine": "neo4j-2026",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..3]->(y:N) WHERE x.name='a' WITH x, y, min(length(p)) AS m MATCH q=(x)-[:E*1..3]->(y) WHERE length(q)=m RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->b": 2,
+        "a->c": 2,
+        "a->a": 2
+      }
+    },
+    {
       "diagnostics": [
         {
           "code": "PlanHinting",
@@ -1600,11 +1925,42 @@
       "reference": null
     },
     {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
       "case": "selector-any-shortest",
       "engine": "neo4j",
-      "verdict": "INEXPRESSIBLE",
-      "surface": "common-dialect",
-      "detail": "no surface syntax in this dialect"
+      "surface": "gql-prefix",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ANY SHORTEST (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "reference": null
+    },
+    {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "selector-any-shortest",
+      "engine": "neo4j-2026",
+      "surface": "gql-prefix",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ANY SHORTEST (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "reference": null
     },
     {
       "case": "selector-any-shortest",
@@ -1628,7 +1984,7 @@
       "detail_vs_declared": "",
       "case": "selector-any-shortest",
       "engine": "samyama-graph",
-      "surface": "vendor-extension",
+      "surface": "gql-prefix",
       "verdict": "CONFORMS",
       "detail": "",
       "query": "MATCH ANY SHORTEST (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
@@ -1665,11 +2021,42 @@
       "reference": null
     },
     {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
       "case": "selector-any",
       "engine": "neo4j",
-      "verdict": "INEXPRESSIBLE",
-      "surface": "common-dialect",
-      "detail": "no surface syntax in this dialect"
+      "surface": "gql-prefix",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "reference": null
+    },
+    {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "selector-any",
+      "engine": "neo4j-2026",
+      "surface": "gql-prefix",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "reference": null
     },
     {
       "case": "selector-any",
@@ -1693,7 +2080,7 @@
       "detail_vs_declared": "",
       "case": "selector-any",
       "engine": "samyama-graph",
-      "surface": "vendor-extension",
+      "surface": "gql-prefix",
       "verdict": "CONFORMS",
       "detail": "",
       "query": "MATCH ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
@@ -1739,6 +2126,25 @@
       "detail_vs_declared": "",
       "case": "paper-trail-unbounded",
       "engine": "neo4j",
+      "surface": "common-dialect",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN a.eid AS s, b.eid AS t",
+      "observed": {
+        "a6->a2": 3
+      },
+      "reference": {
+        "a6->a2": 3
+      }
+    },
+    {
+      "diagnostics": [],
+      "diagnostics_supported": true,
+      "declared_mode": "TRAIL",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "paper-trail-unbounded",
+      "engine": "neo4j-2026",
       "surface": "common-dialect",
       "verdict": "CONFORMS",
       "detail": "",
