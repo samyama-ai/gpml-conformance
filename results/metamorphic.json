@@ -254,6 +254,152 @@
       "start": "a"
     },
     {
+      "relation": "M2 lower-bound monotonicity",
+      "left": "{1,1}",
+      "right": "{0,1}",
+      "left_answer": {
+        "a->b": 2
+      },
+      "right_answer": {
+        "a->a": 1,
+        "a->b": 1
+      },
+      "explanation": "widening the lower bound dropped an answer, which no path mode allows",
+      "fixture": "micro",
+      "engine": "samyama-graph",
+      "start": "a"
+    },
+    {
+      "relation": "M2 lower-bound monotonicity",
+      "left": "{1,2}",
+      "right": "{0,2}",
+      "left_answer": {
+        "a->b": 2,
+        "a->c": 2
+      },
+      "right_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "explanation": "widening the lower bound dropped an answer, which no path mode allows",
+      "fixture": "micro",
+      "engine": "samyama-graph",
+      "start": "a"
+    },
+    {
+      "relation": "M2 lower-bound monotonicity",
+      "left": "{1,3}",
+      "right": "{0,3}",
+      "left_answer": {
+        "a->a": 2,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "right_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "explanation": "widening the lower bound dropped an answer, which no path mode allows",
+      "fixture": "micro",
+      "engine": "samyama-graph",
+      "start": "a"
+    },
+    {
+      "relation": "M2 lower-bound monotonicity",
+      "left": "{1,4}",
+      "right": "{0,4}",
+      "left_answer": {
+        "a->a": 2,
+        "a->b": 4,
+        "a->c": 2
+      },
+      "right_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "explanation": "widening the lower bound dropped an answer, which no path mode allows",
+      "fixture": "micro",
+      "engine": "samyama-graph",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,1}",
+      "right": "{0,0} + {1,1}",
+      "left_answer": {
+        "a->a": 1,
+        "a->b": 1
+      },
+      "right_answer": {
+        "a->a": 1,
+        "a->b": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "samyama-graph",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "right_answer": {
+        "a->a": 1,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "samyama-graph",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "right_answer": {
+        "a->a": 3,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "samyama-graph",
+      "start": "a"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "a->a": 1,
+        "a->b": 1,
+        "a->c": 1
+      },
+      "right_answer": {
+        "a->a": 3,
+        "a->b": 4,
+        "a->c": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "micro",
+      "engine": "samyama-graph",
+      "start": "a"
+    },
+    {
       "relation": "M3 range decomposition",
       "left": "{0,4}",
       "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
@@ -331,6 +477,57 @@
       "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
       "fixture": "cycle2",
       "engine": "duckpgq",
+      "start": "m"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "right_answer": {
+        "m->m": 2,
+        "m->n": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "cycle2",
+      "engine": "samyama-graph",
+      "start": "m"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "right_answer": {
+        "m->m": 2,
+        "m->n": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "cycle2",
+      "engine": "samyama-graph",
+      "start": "m"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "m->m": 1,
+        "m->n": 1
+      },
+      "right_answer": {
+        "m->m": 2,
+        "m->n": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "cycle2",
+      "engine": "samyama-graph",
       "start": "m"
     },
     {
@@ -514,6 +711,125 @@
       "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
       "fixture": "loop",
       "engine": "duckpgq",
+      "start": "x"
+    },
+    {
+      "relation": "M2 lower-bound monotonicity",
+      "left": "{1,2}",
+      "right": "{0,2}",
+      "left_answer": {
+        "x->x": 2,
+        "x->y": 2
+      },
+      "right_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "explanation": "widening the lower bound dropped an answer, which no path mode allows",
+      "fixture": "loop",
+      "engine": "samyama-graph",
+      "start": "x"
+    },
+    {
+      "relation": "M2 lower-bound monotonicity",
+      "left": "{1,3}",
+      "right": "{0,3}",
+      "left_answer": {
+        "x->x": 4,
+        "x->y": 2
+      },
+      "right_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "explanation": "widening the lower bound dropped an answer, which no path mode allows",
+      "fixture": "loop",
+      "engine": "samyama-graph",
+      "start": "x"
+    },
+    {
+      "relation": "M2 lower-bound monotonicity",
+      "left": "{1,4}",
+      "right": "{0,4}",
+      "left_answer": {
+        "x->x": 4,
+        "x->y": 2
+      },
+      "right_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "explanation": "widening the lower bound dropped an answer, which no path mode allows",
+      "fixture": "loop",
+      "engine": "samyama-graph",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,1}",
+      "right": "{0,0} + {1,1}",
+      "left_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 2,
+        "x->y": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "samyama-graph",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 3,
+        "x->y": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "samyama-graph",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 5,
+        "x->y": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "samyama-graph",
+      "start": "x"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,4}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3} + {4,4}",
+      "left_answer": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "right_answer": {
+        "x->x": 5,
+        "x->y": 2
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "loop",
+      "engine": "samyama-graph",
       "start": "x"
     },
     {
@@ -733,6 +1049,100 @@
       "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
       "fixture": "fig1",
       "engine": "duckpgq",
+      "start": "a6"
+    },
+    {
+      "relation": "M2 lower-bound monotonicity",
+      "left": "{1,2}",
+      "right": "{0,2}",
+      "left_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 1,
+        "a6->a5": 2
+      },
+      "right_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 1,
+        "a6->a5": 1,
+        "a6->a6": 1
+      },
+      "explanation": "widening the lower bound dropped an answer, which no path mode allows",
+      "fixture": "fig1",
+      "engine": "samyama-graph",
+      "start": "a6"
+    },
+    {
+      "relation": "M2 lower-bound monotonicity",
+      "left": "{1,3}",
+      "right": "{0,3}",
+      "left_answer": {
+        "a6->a1": 2,
+        "a6->a2": 1,
+        "a6->a3": 2,
+        "a6->a4": 1,
+        "a6->a5": 2
+      },
+      "right_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 1,
+        "a6->a4": 1,
+        "a6->a5": 1,
+        "a6->a6": 1
+      },
+      "explanation": "widening the lower bound dropped an answer, which no path mode allows",
+      "fixture": "fig1",
+      "engine": "samyama-graph",
+      "start": "a6"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,2}",
+      "right": "{0,0} + {1,1} + {2,2}",
+      "left_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 1,
+        "a6->a5": 1,
+        "a6->a6": 1
+      },
+      "right_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 1,
+        "a6->a5": 2,
+        "a6->a6": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "fig1",
+      "engine": "samyama-graph",
+      "start": "a6"
+    },
+    {
+      "relation": "M3 range decomposition",
+      "left": "{0,3}",
+      "right": "{0,0} + {1,1} + {2,2} + {3,3}",
+      "left_answer": {
+        "a6->a1": 1,
+        "a6->a2": 1,
+        "a6->a3": 1,
+        "a6->a4": 1,
+        "a6->a5": 1,
+        "a6->a6": 1
+      },
+      "right_answer": {
+        "a6->a1": 2,
+        "a6->a2": 1,
+        "a6->a3": 2,
+        "a6->a4": 1,
+        "a6->a5": 2,
+        "a6->a6": 1
+      },
+      "explanation": "a bounded range is not the sum of its exact lengths, which no path mode allows",
+      "fixture": "fig1",
+      "engine": "samyama-graph",
       "start": "a6"
     }
   ]

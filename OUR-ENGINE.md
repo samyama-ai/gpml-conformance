@@ -45,3 +45,24 @@ maintainers are the authors. No other engine's maintainers have had that opportu
 Measuring the release rather than the development head is what keeps the table
 comparable despite that — but a reader should still know it is the reason the release
 row and the dev row differ as much as they do.
+
+## The release also exhausts memory on a two-node graph
+
+Measured while running this suite on a 128 GB machine: `v1.7.1` peaked at **75 GB**
+during the metamorphic layer. The minimal case is 2 nodes and 3 edges — a self-loop
+`x->x`, plus `x->y` and `y->x` — asked `MATCH p=(x:N)-[:E*1..2]->(y:N)`. Under TRAIL
+that has a handful of paths.
+
+| build | result |
+|---|---|
+| v1.7.1 (released) | exceeds a 6 GB cap; 75 GB peak under the full suite |
+| main `717cde3` | 4 rows, 0.0 s, 20 MB peak |
+
+Filed as [samyama-graph#1183](https://github.com/samyama-ai/samyama-graph/issues/1183).
+It is fixed on that engine's `main` and present in the release this suite measures,
+which is the same gap the conformance rows show, in a more consequential form: on the
+released engine it is a denial of service reachable from an ordinary read query.
+
+This is worth stating plainly because it is a *finding of the suite*, not a limitation
+of it. The corpus that exposes it — pathological small fixtures at quantifier bounds —
+is exactly what the engine's own test suite does not contain.

@@ -45,6 +45,23 @@ being over-constrained.
 
 ## Reproduce
 
+> **Run this on a machine with at least 96 GB of RAM, or cap it.** The metamorphic
+> layer asks quantifier-range decompositions over deliberately pathological small
+> fixtures — self-loops and 2-cycles. Samyama-Graph **v1.7.1** grows without bound on
+> one of them and was measured at a **75 GB** peak, on a graph of 2 nodes and 3 edges
+> (`samyama-graph#1183`; fixed on that engine's `main`, not in the release the suite
+> measures). It killed a 46 GB workstation several times before the shape was visible.
+>
+> On a smaller machine, cap the run so a runaway dies alone instead of taking the
+> session with it:
+>
+> ```bash
+> systemd-run --user --scope -p MemoryMax=12G ./run.sh
+> ```
+>
+> An exit code of 137 then means the cap did its job. No other engine in the suite
+> exceeded 800 MB.
+
 ```bash
 ./run.sh          # starts the engines in Docker, runs everything, regenerates RESULTS.md
 ```
