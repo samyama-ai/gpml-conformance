@@ -146,6 +146,16 @@
       "s2": 0.6
     }
   },
+  "metamorphic_lo0_by_engine": {
+    "kuzu": 6,
+    "duckpgq": 25,
+    "neo4j": 0,
+    "neo4j-2026": 0,
+    "memgraph": 0,
+    "apache-age": 0,
+    "samyama-graph": 22,
+    "samyama-graph-dev": 0
+  },
   "level2": {
     "comparable_cells": 76,
     "conforms_both": 50,

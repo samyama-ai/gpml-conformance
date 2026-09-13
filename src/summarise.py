@@ -312,6 +312,13 @@ def main():
         # choice is checkable rather than asserted. `headline` is one row per
         # product at its newest measured version; the others are stated for contrast.
         "aggregates": _aggregates(m),
+        # How many of each engine's metamorphic violations have a lower-bound-zero
+        # query on one side. The paper says every one of the authors' release's
+        # violations does -- one root cause; this is the key that claim resolves to.
+        "metamorphic_lo0_by_engine": {
+            e: sum(1 for v in mm["violations"] if v["engine"] == e
+                   and (v["left"].startswith("{0,") or v["right"].startswith("{0,")))
+            for e in engines},
         "level2": _level2_summary(),
         "metamorphic_violations_ours": sum(
             1 for v in mm["violations"] if v["engine"] in OURS),
