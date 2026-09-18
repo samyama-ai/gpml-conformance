@@ -139,6 +139,15 @@
       "s2": 0.6
     }
   },
+  "conforms_gql_prefix_by_engine": {
+    "kuzu": 0,
+    "duckpgq": 0,
+    "neo4j": 2,
+    "neo4j-2026": 4,
+    "memgraph": 0,
+    "apache-age": 0,
+    "samyama-graph": 5
+  },
   "metamorphic_dropped_by_engine": {
     "kuzu": 0,
     "duckpgq": 0,

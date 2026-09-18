@@ -312,6 +312,13 @@ def main():
         # choice is checkable rather than asserted. `headline` is one row per
         # product at its newest measured version; the others are stated for contrast.
         "aggregates": _aggregates(m),
+        # Of each engine's conforming cells, how many it could only answer through the
+        # standard's prefix keywords rather than the common openCypher rendering. A
+        # conforming cell reached that way is not portable to an engine without them.
+        "conforms_gql_prefix_by_engine": {
+            e: sum(1 for c in m["cells"] if c["engine"] == e
+                   and c["verdict"] == "CONFORMS" and c.get("surface") == "gql-prefix")
+            for e in engines},
         # Queries that errored, so the relation needing them was skipped. A crash can
         # hide a violation but never add one, so a non-zero count here means that
         # engine's violation count is a lower bound (issue #4).
