@@ -11,7 +11,7 @@ BYID = {c.id: c for c in CASES}
 
 # The authors' own engine. It is measured by the same suite and shown as a row, but it
 # is excluded from every headline statistic; see the conflict-of-interest note.
-OURS = {"samyama-graph", "samyama-graph-dev"}
+OURS = {"samyama-graph", "samyama-graph-171"}
 
 # Two Neo4j releases are measured. Counting both in one aggregate would weight that
 # vendor twice, so the headline is computed over **one row per product**, taking the
@@ -22,7 +22,8 @@ OURS = {"samyama-graph", "samyama-graph-dev"}
 #
 # All three aggregates are written to summary.json so the choice is visible and the
 # paper's claims registry can resolve whichever it quotes.
-SUPERSEDED = {"neo4j"}          # superseded by neo4j-2026 in the headline set
+SUPERSEDED = {"neo4j",          # superseded by neo4j-2026 in the headline set
+               "samyama-graph-171"}  # superseded by v1.8.0; also excluded as ours
 
 SYM = {"CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": "–",
        "NONDETERMINISTIC": "?", "LOAD_FAILED": "∅"}

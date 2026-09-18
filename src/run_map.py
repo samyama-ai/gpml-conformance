@@ -45,7 +45,7 @@ DECLARED_MODE = {
     "duckpgq": None,        # None = the dialect *is* the standard; no second axis
     "neo4j-2026": "TRAIL",
     "samyama-graph": "TRAIL",
-    "samyama-graph-dev": "TRAIL",
+    "samyama-graph-171": "TRAIL",
 }
 
 def pick_cypher_rendering(case, cap):
@@ -159,23 +159,25 @@ def build_engines(workdir):
                                   "user=postgres password=postgres"))
     except Exception as e:
         print(f"  apache-age unavailable: {e}", file=sys.stderr)
-    # The authors' own engine, measured at the release a user can install. Every
-    # other row in the paper is a published release; measuring ours at a development
-    # head that already carries the fixes this suite prompted would not be the same
-    # comparison, and would flatter us. SAMYAMA_BIN points at the release build.
+    # The authors' own engine, measured at the release a user can install, like every
+    # other row. SAMYAMA_BIN points at the newest release build. No development head is
+    # measured: no other vendor's unreleased work is, and measuring ours would flatter us.
     try:
-        engines.append(SamyamaAdapter(build=os.environ.get("SAMYAMA_BUILD", "v1.7.1")))
+        engines.append(SamyamaAdapter(build=os.environ.get("SAMYAMA_BUILD", "v1.8.0")))
     except Exception as e:
         print(f"  samyama-graph unavailable: {e}", file=sys.stderr)
-    # Optionally also measure the development head, reported separately and never in
-    # a total, so the effect of the fixes is visible without entering the comparison.
-    dev = os.environ.get("SAMYAMA_DEV_BIN")
-    if dev and os.path.exists(dev):
+    # The previous release, kept as its own row exactly as Neo4j 5.26 is kept beside
+    # 2026.04: both are installable, and the pair is what shows a version's drift. It
+    # is excluded from the headline aggregate as the superseded row, and from every
+    # aggregate as ours.
+    prev = os.environ.get("SAMYAMA_PREV_BIN")
+    if prev and os.path.exists(prev):
         try:
-            engines.append(SamyamaAdapter(binary=dev, port=8098, resp_port=6398,
-                                          name="samyama-graph-dev", build="dev head"))
+            engines.append(SamyamaAdapter(
+                binary=prev, port=8098, resp_port=6398, name="samyama-graph-171",
+                build=os.environ.get("SAMYAMA_PREV_BUILD", "v1.7.1")))
         except Exception as e:
-            print(f"  samyama-graph-dev unavailable: {e}", file=sys.stderr)
+            print(f"  samyama-graph-171 unavailable: {e}", file=sys.stderr)
     return engines
 
 

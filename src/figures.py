@@ -25,15 +25,6 @@ GLYPH = {"CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": 
          "NONDETERMINISTIC": "?"}
 INK, MUTED = "#1F2933", "#667085"
 
-# The paper's figures show releases only: every external release plus the authors'
-# release. The unreleased development head (`samyama-graph-dev`) is measured and kept
-# in the artifact, but no other vendor's unreleased work is measured, so it appears in
-# no paper figure.
-UNRELEASED = {"samyama-graph-dev"}
-
-
-def paper_engines(m):
-    return [e["name"] for e in m["engines"] if e["name"] not in UNRELEASED]
 
 plt.rcParams.update({
     "font.family": "DejaVu Sans", "font.size": 9,
@@ -50,7 +41,7 @@ def load():
 
 
 def fig_map(m, path):
-    engines = paper_engines(m)
+    engines = [e["name"] for e in m["engines"]]
     grid = {(c["case"], c["engine"]): c["verdict"] for c in m["cells"]}
     # Which cells the engine could only answer through the standard's restrictor and
     # selector keywords, rather than the dialect every openCypher engine shares. Three
@@ -96,7 +87,7 @@ def fig_map(m, path):
 
 def fig_attribution(m, path):
     """Divergences split into documented language differences and real defects."""
-    engines = paper_engines(m)
+    engines = [e["name"] for e in m["engines"]]
     spec = Counter()
     defect = Counter()
     for c in m["cells"]:
@@ -134,7 +125,7 @@ def fig_attribution(m, path):
 
 
 def fig_metamorphic(mm, m, path):
-    engines = paper_engines(m)
+    engines = [e["name"] for e in m["engines"]]
     rels = sorted({v["relation"] for v in mm["violations"]})
     counts = {r: [sum(1 for v in mm["violations"]
                       if v["engine"] == e and v["relation"] == r) for e in engines]
