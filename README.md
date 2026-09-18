@@ -49,8 +49,9 @@ being over-constrained.
 > layer asks quantifier-range decompositions over deliberately pathological small
 > fixtures — self-loops and 2-cycles. Samyama-Graph **v1.7.1** grows without bound on
 > one of them and was measured at a **75 GB** peak, on a graph of 2 nodes and 3 edges
-> (`samyama-graph#1183`; fixed on that engine's `main`, not in the release the suite
-> measures). It killed a 46 GB workstation several times before the shape was visible.
+> (`samyama-graph#1183`, fixed in `v1.8.0`). The suite still measures `v1.7.1` as its
+> own row, so the requirement stands. It killed a 46 GB workstation several times
+> before the shape was visible.
 >
 > On a smaller machine, cap the run so a runaway dies alone instead of taking the
 > session with it:
@@ -105,14 +106,16 @@ claim about performance.
 
 ## Conflict of interest
 
-This work was produced at Samyama, which develops one of the engines measured. The
-comparison measures **the release, `v1.7.1`** — every other row is a published release
-too — and both our rows are excluded from every aggregate. No engine's output derives
-any expected answer.
+This work was produced at Samyama, which develops one of the engines measured. It is
+measured at its published releases, **`v1.8.0`** and **`v1.7.1`** — every other row is a
+published release too — and all our rows are excluded from every aggregate. No engine's
+output derives any expected answer.
 
-`v1.7.1` predates every fix this suite prompted, so the row shows the engine as shipped,
-which scores worse than our development head. That is deliberate. See
-[`OUR-ENGINE.md`](OUR-ENGINE.md) for the issues, the builds, and the standing caveat.
+**`v1.8.0` carries fixes this suite prompted, and `v1.7.1` predates them.** That is why
+both are rows: the pair shows the change rather than asserting it. It is also the
+standing caveat of this artifact — our maintainers saw these findings before their
+release shipped, and no other engine's maintainers did. See
+[`OUR-ENGINE.md`](OUR-ENGINE.md) for the issues and the builds.
 
 ## Licence
 
