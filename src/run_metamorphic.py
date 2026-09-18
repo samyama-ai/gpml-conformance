@@ -27,6 +27,11 @@ def main():
     os.makedirs(workdir, exist_ok=True)
     engines = build_engines(workdir)
     out = []
+    # A query that errors cannot violate a relation: check_engine simply skips any
+    # relation that needs it, so a crash lowers an engine's violation count instead of
+    # raising it. Record every refusal, so the counts can be read as the lower bounds
+    # they are rather than taken for complete (issue #4).
+    dropped = []
     for fx, start in STARTS.items():
         g = fixtures.FIXTURES[fx]()
         L = fixtures.PRIMARY_LABEL[fx]
@@ -35,11 +40,13 @@ def main():
             eng.load(g, L, E)
             tmpl = CY if eng.dialect == "cypher" else PG
 
-            def run(lo, hi, _e=eng, _t=tmpl):
+            def run(lo, hi, _e=eng, _t=tmpl, _fx=fx):
                 q = _t.format(L=L, E=E, lo=lo, hi=hi, s=start)
                 try:
                     return _e.run(q).pairs
-                except EngineError:
+                except EngineError as e:
+                    dropped.append(dict(engine=_e.name, fixture=_fx, lo=lo, hi=hi,
+                                        query=q, error=str(e)[:300]))
                     return None
 
             def _str_keys(d):
@@ -55,11 +62,18 @@ def main():
                 print(f"    {v.left_answer}  vs  {v.right_answer}")
     dest = os.path.join(HERE, "results", "metamorphic.json")
     with open(dest, "w") as f:
-        json.dump(dict(pairs=PAIRS, violations=out), f, indent=2)
+        json.dump(dict(pairs=PAIRS, violations=out, dropped=dropped), f, indent=2)
     print(f"\nwrote {dest}: {len(out)} violation(s)")
     per = Counter(v["engine"] for v in out)
     for k, n in per.items():
         print(f"  {k:12s} {n}")
+    if dropped:
+        print(f"{len(dropped)} query/queries errored and were skipped; "
+              f"every count above is a lower bound:")
+        for k, n in Counter(d["engine"] for d in dropped).items():
+            print(f"  {k:12s} {n} dropped")
+    else:
+        print("no query errored: no relation was skipped")
 
 
 if __name__ == "__main__":

@@ -313,6 +313,12 @@ def main():
         # choice is checkable rather than asserted. `headline` is one row per
         # product at its newest measured version; the others are stated for contrast.
         "aggregates": _aggregates(m),
+        # Queries that errored, so the relation needing them was skipped. A crash can
+        # hide a violation but never add one, so a non-zero count here means that
+        # engine's violation count is a lower bound (issue #4).
+        "metamorphic_dropped_by_engine": {
+            e: sum(1 for d in mm.get("dropped", []) if d["engine"] == e)
+            for e in engines},
         # How many of each engine's metamorphic violations have a lower-bound-zero
         # query on one side. The paper says every one of the authors' release's
         # violations does -- one root cause; this is the key that claim resolves to.

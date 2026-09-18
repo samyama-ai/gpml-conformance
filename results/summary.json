@@ -1,26 +1,27 @@
 {
   "n_constructs": 17,
   "n_engines": 8,
-  "n_engines_external": 5,
+  "n_engines_external": 6,
   "n_cells": 136,
-  "n_cells_external": 85,
+  "n_cells_external": 102,
   "repeats": 3,
-  "conforms": 44,
-  "diverges": 15,
+  "conforms": 59,
+  "diverges": 17,
   "rejects": 11,
   "inexpressible": 15,
   "nondeterministic": 0,
-  "s1_divergence_rate": 0.2542,
-  "s2_silence_ratio": 0.5769,
-  "disagreements": 26,
-  "divergences_specified": 9,
+  "s1_divergence_rate": 0.2237,
+  "s2_silence_ratio": 0.6071,
+  "disagreements": 28,
+  "divergences_specified": 11,
   "divergences_defect": 6,
   "constructs_multi_class": 9,
-  "constructs_single_class": 7,
+  "constructs_single_class": 8,
   "classes_per_construct": {
     "mode-walk-bounded": 3,
     "mode-trail-bounded": 2,
     "mode-acyclic-bounded": 1,
+    "mode-simple-bounded": 1,
     "walk-revisits-same-edge": 2,
     "quant-zero-lower-bound": 2,
     "quant-zero-zero": 2,
@@ -35,8 +36,8 @@
     "selector-any": 2,
     "paper-trail-unbounded": 2
   },
-  "nondeterministic_selector_cells": 4,
-  "constructs_measured": 16,
+  "nondeterministic_selector_cells": 6,
+  "constructs_measured": 17,
   "metamorphic_violations_total": 61,
   "metamorphic_violations_external": 39,
   "s2b": {
@@ -97,7 +98,7 @@
       "irrelevant": 0
     }
   },
-  "s2b_external": 1.0,
+  "s2b_external": 0.8947,
   "aggregates": {
     "headline_newest_per_product": {
       "engines": [
@@ -105,14 +106,15 @@
         "duckpgq",
         "kuzu",
         "memgraph",
-        "neo4j-2026"
+        "neo4j-2026",
+        "samyama-graph-dev"
       ],
-      "conforms": 44,
-      "diverges": 15,
+      "conforms": 59,
+      "diverges": 17,
       "rejects": 11,
       "inexpressible": 15,
-      "s1": 0.2542,
-      "s2": 0.5769
+      "s1": 0.2237,
+      "s2": 0.6071
     },
     "all_external_rows": {
       "engines": [
@@ -121,14 +123,15 @@
         "kuzu",
         "memgraph",
         "neo4j",
-        "neo4j-2026"
+        "neo4j-2026",
+        "samyama-graph-dev"
       ],
-      "conforms": 56,
-      "diverges": 17,
+      "conforms": 71,
+      "diverges": 19,
       "rejects": 11,
       "inexpressible": 18,
-      "s1": 0.2329,
-      "s2": 0.6071
+      "s1": 0.2111,
+      "s2": 0.6333
     },
     "as_published_5_engines": {
       "engines": [
@@ -145,6 +148,16 @@
       "s1": 0.2632,
       "s2": 0.6
     }
+  },
+  "metamorphic_dropped_by_engine": {
+    "kuzu": 0,
+    "duckpgq": 0,
+    "neo4j": 0,
+    "neo4j-2026": 0,
+    "memgraph": 0,
+    "apache-age": 0,
+    "samyama-graph": 0,
+    "samyama-graph-dev": 0
   },
   "metamorphic_lo0_by_engine": {
     "kuzu": 6,

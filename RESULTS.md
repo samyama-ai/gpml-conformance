@@ -54,8 +54,8 @@ S1 is divergences over the cells the engine answered. S2 is divergences over div
 | memgraph | 10 | 2 | 0 | 5 | 0.17 | 1.00 |
 | apache-age | 9 | 2 | 1 | 5 | 0.18 | 0.67 |
 | samyama-graph *(ours — excluded from the totals)* | 8 | 4 | 0 | 5 | 0.33 | 1.00 |
-| samyama-graph-dev *(ours — excluded from the totals)* | 15 | 2 | 0 | 0 | 0.12 | 1.00 |
-| **all five external engines** | 44 | 15 | 11 | 15 | **0.25** | **0.58** |
+| samyama-graph-dev | 15 | 2 | 0 | 0 | 0.12 | 1.00 |
+| **all five external engines** | 59 | 17 | 11 | 15 | **0.22** | **0.61** |
 
 ## Attribution: language difference or implementation defect?
 
@@ -67,11 +67,13 @@ A divergence from the ISO reference is only a defect if the engine also departs 
 | `mode-walk-bounded` | neo4j-2026 | diverges | conforms — the deviation is documented |
 | `mode-walk-bounded` | memgraph | diverges | conforms — the deviation is documented |
 | `mode-walk-bounded` | apache-age | diverges | conforms — the deviation is documented |
+| `mode-walk-bounded` | samyama-graph-dev | diverges | conforms — the deviation is documented |
 | `mode-trail-bounded` | kuzu | diverges | conforms — the deviation is documented |
 | `walk-revisits-same-edge` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `walk-revisits-same-edge` | neo4j-2026 | diverges | conforms — the deviation is documented |
 | `walk-revisits-same-edge` | memgraph | diverges | conforms — the deviation is documented |
 | `walk-revisits-same-edge` | apache-age | diverges | conforms — the deviation is documented |
+| `walk-revisits-same-edge` | samyama-graph-dev | diverges | conforms — the deviation is documented |
 | `quant-zero-lower-bound` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `quant-zero-zero` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `self-loop-trail` | kuzu | diverges | conforms — the deviation is documented |
@@ -79,7 +81,7 @@ A divergence from the ISO reference is only a defect if the engine also departs 
 | `selector-any` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `paper-trail-unbounded` | kuzu | diverges | conforms — the deviation is documented |
 
-**9 of 15 divergences are specified language differences** — the engine does exactly what it documents. The remaining **6** are departures from the standard the engine itself implements.
+**11 of 17 divergences are specified language differences** — the engine does exactly what it documents. The remaining **6** are departures from the standard the engine itself implements.
 
 ## S2b — divergences delivered with neither an error nor a relevant diagnostic
 
@@ -94,8 +96,8 @@ S2 counts a rejection as the engine having spoken. S2b asks a narrower question:
 | memgraph | 2 | 0 | 1.00 | yes | 12 |
 | apache-age | 2 | 0 | 1.00 | yes | 0 |
 | samyama-graph *(ours)* | 4 | 0 | 1.00 | yes | 0 |
-| samyama-graph-dev *(ours)* | 2 | 2 | 0.00 | yes | 0 |
-| **all five external** | 17 | 0 | **1.00** | | |
+| samyama-graph-dev | 2 | 2 | 0.00 | yes | 0 |
+| **all five external** | 19 | 2 | **0.89** | | |
 
 Every diagnostic credited above was checked rather than counted: `PathModeAffectsResult` claims that naming the path mode would change the answer, and that claim was re-tested by running the same pattern under each mode. All verified true; no false positives.
 
@@ -105,22 +107,23 @@ How many distinct answers the engines that accepted the query gave. One class me
 
 | construct | classes | grouping |
 |---|---:|---|
-| `mode-walk-bounded` | 3 | {kuzu} / {duckpgq} / {neo4j-2026, memgraph, apache-age} |
-| `mode-trail-bounded` | 2 | {kuzu} / {neo4j-2026, memgraph, apache-age} |
-| `mode-acyclic-bounded` | 1 | {neo4j-2026} |
-| `walk-revisits-same-edge` | 2 | {kuzu} / {duckpgq, neo4j-2026, memgraph, apache-age} |
-| `quant-zero-lower-bound` | 2 | {kuzu, neo4j-2026, memgraph, apache-age} / {duckpgq} |
-| `quant-zero-zero` | 2 | {kuzu, neo4j-2026, memgraph, apache-age} / {duckpgq} |
-| `parallel-edges` | 1 | {kuzu, duckpgq, neo4j-2026, memgraph, apache-age} |
-| `self-loop-trail` | 2 | {kuzu} / {neo4j-2026, memgraph, apache-age} |
-| `self-loop-acyclic` | 1 | {neo4j-2026} |
-| `direction-any` | 1 | {kuzu, duckpgq, neo4j-2026, memgraph, apache-age} |
-| `direction-left` | 1 | {kuzu, duckpgq, neo4j-2026, memgraph, apache-age} |
-| `interior-node-unconstrained` | 1 | {neo4j-2026, memgraph} |
-| `selector-all-shortest` | 1 | {kuzu, neo4j-2026, memgraph, apache-age} |
-| `selector-any-shortest` | 2 | {duckpgq} / {neo4j-2026} |
-| `selector-any` | 2 | {duckpgq} / {neo4j-2026} |
-| `paper-trail-unbounded` | 2 | {kuzu} / {neo4j-2026, memgraph, apache-age} |
+| `mode-walk-bounded` | 3 | {kuzu} / {duckpgq} / {neo4j-2026, memgraph, apache-age, samyama-graph-dev} |
+| `mode-trail-bounded` | 2 | {kuzu} / {neo4j-2026, memgraph, apache-age, samyama-graph-dev} |
+| `mode-acyclic-bounded` | 1 | {neo4j-2026, samyama-graph-dev} |
+| `mode-simple-bounded` | 1 | {samyama-graph-dev} |
+| `walk-revisits-same-edge` | 2 | {kuzu} / {duckpgq, neo4j-2026, memgraph, apache-age, samyama-graph-dev} |
+| `quant-zero-lower-bound` | 2 | {kuzu, neo4j-2026, memgraph, apache-age, samyama-graph-dev} / {duckpgq} |
+| `quant-zero-zero` | 2 | {kuzu, neo4j-2026, memgraph, apache-age, samyama-graph-dev} / {duckpgq} |
+| `parallel-edges` | 1 | {kuzu, duckpgq, neo4j-2026, memgraph, apache-age, samyama-graph-dev} |
+| `self-loop-trail` | 2 | {kuzu} / {neo4j-2026, memgraph, apache-age, samyama-graph-dev} |
+| `self-loop-acyclic` | 1 | {neo4j-2026, samyama-graph-dev} |
+| `direction-any` | 1 | {kuzu, duckpgq, neo4j-2026, memgraph, apache-age, samyama-graph-dev} |
+| `direction-left` | 1 | {kuzu, duckpgq, neo4j-2026, memgraph, apache-age, samyama-graph-dev} |
+| `interior-node-unconstrained` | 1 | {neo4j-2026, memgraph, samyama-graph-dev} |
+| `selector-all-shortest` | 1 | {kuzu, neo4j-2026, memgraph, apache-age, samyama-graph-dev} |
+| `selector-any-shortest` | 2 | {duckpgq} / {neo4j-2026, samyama-graph-dev} |
+| `selector-any` | 2 | {duckpgq} / {neo4j-2026, samyama-graph-dev} |
+| `paper-trail-unbounded` | 2 | {kuzu} / {neo4j-2026, memgraph, apache-age, samyama-graph-dev} |
 
 ## Metamorphic self-consistency
 
