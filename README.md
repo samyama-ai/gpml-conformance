@@ -45,13 +45,12 @@ being over-constrained.
 
 ## Reproduce
 
-> **Run this on a machine with at least 96 GB of RAM, or cap it.** The metamorphic
-> layer asks quantifier-range decompositions over deliberately pathological small
-> fixtures — self-loops and 2-cycles. Samyama-Graph **v1.7.1** grows without bound on
-> one of them and was measured at a **75 GB** peak, on a graph of 2 nodes and 3 edges
-> (`samyama-graph#1183`, fixed in `v1.8.0`). The suite still measures `v1.7.1` as its
-> own row, so the requirement stands. It killed a 46 GB workstation several times
-> before the shape was visible.
+> **Give this room, or cap it.** The metamorphic layer asks quantifier-range
+> decompositions over deliberately pathological small fixtures — self-loops and
+> 2-cycles. An engine that mishandles them can grow without bound on a graph of 2 nodes
+> and 3 edges: that is how `samyama-graph#1183` was found, and it killed a 46 GB
+> workstation several times before the shape was visible. The measured peak for the
+> engines in the current run is in `RESULTS.md`.
 >
 > On a smaller machine, cap the run so a runaway dies alone instead of taking the
 > session with it:
@@ -107,14 +106,13 @@ claim about performance.
 ## Conflict of interest
 
 This work was produced at Samyama, which develops one of the engines measured. It is
-measured at its published releases, **`v1.8.0`** and **`v1.7.1`** — every other row is a
-published release too — and all our rows are excluded from every aggregate. No engine's
-output derives any expected answer.
+measured at its published release, **`v1.8.0`** — every other row is a published release
+too — and our row is excluded from every aggregate. No engine's output derives any
+expected answer.
 
-**`v1.8.0` carries fixes this suite prompted, and `v1.7.1` predates them.** That is why
-both are rows: the pair shows the change rather than asserting it. It is also the
-standing caveat of this artifact — our maintainers saw these findings before their
-release shipped, and no other engine's maintainers did. See
+**`v1.8.0` carries fixes this suite prompted.** Our maintainers are the authors and saw
+every finding before this release shipped; no other engine's maintainers had that
+chance. That is the standing caveat, and it is why our row enters no total. See
 [`OUR-ENGINE.md`](OUR-ENGINE.md) for the issues and the builds.
 
 ## Licence

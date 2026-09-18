@@ -45,7 +45,6 @@ DECLARED_MODE = {
     "duckpgq": None,        # None = the dialect *is* the standard; no second axis
     "neo4j-2026": "TRAIL",
     "samyama-graph": "TRAIL",
-    "samyama-graph-171": "TRAIL",
 }
 
 def pick_cypher_rendering(case, cap):
@@ -166,18 +165,6 @@ def build_engines(workdir):
         engines.append(SamyamaAdapter(build=os.environ.get("SAMYAMA_BUILD", "v1.8.0")))
     except Exception as e:
         print(f"  samyama-graph unavailable: {e}", file=sys.stderr)
-    # The previous release, kept as its own row exactly as Neo4j 5.26 is kept beside
-    # 2026.04: both are installable, and the pair is what shows a version's drift. It
-    # is excluded from the headline aggregate as the superseded row, and from every
-    # aggregate as ours.
-    prev = os.environ.get("SAMYAMA_PREV_BIN")
-    if prev and os.path.exists(prev):
-        try:
-            engines.append(SamyamaAdapter(
-                binary=prev, port=8098, resp_port=6398, name="samyama-graph-171",
-                build=os.environ.get("SAMYAMA_PREV_BUILD", "v1.7.1")))
-        except Exception as e:
-            print(f"  samyama-graph-171 unavailable: {e}", file=sys.stderr)
     return engines
 
 
