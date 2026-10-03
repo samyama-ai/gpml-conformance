@@ -943,7 +943,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"8d03293ecb9aadd6-3dd1\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"ac03345a69d9e690-481f\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
       "query": "MATCH SIMPLE (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -4997,7 +4997,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 ALL SHORTEST search is unimplemented [at 1:15]\nGRAPH g MATCH ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x....\n              ^, request_id = 1.17475660805545853493.1.0.23.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\002\"\n]",
+      "detail": "InvalidArgument: 400 ALL SHORTEST search is unimplemented [at 1:15]\nGRAPH g MATCH ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x....\n              ^, request_id = 1.1094382145931051832.1.0.23.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\002\"\n]",
       "query": "MATCH ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5815,7 +5815,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY TRAIL (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.own...\n              ^, request_id = 1.17475660805545853493.1.0.36.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY TRAIL (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.own...\n              ^, request_id = 1.1094382145931051832.1.0.36.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ANY TRAIL (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -6137,7 +6137,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST TRAIL (x:Account)-[:Transfer]->{1,5}(y:Account) WH...\n              ^, request_id = 1.17475660805545853493.1.0.39.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST TRAIL (x:Account)-[:Transfer]->{1,5}(y:Account) WH...\n              ^, request_id = 1.1094382145931051832.1.0.39.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ALL SHORTEST TRAIL (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -6328,7 +6328,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST TRAIL (x:Account)-[:Transfer]->{1,5}(y:Account) WH...\n              ^, request_id = 1.17475660805545853493.1.0.42.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST TRAIL (x:Account)-[:Transfer]->{1,5}(y:Account) WH...\n              ^, request_id = 1.1094382145931051832.1.0.42.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ANY SHORTEST TRAIL (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -6727,7 +6727,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY ACYCLIC (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.o...\n              ^, request_id = 1.17475660805545853493.1.0.50.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY ACYCLIC (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.o...\n              ^, request_id = 1.1094382145931051832.1.0.50.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ANY ACYCLIC (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -6893,7 +6893,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST ACYCLIC (x:Account)-[:Transfer]->{1,5}(y:Account) ...\n              ^, request_id = 1.17475660805545853493.1.0.53.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST ACYCLIC (x:Account)-[:Transfer]->{1,5}(y:Account) ...\n              ^, request_id = 1.1094382145931051832.1.0.53.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ALL SHORTEST ACYCLIC (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7079,7 +7079,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST ACYCLIC (x:Account)-[:Transfer]->{1,5}(y:Account) ...\n              ^, request_id = 1.17475660805545853493.1.0.56.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST ACYCLIC (x:Account)-[:Transfer]->{1,5}(y:Account) ...\n              ^, request_id = 1.1094382145931051832.1.0.56.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ANY SHORTEST ACYCLIC (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7185,7 +7185,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"28d68d40230dd3f7-3f94\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"4f747cec418a74ee-49e2\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
       "query": "MATCH SIMPLE (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7390,7 +7390,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"d71cdb39e5cc7ab1-3fa7\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:10 - no viable alternative at input 'ANY SIMPLE' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"356ddf43b2f75eca-49f5\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:10 - no viable alternative at input 'ANY SIMPLE' -> NoViableAltException\"}",
       "query": "MATCH ANY SIMPLE (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7429,7 +7429,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SIMPLE (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.ow...\n              ^, request_id = 1.17475660805545853493.1.0.64.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SIMPLE (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.ow...\n              ^, request_id = 1.1094382145931051832.1.0.64.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ANY SIMPLE (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7531,7 +7531,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"f8bba05b82e9b823-3fba\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:19 - extraneous input 'SIMPLE' expecting {ALL_SHORTEST_PATHS, '(', SHORTEST_PATH}\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"149d4dddff222d0e-4a08\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:19 - extraneous input 'SIMPLE' expecting {ALL_SHORTEST_PATHS, '(', SHORTEST_PATH}\"}",
       "query": "MATCH ALL SHORTEST SIMPLE (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7577,7 +7577,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST SIMPLE (x:Account)-[:Transfer]->{1,5}(y:Account) W...\n              ^, request_id = 1.17475660805545853493.1.0.67.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST SIMPLE (x:Account)-[:Transfer]->{1,5}(y:Account) W...\n              ^, request_id = 1.1094382145931051832.1.0.67.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ALL SHORTEST SIMPLE (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7713,7 +7713,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"41b429580376c817-3fcd\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:19 - extraneous input 'SIMPLE' expecting {ALL_SHORTEST_PATHS, '(', SHORTEST_PATH}\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"a97125fa8cc2c549-4a1b\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:19 - extraneous input 'SIMPLE' expecting {ALL_SHORTEST_PATHS, '(', SHORTEST_PATH}\"}",
       "query": "MATCH ANY SHORTEST SIMPLE (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7752,7 +7752,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST SIMPLE (x:Account)-[:Transfer]->{1,5}(y:Account) W...\n              ^, request_id = 1.17475660805545853493.1.0.70.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST SIMPLE (x:Account)-[:Transfer]->{1,5}(y:Account) W...\n              ^, request_id = 1.1094382145931051832.1.0.70.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ANY SHORTEST SIMPLE (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -8542,7 +8542,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 ALL SHORTEST search is unimplemented [at 1:15]\nGRAPH g MATCH ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.e...\n              ^, request_id = 1.17475660805545853493.1.0.83.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\002\"\n]",
+      "detail": "InvalidArgument: 400 ALL SHORTEST search is unimplemented [at 1:15]\nGRAPH g MATCH ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.e...\n              ^, request_id = 1.1094382145931051832.1.0.83.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\002\"\n]",
       "query": "MATCH ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -9204,7 +9204,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY TRAIL (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid ...\n              ^, request_id = 1.17475660805545853493.1.0.96.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY TRAIL (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid ...\n              ^, request_id = 1.1094382145931051832.1.0.96.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ANY TRAIL (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -9458,7 +9458,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST TRAIL (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETU...\n              ^, request_id = 1.17475660805545853493.1.0.99.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST TRAIL (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETU...\n              ^, request_id = 1.1094382145931051832.1.0.99.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPaylo",
       "query": "MATCH ALL SHORTEST TRAIL (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -9621,7 +9621,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST TRAIL (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETU...\n              ^, request_id = 1.17475660805545853493.1.0.102.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST TRAIL (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETU...\n              ^, request_id = 1.1094382145931051832.1.0.102.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
       "query": "MATCH ANY SHORTEST TRAIL (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -9952,7 +9952,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY ACYCLIC (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.ei...\n              ^, request_id = 1.17475660805545853493.1.0.110.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY ACYCLIC (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.ei...\n              ^, request_id = 1.1094382145931051832.1.0.110.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
       "query": "MATCH ANY ACYCLIC (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -10098,7 +10098,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST ACYCLIC (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RE...\n              ^, request_id = 1.17475660805545853493.1.0.113.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST ACYCLIC (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RE...\n              ^, request_id = 1.1094382145931051832.1.0.113.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
       "query": "MATCH ALL SHORTEST ACYCLIC (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -10256,7 +10256,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST ACYCLIC (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RE...\n              ^, request_id = 1.17475660805545853493.1.0.116.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST ACYCLIC (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RE...\n              ^, request_id = 1.1094382145931051832.1.0.116.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
       "query": "MATCH ANY SHORTEST ACYCLIC (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -10354,7 +10354,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"68a358aee48d070b-4067\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"23457d7d6bd9b6f6-4ab5\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
       "query": "MATCH SIMPLE (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -10523,7 +10523,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"42b053a423c2bb09-4071\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:10 - no viable alternative at input 'ANY SIMPLE' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"10dcba49479287ef-4abf\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:10 - no viable alternative at input 'ANY SIMPLE' -> NoViableAltException\"}",
       "query": "MATCH ANY SIMPLE (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -10558,7 +10558,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SIMPLE (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid...\n              ^, request_id = 1.17475660805545853493.1.0.124.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SIMPLE (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid...\n              ^, request_id = 1.1094382145931051832.1.0.124.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
       "query": "MATCH ANY SIMPLE (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -10656,7 +10656,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"ab25ff80a93ec784-407b\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:19 - extraneous input 'SIMPLE' expecting {ALL_SHORTEST_PATHS, '(', SHORTEST_PATH}\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"43844fd1b19a20be-4ac9\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:19 - extraneous input 'SIMPLE' expecting {ALL_SHORTEST_PATHS, '(', SHORTEST_PATH}\"}",
       "query": "MATCH ALL SHORTEST SIMPLE (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -10694,7 +10694,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST SIMPLE (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RET...\n              ^, request_id = 1.17475660805545853493.1.0.127.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ALL SHORTEST SIMPLE (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RET...\n              ^, request_id = 1.1094382145931051832.1.0.127.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
       "query": "MATCH ALL SHORTEST SIMPLE (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -10810,7 +10810,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"91ccca2c34201818-4085\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:19 - extraneous input 'SIMPLE' expecting {ALL_SHORTEST_PATHS, '(', SHORTEST_PATH}\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"24cb5e42b151541a-4ad3\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:19 - extraneous input 'SIMPLE' expecting {ALL_SHORTEST_PATHS, '(', SHORTEST_PATH}\"}",
       "query": "MATCH ANY SHORTEST SIMPLE (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -10845,7 +10845,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST SIMPLE (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RET...\n              ^, request_id = 1.17475660805545853493.1.0.130.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
+      "detail": "InvalidArgument: 400 Path pattern with path mode and search prefix is not allowed [at 1:15]\nGRAPH g MATCH ANY SHORTEST SIMPLE (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RET...\n              ^, request_id = 1.1094382145931051832.1.0.130.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl",
       "query": "MATCH ANY SHORTEST SIMPLE (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -11631,7 +11631,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:30]\nGRAPH g MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.ei...\n                             ^, request_id = 1.17475660805545853493.1.0.143.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPa",
+      "detail": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:30]\nGRAPH g MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.ei...\n                             ^, request_id = 1.1094382145931051832.1.0.143.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
       "query": "MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -11872,7 +11872,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:36]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s...\n                                   ^, request_id = 1.17475660805545853493.1.0.146.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageMod",
+      "detail": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:36]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s...\n                                   ^, request_id = 1.1094382145931051832.1.0.146.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageMode",
       "query": "MATCH TRAIL (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -17499,7 +17499,7 @@
       "expect": "ANSWER",
       "prefix_order": "selector-first",
       "verdict": "DIVERGES",
-      "detail": "expected {('x', 'x'): 6, ('x', 'y'): 4}, observed {('x', 'x'): 4, ('x', 'y'): 2}",
+      "detail": "expected {('x', 'x'): 6, ('x', 'y'): 4}, observed {('x', 'y'): 2, ('x', 'x'): 4}",
       "query": "MATCH (x:N)-[:E]->{1,3}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "x->x": 4,
@@ -18541,7 +18541,7 @@
       "verdict": "CONFORMS",
       "surface": "gql-prefix",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"2cefab9ca5d5aeb1-41e9\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
+      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"2fb2f5c0a1a4f587-4c37\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
       "query": "MATCH WALK (x:N)-[:E*0..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -18571,7 +18571,7 @@
       "verdict": "CONFORMS",
       "surface": "iso-gql",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.17475660805545853493.1.0.259.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
+      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.1094382145931051832.1.0.259.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
       "query": "MATCH WALK (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -18652,7 +18652,7 @@
       "verdict": "CONFORMS",
       "surface": "gql-prefix",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"d4d8126c0387acb3-41f5\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
+      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"6204bf3f4bb2a3c8-4c43\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
       "query": "MATCH WALK (x:N)-[:E*1..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -18682,7 +18682,7 @@
       "verdict": "CONFORMS",
       "surface": "iso-gql",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.17475660805545853493.1.0.262.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
+      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.1094382145931051832.1.0.262.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
       "query": "MATCH WALK (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -18763,7 +18763,7 @@
       "verdict": "CONFORMS",
       "surface": "gql-prefix",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"ab9b65b3cb52668c-4201\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
+      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"c7062f062834d6d8-4c4f\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
       "query": "MATCH WALK (x:N)-[:E*2..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -18793,7 +18793,7 @@
       "verdict": "CONFORMS",
       "surface": "iso-gql",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{2,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.17475660805545853493.1.0.265.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
+      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{2,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.1094382145931051832.1.0.265.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
       "query": "MATCH WALK (x:N)-[:E]->{2,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -18850,7 +18850,7 @@
       "expect": "ACCEPT",
       "prefix_order": "selector-first",
       "verdict": "DIVERGES",
-      "detail": "expected {('a', 'a'): 3, ('a', 'b'): 4, ('a', 'c'): 2}, observed {('a', 'b'): 2046, ('a', 'a'): 4092, ('a', 'c'): 2046}",
+      "detail": "expected {('a', 'a'): 3, ('a', 'b'): 4, ('a', 'c'): 2}, observed {('a', 'a'): 4092, ('a', 'c'): 2046, ('a', 'b'): 2046}",
       "query": "MATCH p=(x:N)-[:E*0..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "a->a": 4092,
@@ -19060,7 +19060,7 @@
       "verdict": "REJECTS",
       "surface": "iso-gql",
       "expect": "ACCEPT",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s,...\n                                ^, request_id = 1.17475660805545853493.1.0.268.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s,...\n                                ^, request_id = 1.1094382145931051832.1.0.268.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
       "query": "MATCH TRAIL (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -19259,7 +19259,7 @@
       "verdict": "REJECTS",
       "surface": "iso-gql",
       "expect": "ACCEPT",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:40]\nGRAPH g MATCH ANY SHORTEST (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.ei...\n                                       ^, request_id = 1.17475660805545853493.1.0.271.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForP",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:40]\nGRAPH g MATCH ANY SHORTEST (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.ei...\n                                       ^, request_id = 1.1094382145931051832.1.0.271.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPa",
       "query": "MATCH ANY SHORTEST (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -19422,7 +19422,7 @@
       "verdict": "REJECTS",
       "surface": "iso-gql",
       "expect": "ACCEPT",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:31]\nGRAPH g MATCH ANY (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y...\n                              ^, request_id = 1.17475660805545853493.1.0.274.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:31]\nGRAPH g MATCH ANY (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y...\n                              ^, request_id = 1.1094382145931051832.1.0.274.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nva",
       "query": "MATCH ANY (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -19459,7 +19459,7 @@
       "expect": "ANSWER",
       "prefix_order": "selector-first",
       "verdict": "DIVERGES",
-      "detail": "expected {('a', 'a'): 3, ('a', 'b'): 4, ('a', 'c'): 2}, observed {('a', 'b'): 2046, ('a', 'a'): 2046, ('a', 'c'): 2046}",
+      "detail": "expected {('a', 'a'): 3, ('a', 'b'): 4, ('a', 'c'): 2}, observed {('a', 'b'): 2046, ('a', 'c'): 2046, ('a', 'a'): 2046}",
       "query": "MATCH p=(x:N)-[:E*]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "a->a": 2046,
@@ -19692,7 +19692,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->*(y:N) WHERE x.name='a' RETURN x.eid AS s, y....\n                                ^, request_id = 1.17475660805545853493.1.0.277.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->*(y:N) WHERE x.name='a' RETURN x.eid AS s, y....\n                                ^, request_id = 1.1094382145931051832.1.0.277.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
       "query": "MATCH TRAIL (x:N)-[:E]->*(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -19757,7 +19757,7 @@
       "expect": "ANSWER",
       "prefix_order": "selector-first",
       "verdict": "DIVERGES",
-      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'b'): 2046, ('a', 'a'): 2046, ('a', 'c'): 2046}",
+      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'b'): 2046, ('a', 'c'): 2046, ('a', 'a'): 2046}",
       "query": "MATCH p=(x:N)-[:E*]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "a->a": 2046,
@@ -19782,7 +19782,7 @@
       "expect": "ANSWER",
       "prefix_order": "selector-first",
       "verdict": "DIVERGES",
-      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'b'): 2046, ('a', 'c'): 2046, ('a', 'a'): 2046}",
+      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'b'): 2046, ('a', 'a'): 2046, ('a', 'c'): 2046}",
       "query": "MATCH p=(x:N)-[:E*]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "a->a": 2046,
@@ -19961,36 +19961,19 @@
       }
     },
     {
-      "diagnostics": null,
-      "diagnostics_supported": false,
-      "declared_mode": "TRAIL",
-      "verdict_vs_declared": "CONFORMS",
-      "detail_vs_declared": "",
       "case": "g5-plus-bare",
       "engine": "surrealdb",
+      "verdict": "INEXPRESSIBLE",
       "surface": "iso-gql",
-      "expect": "ANSWER",
-      "prefix_order": "selector-first",
-      "verdict": "CONFORMS",
-      "detail": "",
-      "query": "MATCH TRAIL (x:N)-[:E]->+(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
-      "observed": {
-        "a->a": 2,
-        "a->b": 4,
-        "a->c": 2
-      },
-      "reference": {
-        "a->b": 4,
-        "a->c": 2,
-        "a->a": 2
-      }
+      "detail": "unaskable under a gql reading: the rendering is a bare `*`, which that reading takes as the other quantifier",
+      "query": "MATCH TRAIL (x:N)-[:E]->+(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
       "case": "g5-plus-bare",
       "engine": "spanner",
-      "verdict": "REJECTS",
+      "verdict": "INEXPRESSIBLE",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->+(y:N) WHERE x.name='a' RETURN x.eid AS s, y....\n                                ^, request_id = 1.17475660805545853493.1.0.280.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"",
+      "detail": "unaskable under a gql reading: the rendering is a bare `*`, which that reading takes as the other quantifier",
       "query": "MATCH TRAIL (x:N)-[:E]->+(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -20288,7 +20271,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s,...\n                                ^, request_id = 1.17475660805545853493.1.0.283.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s,...\n                                ^, request_id = 1.1094382145931051832.1.0.280.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
       "query": "MATCH TRAIL (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {

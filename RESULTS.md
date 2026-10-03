@@ -108,7 +108,7 @@ Each cell is one exact multiset comparison, repeated 3 times to confirm the engi
 | `g4-star-walk-any-shortest` | – | – | ✓ | ✓ | ✓ | – | – | ✗ | – | ✓ | ! | ✓ | ✓ |
 | `g4-star-walk-any` | – | – | ✓ | ✓ | ✓ | – | – | ✓ | – | ✓ | ! | ∅ | ✓ |
 | `g5-star-bare` | ✗ | ✗ | ! | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✓ | ! | ✗ | ✗ |
-| `g5-plus-bare` | ✗ | ✗ | ! | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ! | ✓ | ✓ |
+| `g5-plus-bare` | ✗ | ✗ | ! | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | – | – | ✓ | ✓ |
 | `g5-plus-explicit` | ✗ | ✗ | ! | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ! | ✓ | ✓ |
 
 ✓ conforms  ✗ diverges  ! rejects  – inexpressible in that dialect  ∅ engine failed to load the fixture
@@ -128,11 +128,11 @@ S1 is divergences over the cells the engine answered. S2 is divergences over div
 | apache-age | 38 | 10 | 1 | 29 | 0.21 | 0.91 |
 | arcadedb | 42 | 27 | 9 | 0 | 0.39 | 0.75 |
 | falkordb | 39 | 10 | 0 | 29 | 0.20 | 1.00 |
-| surrealdb | 51 | 6 | 4 | 17 | 0.11 | 0.60 |
-| spanner | 36 | 0 | 25 | 17 | 0.00 | 0.00 |
+| surrealdb | 50 | 6 | 4 | 18 | 0.11 | 0.60 |
+| spanner | 36 | 0 | 24 | 18 | 0.00 | 0.00 |
 | grafeo | 59 | 18 | 1 | 0 | 0.23 | 0.95 |
 | samyama-graph *(ours — excluded from the totals)* | 68 | 10 | 0 | 0 | 0.13 | 1.00 |
-| **all five external engines** | 426 | 148 | 105 | 179 | **0.26** | **0.58** |
+| **all five external engines** | 425 | 148 | 104 | 181 | **0.26** | **0.59** |
 
 ## Attribution: language difference or implementation defect?
 
@@ -402,7 +402,7 @@ How many distinct answers the engines that accepted the query gave. One class me
 | `g4-star-walk-any-shortest` | 2 | {duckpgq, neo4j-2026, surrealdb, grafeo} / {arcadedb} |
 | `g4-star-walk-any` | 2 | {duckpgq, neo4j-2026, surrealdb} / {arcadedb} |
 | `g5-star-bare` | 3 | {kuzu, ladybugdb} / {neo4j-2026, surrealdb} / {memgraph, apache-age, arcadedb, falkordb, grafeo} |
-| `g5-plus-bare` | 2 | {kuzu, ladybugdb} / {neo4j-2026, memgraph, apache-age, arcadedb, falkordb, surrealdb, grafeo} |
+| `g5-plus-bare` | 2 | {kuzu, ladybugdb} / {neo4j-2026, memgraph, apache-age, arcadedb, falkordb, grafeo} |
 | `g5-plus-explicit` | 2 | {kuzu, ladybugdb} / {neo4j-2026, memgraph, apache-age, arcadedb, falkordb, surrealdb, grafeo} |
 
 ## S4 — well-formedness enforcement
@@ -440,7 +440,7 @@ Two ways of writing one quantifier, which the standard says mean the same thing.
 | apache-age | **differ** | same |
 | arcadedb | **differ** | same |
 | falkordb | **differ** | same |
-| surrealdb | same | same |
+| surrealdb | same | **differ** |
 | spanner | not askable | not askable |
 | grafeo | **differ** | same |
 | samyama-graph | **differ** | same |

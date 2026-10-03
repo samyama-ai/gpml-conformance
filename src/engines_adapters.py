@@ -312,6 +312,9 @@ class SamyamaAdapter:
         # Which dialect the suite asks this engine for. None means "whatever the
         # engine defaults to", which is how every other row is measured.
         self.dialect_requested = dialect_request
+        # Which reading of a bare `*` this row is measured under. The suite uses it to
+        # tell "cannot be asked" from "answered wrongly"; see DIALECT_UNASKABLE.
+        self.reads_bare_star_as = "gql" if dialect_request == "gql" else "cypher"
         self.port, self.resp_port = port, resp_port
         self.base_url = f"http://localhost:{port}"
         self.proc = None

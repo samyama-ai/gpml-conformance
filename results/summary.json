@@ -52,12 +52,12 @@
     "G5": {
       "constructs": 3,
       "cells": 33,
-      "conforms": 16,
+      "conforms": 15,
       "diverges": 11,
-      "rejects": 6,
-      "inexpressible": 0,
-      "s1": 0.4074,
-      "s2": 0.6471
+      "rejects": 5,
+      "inexpressible": 2,
+      "s1": 0.4231,
+      "s2": 0.6875
     },
     "v1": {
       "constructs": 17,
@@ -202,7 +202,7 @@
     },
     "surrealdb": {
       "g5-star-bare|g5-star-explicit": true,
-      "g5-plus-bare|g5-plus-explicit": true
+      "g5-plus-bare|g5-plus-explicit": false
     },
     "spanner": {
       "g5-star-bare|g5-star-explicit": null,
@@ -297,14 +297,14 @@
   "n_cells": 1092,
   "n_cells_external": 858,
   "repeats": 3,
-  "conforms": 426,
+  "conforms": 425,
   "diverges": 148,
-  "rejects": 105,
-  "inexpressible": 179,
+  "rejects": 104,
+  "inexpressible": 181,
   "nondeterministic": 0,
-  "s1_divergence_rate": 0.2578,
-  "s2_silence_ratio": 0.585,
-  "disagreements": 253,
+  "s1_divergence_rate": 0.2583,
+  "s2_silence_ratio": 0.5873,
+  "disagreements": 252,
   "divergences_specified": 62,
   "divergences_defect": 86,
   "constructs_multi_class": 59,
@@ -509,12 +509,12 @@
         "surrealdb"
       ],
       "cells": 858,
-      "conforms": 426,
+      "conforms": 425,
       "diverges": 148,
-      "rejects": 105,
-      "inexpressible": 179,
-      "s1": 0.2578,
-      "s2": 0.585
+      "rejects": 104,
+      "inexpressible": 181,
+      "s1": 0.2583,
+      "s2": 0.5873
     },
     "all_external_rows": {
       "engines": [
@@ -532,12 +532,12 @@
         "surrealdb"
       ],
       "cells": 936,
-      "conforms": 471,
+      "conforms": 470,
       "diverges": 158,
-      "rejects": 105,
-      "inexpressible": 202,
-      "s1": 0.2512,
-      "s2": 0.6008
+      "rejects": 104,
+      "inexpressible": 204,
+      "s1": 0.2516,
+      "s2": 0.6031
     },
     "v1_constructs_v1_engines": {
       "engines": [
@@ -805,18 +805,18 @@
       "s2": 1.0
     },
     "surrealdb": {
-      "conforms": 51,
+      "conforms": 50,
       "diverges": 6,
       "rejects": 4,
-      "inexpressible": 17,
-      "s1": 0.1053,
+      "inexpressible": 18,
+      "s1": 0.1071,
       "s2": 0.6
     },
     "spanner": {
       "conforms": 36,
       "diverges": 0,
-      "rejects": 25,
-      "inexpressible": 17,
+      "rejects": 24,
+      "inexpressible": 18,
       "s1": 0.0,
       "s2": 0.0
     },

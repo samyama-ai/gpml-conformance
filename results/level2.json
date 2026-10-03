@@ -1084,7 +1084,7 @@
       "engine": "arcadedb",
       "level2": "REJECTS",
       "level1": "CONFORMS",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"8c917b64d2828c87-4355\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"d2e1b8a20a77807b-4da3\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
       "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
@@ -1124,7 +1124,7 @@
       "engine": "arcadedb",
       "level2": "REJECTS",
       "level1": "CONFORMS",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"f67d99e046f0fe7-435f\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"33061e469d9cced9-4dad\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
       "query": "MATCH p=ACYCLIC (u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
@@ -1759,7 +1759,7 @@
       "engine": "arcadedb",
       "level2": "REJECTS",
       "level1": "CONFORMS",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"3ac181238f818ad6-43ad\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"d5ffdb9f5a8def0e-4dfb\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
       "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {

@@ -27,6 +27,25 @@ from engines_adapters import (AgeAdapter, ArcadeAdapter, BoltAdapter,
 
 REPEATS = 3
 
+# Constructs that a given reading cannot be asked, as opposed to gets wrong.
+#
+# openCypher writes both `*` and `+` as a bare `*`. An engine that reads a bare `*` the
+# GQL way takes it as `{0,}`, so the `+` member of the G5 spelling pair is not a
+# question that reading can be put. Marking it inexpressible is the same rule the suite
+# already applies to a dialect with no ACYCLIC keyword: absence of a way to ask is a
+# fact about the language, not a defect in the engine.
+DIALECT_UNASKABLE = {"g5-plus-bare": "gql"}
+
+def _reads_as(engine, cap) -> str:
+    """Which reading of a bare `*` this engine takes: "gql" ({0,}) or "cypher" ({1,}).
+
+    Asked of the engine rather than assumed from its dialect field, because an engine
+    can be openCypher-shaped and still read the standard's way -- which is exactly what
+    a dialect switch is for.
+    """
+    return getattr(engine, "reads_bare_star_as", None) or (
+        "gql" if engine.dialect == "gql" else "cypher")
+
 # The path mode each engine's own documentation assigns to a variable-length
 # pattern written with no restrictor. This is the second axis of the map: it lets a
 # divergence from the ISO reference be attributed either to the *language* (the
@@ -271,6 +290,23 @@ def main():
                     swapped = render.swap_prefix_order(query)
                     if swapped != query:
                         query, prefix_order = swapped, "mode-first"
+            # A construct can be unaskable because of the *reading* an engine takes,
+            # not only because its dialect lacks the syntax. openCypher spells both
+            # `*` and `+` as a bare `*`; an engine reading that as GQL reads it as
+            # `{0,}`, so the `+` construct cannot be put to it at all in that
+            # rendering. Scoring the answer it gives to the other question as a
+            # divergence would charge it for a question nobody asked.
+            reading = _reads_as(eng, caps.get(eng.name))
+            if query is not None and case.id in DIALECT_UNASKABLE:
+                want = DIALECT_UNASKABLE[case.id]
+                if reading == want:
+                    cells.append(dict(case=case.id, engine=eng.name,
+                                      verdict="INEXPRESSIBLE", surface=surface,
+                                      detail=f"unaskable under a {want} reading: the "
+                                             f"rendering is a bare `*`, which that "
+                                             f"reading takes as the other quantifier",
+                                      query=query))
+                    continue
             if query is None:
                 cells.append(dict(case=case.id, engine=eng.name, verdict="INEXPRESSIBLE",
                                   surface=surface,
