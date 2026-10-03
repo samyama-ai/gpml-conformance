@@ -293,7 +293,7 @@ class SamyamaAdapter:
 
     def __init__(self, binary: str | None = None, port: int = 8099,
                  resp_port: int = 6399, name: str | None = None,
-                 build: str | None = None):
+                 build: str | None = None, dialect_request: str | None = None):
         import os
         import urllib.request
         self._urllib = urllib.request
@@ -309,6 +309,9 @@ class SamyamaAdapter:
         # only thing that tells them apart -- and the paper's table reports the
         # release, like every other row.
         self.build = build or "unspecified"
+        # Which dialect the suite asks this engine for. None means "whatever the
+        # engine defaults to", which is how every other row is measured.
+        self.dialect_requested = dialect_request
         self.port, self.resp_port = port, resp_port
         self.base_url = f"http://localhost:{port}"
         self.proc = None
@@ -378,9 +381,24 @@ class SamyamaAdapter:
     # -- protocol -----------------------------------------------------------
     def _post(self, query: str):
         import json as _json
+        body = {"query": query}
+        # Ask for the standard's readings where the engine offers a choice.
+        #
+        # This engine's default dialect is openCypher: an unprefixed variable-length
+        # pattern is a TRAIL and a bare `*` is `{1,}`. ISO/IEC 39075 reads both the
+        # other way. Sending `dialect: "gql"` selects the standard's readings, which
+        # is what a GQL user would do, and it is recorded in the map so the row can
+        # never be read as the default behaviour.
+        #
+        # No other engine in this matrix offers such a switch -- probed, not assumed:
+        # the others are either GQL-native, or openCypher with no way to ask for
+        # anything else. If one appears, it gets the same courtesy and the same
+        # disclosure.
+        if self.dialect_requested:
+            body["dialect"] = self.dialect_requested
         req = self._urllib.Request(
             f"{self.base_url}/api/query",
-            data=_json.dumps({"query": query}).encode(),
+            data=_json.dumps(body).encode(),
             headers={"Content-Type": "application/json"})
         with self._urllib.urlopen(req, timeout=30) as r:
             return _json.loads(r.read().decode())
@@ -426,7 +444,16 @@ class SamyamaAdapter:
         try:
             res = self._post(q)
         except Exception as ex:
-            raise EngineError(f"{type(ex).__name__}: {ex}") from ex
+            # A refusal arrives as an HTTP 400 with a body. A timeout or a closed
+            # socket is the engine not answering, which is not a verdict about the
+            # query -- and scoring it REJECTS would record a query that hangs the
+            # server as one the server correctly refused. That is the better-looking
+            # of the two and the wrong one.
+            name = type(ex).__name__
+            if name in ("TimeoutError", "socket.timeout", "URLError", "ConnectionResetError",
+                        "RemoteDisconnected", "IncompleteRead") or "timed out" in str(ex):
+                raise EngineUnavailable(f"{self.name}: {name}: {str(ex)[:160]}") from ex
+            raise EngineError(f"{name}: {ex}") from ex
         if isinstance(res, dict) and res.get("error"):
             raise EngineError(str(res["error"])[:300])
         diags = [{"code": n.get("code", ""), "title": n.get("title", ""),
