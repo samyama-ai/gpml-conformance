@@ -31,7 +31,14 @@ def test_every_case_carries_a_clause():
 
 def test_every_case_has_a_reference_answer_or_says_why():
     """A construct with no computable reference is not a conformance test, unless the
-    case is scored on acceptance alone and says so."""
+    case is scored on whether the engine accepts or refuses it.
+
+    Two kinds have no reference and are still tests. A REJECT case is ill-formed, so
+    there is nothing for a conforming engine to return. An ACCEPT control can be
+    well-formed and still have an infinite admissible set -- an unbounded quantifier
+    under WALK with ANY -- so acceptance is the whole test. Anything else with no
+    reference is a query nobody can grade, and should not be in the suite.
+    """
     import sys
     sys.path.insert(0, os.path.join(HERE, "src"))
     import fixtures
@@ -41,5 +48,6 @@ def test_every_case_has_a_reference_answer_or_says_why():
         try:
             match(fixtures.FIXTURES[c.fixture](), c.ref)
         except ValueError:
-            assert c.expect == "ACCEPT", (
-                f"{c.id} has no reference answer and is not scored on acceptance")
+            assert c.expect in ("ACCEPT", "REJECT"), (
+                f"{c.id} has no reference answer and is not scored on acceptance "
+                f"or refusal, so nothing can grade it")
