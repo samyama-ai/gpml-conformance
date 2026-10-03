@@ -29,7 +29,7 @@ docker run -d --name cf-age -p 5433:5432 -e POSTGRES_PASSWORD=postgres \
 # Every engine the map has a row for has to be started here. A row whose container
 # run.sh does not start scores LOAD_FAILED across the board and the map ships with a
 # hole in it -- which is how the neo4j-2026 column was empty for a week.
-docker run -d --name cf-arcade -p 7693:7687 -p 2480:2480 \
+docker run -d --name cf-arcade -p 2480:2480 \
   -e JAVA_OPTS="-Darcadedb.server.rootPassword=playwithdata -Darcadedb.server.defaultDatabases=gpml[root]" \
   arcadedata/arcadedb:26.9.1 >/dev/null
 docker run -d --name cf-falkor -p 6380:6379 falkordb/falkordb:latest >/dev/null
@@ -39,25 +39,29 @@ docker run -d --name cf-spanner -p 9010:9010 -p 9020:9020 \
   gcr.io/cloud-spanner-emulator/emulator:1.5.58 >/dev/null
 
 echo "== waiting for engines"
-for _ in $(seq 1 60); do
+for _ in $(seq 1 90); do
   if "$PYBIN" - <<'PROBE' >/dev/null 2>&1
 import sys
 sys.path.insert(0, "src")
-from engines_adapters import BoltAdapter, AgeAdapter
 # Opening a connection is not readiness. Neo4j accepts Bolt before the database is
-# writable, so a connect-only probe returns success and the first two cases of the
-# run then score LOAD_FAILED. Each engine must complete a write and a read.
+# writable, so a connect-only probe returns success and the first cases of the run then
+# score LOAD_FAILED. Each engine must complete a write and a read. Every engine with a
+# row is probed here: one left out is a column of LOAD_FAILED that nobody notices until
+# the map is published.
+import fixtures
+from engines_adapters import (AgeAdapter, ArcadeAdapter, BoltAdapter, FalkorAdapter,
+                              SpannerAdapter, SurrealAdapter)
+g = fixtures.FIXTURES["single"]()
+L, E = fixtures.PRIMARY_LABEL["single"], fixtures.EDGE_LABEL["single"]
 for a in (BoltAdapter("neo4j", "bolt://localhost:7688", ("neo4j", "testpassword123")),
           BoltAdapter("neo4j-2026", "bolt://localhost:7690", ("neo4j", "testpassword123")),
           BoltAdapter("memgraph", "bolt://localhost:7689", None),
           AgeAdapter("host=localhost port=5433 dbname=postgres "
-                     "user=postgres password=postgres")):
-    from gpml_ref import PropertyGraph
-    import fixtures
-    a.load(fixtures.FIXTURES["single"](), fixtures.PRIMARY_LABEL["single"],
-           fixtures.EDGE_LABEL["single"])
+                     "user=postgres password=postgres"),
+          ArcadeAdapter(), FalkorAdapter(), SurrealAdapter(), SpannerAdapter()):
+    a.load(g, L, E)
 PROBE
-  then break; fi
+  then echo "   all engines ready"; break; fi
   sleep 2
 done
 
