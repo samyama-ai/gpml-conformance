@@ -722,3 +722,72 @@ class SpannerAdapter:
         except Exception as ex:
             raise EngineError(f"{type(ex).__name__}: {ex}") from ex
         return _counter(rows, None)
+
+
+class IsolatedKuzuAdapter:
+    """A Kuzu-API engine driven in its own interpreter.
+
+    LadybugDB is the live MIT fork of Kuzu, whose own row is frozen: 0.11.3 is the
+    final release and the repository is archived. Both wheels are built from the same
+    C++ sources and both export a pybind11 type named `Database`, and pybind11's type
+    registry is global to the interpreter -- so whichever imports second raises
+    "type Database is already registered", falls back to a C API shared library the
+    wheel does not ship, and reports a misleading "could not find lbug C API shared
+    library". Keeping both rows therefore means keeping them in separate processes.
+
+    The worker is src/_engine_worker.py and the protocol is newline-delimited JSON.
+    """
+
+    dialect = "cypher"
+
+    def __init__(self, workdir: str, module: str = "ladybug", name: str = "ladybugdb",
+                 python: str | None = None):
+        import json as _json
+        import os as _os
+        import subprocess
+        import sys as _sys
+        self._json = _json
+        self.name = name
+        self.workdir = workdir
+        _os.makedirs(workdir, exist_ok=True)
+        worker = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                               "_engine_worker.py")
+        self._proc = subprocess.Popen(
+            [python or _sys.executable, "-u", worker, module, workdir],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL, text=True)
+        self.version = self._call({"op": "version"})["version"]
+
+    def _call(self, msg):
+        if self._proc.poll() is not None:
+            raise EngineError(f"{self.name} worker exited "
+                              f"with code {self._proc.returncode}")
+        self._proc.stdin.write(self._json.dumps(msg) + "\n")
+        self._proc.stdin.flush()
+        line = self._proc.stdout.readline()
+        if not line:
+            raise EngineError(f"{self.name} worker closed the pipe")
+        out = self._json.loads(line)
+        if not out.get("ok"):
+            raise EngineError(out.get("error", "unknown worker error"))
+        return out
+
+    def load(self, g: PropertyGraph, primary: str, edge_label: str):
+        self._call({
+            "op": "load", "primary": primary, "edge_label": edge_label,
+            "nodes": [{"id": n.id, "labels": sorted(n.labels), "props": dict(n.props)}
+                      for n in g.nodes.values()],
+            "edges": [{"id": e.id, "src": e.src, "dst": e.dst}
+                      for e in g.edges.values()],
+        })
+
+    def run(self, q: str) -> Answer:
+        return _counter([tuple(r) for r in self._call({"op": "run", "q": q})["rows"]],
+                        None)
+
+    def close(self):
+        try:
+            self._proc.stdin.close()
+            self._proc.wait(timeout=10)
+        except Exception:
+            self._proc.kill()

@@ -16,11 +16,12 @@ Three questions, none of them previously measured:
 
 <!-- BEGIN GENERATED: scorecard -->
 
-**84 constructs x 11 engines = 924 cells.** Each cell is one exact multiset comparison, run 3 times to confirm the engine agrees with itself.
+**84 constructs x 12 engines = 1008 cells.** Each cell is one exact multiset comparison, run 3 times to confirm the engine agrees with itself.
 
 | engine | version | conforms | diverges | rejects | inexpressible | silence ratio | refuses ill-formed |
 |---|---|---:|---:|---:|---:|---:|---:|
 | kuzu | 0.11.3 | 33 | 15 | 1 | 29 | 0.94 | not askable |
+| ladybugdb | 0.21.2 | 33 | 15 | 1 | 29 | 0.94 | not askable |
 | duckpgq | 1.4.1 | 6 | 20 | 52 | 0 | 0.28 | 3/3 |
 | neo4j | Neo4j Kernel 5.26.30 | 45 | 10 | 0 | 23 | 1.00 | 3/3 |
 | neo4j-2026 | Neo4j Kernel 2026.04.0 | 46 | 9 | 23 | 0 | 0.28 | 3/3 |
@@ -32,7 +33,7 @@ Three questions, none of them previously measured:
 | spanner | cloud-spanner-emulator 1.5.58 | 36 | 0 | 25 | 17 | 0.00 | 3/3 |
 | samyama-graph *(ours)* | samyama v1.8.0 (reports 1.10.0) | 50 | 10 | 18 | 0 | 0.36 | 3/3 |
 
-Over every engine but ours and the superseded Neo4j line: **S1 = 0.2408** of answered cells diverge, and **S2 = 0.4033** of disagreements are silent -- the query runs, returns a different multiset, raises nothing. The silence ratio is a property of the engine, not of the problem: the table above spans the whole range from 0 to 1.
+Over every engine but ours and the superseded Neo4j line: **S1 = 0.2484** of answered cells diverge, and **S2 = 0.4363** of disagreements are silent -- the query runs, returns a different multiset, raises nothing. The silence ratio is a property of the engine, not of the problem: the table above spans the whole range from 0 to 1.
 
 The standard defines 16 restrictor x selector combinations. Over an exhaustive sweep of 22,474 directed multigraphs, 114 of 120 cell pairs have a separating witness and 6 have none: **12 of 16 combinations are observably different.** A shortest path is already simple, so the restrictor is unobservable under a shortest selector except for ACYCLIC.
 

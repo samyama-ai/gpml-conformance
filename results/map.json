@@ -13,6 +13,18 @@
       }
     },
     {
+      "name": "ladybugdb",
+      "dialect": "cypher",
+      "version": "0.21.2",
+      "gql_syntax": {
+        "restrictor_legacy": false,
+        "restrictor_qpp": false,
+        "selector_legacy": false,
+        "selector_qpp": false,
+        "named_path_after_prefix": false
+      }
+    },
+    {
       "name": "duckpgq",
       "dialect": "pgq",
       "version": "1.4.1",
@@ -143,6 +155,28 @@
       "detail_vs_declared": "",
       "case": "mode-walk-bounded",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "m->m": 2,
+        "m->n": 2
+      },
+      "reference": {
+        "m->n": 2,
+        "m->m": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "mode-walk-bounded",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -383,6 +417,28 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "mode-trail-bounded",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('m', 'n'): 1, ('m', 'm'): 1}, observed {('m', 'n'): 2, ('m', 'm'): 2}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "m->m": 2,
+        "m->n": 2
+      },
+      "reference": {
+        "m->n": 1,
+        "m->m": 1
+      }
+    },
+    {
       "case": "mode-trail-bounded",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -581,6 +637,13 @@
     },
     {
       "case": "mode-acyclic-bounded",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "mode-acyclic-bounded",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -704,6 +767,13 @@
     },
     {
       "case": "mode-simple-bounded",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "mode-simple-bounded",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -744,7 +814,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"b4046a09cb3e81fd-1ac3\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"5ede6b434ff2fd3c-1fc4\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
       "query": "MATCH SIMPLE (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -800,6 +870,26 @@
       "detail_vs_declared": "",
       "case": "walk-revisits-same-edge",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "u->u": 1
+      },
+      "reference": {
+        "u->u": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "walk-revisits-same-edge",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -992,6 +1082,30 @@
       "detail_vs_declared": "",
       "case": "quant-zero-lower-bound",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->a": 1,
+        "a->b": 2,
+        "a->c": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "quant-zero-lower-bound",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -1244,6 +1358,26 @@
     {
       "diagnostics": null,
       "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "quant-zero-zero",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1
+      },
+      "reference": {
+        "a->a": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
       "declared_mode": null,
       "verdict_vs_declared": null,
       "detail_vs_declared": "",
@@ -1430,6 +1564,26 @@
       "detail_vs_declared": "",
       "case": "parallel-edges",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->b": 2
+      },
+      "reference": {
+        "a->b": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "parallel-edges",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -1646,6 +1800,28 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "self-loop-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('x', 'x'): 2, ('x', 'y'): 2}, observed {('x', 'y'): 2, ('x', 'x'): 3}",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN u.eid AS s, v.eid AS t",
+      "observed": {
+        "x->x": 3,
+        "x->y": 2
+      },
+      "reference": {
+        "x->x": 2,
+        "x->y": 2
+      }
+    },
+    {
       "case": "self-loop-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -1844,6 +2020,13 @@
     },
     {
       "case": "self-loop-acyclic",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "self-loop-acyclic",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -1960,6 +2143,28 @@
       "detail_vs_declared": "",
       "case": "direction-any",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "b->a": 2,
+        "b->c": 1
+      },
+      "reference": {
+        "b->a": 2,
+        "b->c": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "direction-any",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -2194,6 +2399,26 @@
     {
       "diagnostics": null,
       "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "direction-left",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "b->a": 2
+      },
+      "reference": {
+        "b->a": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
       "declared_mode": null,
       "verdict_vs_declared": null,
       "detail_vs_declared": "",
@@ -2382,6 +2607,14 @@
     },
     {
       "case": "interior-node-unconstrained",
+      "engine": "ladybugdb",
+      "verdict": "REJECTS",
+      "surface": "common-dialect",
+      "detail": "RuntimeError: Binder exception: Table Mark does not exist.",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, y.eid AS t"
+    },
+    {
+      "case": "interior-node-unconstrained",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -2545,6 +2778,30 @@
       "detail_vs_declared": "",
       "case": "selector-all-shortest",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..3]->(y:N) WHERE x.name='a' WITH x, y, min(length(p)) AS m MATCH q=(x)-[:E*1..3]->(y) WHERE length(q)=m RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->b": 2,
+        "a->c": 2,
+        "a->a": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "selector-all-shortest",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -2766,6 +3023,13 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "case": "selector-any-shortest",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
       "diagnostics": null,
       "diagnostics_supported": false,
       "declared_mode": null,
@@ -2902,6 +3166,13 @@
     {
       "case": "selector-any",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "selector-any",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -3048,6 +3319,26 @@
       "detail_vs_declared": "",
       "case": "paper-trail-unbounded",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a6', 'a2'): 3}, observed {('a6', 'a2'): 8}",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN a.eid AS s, b.eid AS t",
+      "observed": {
+        "a6->a2": 8
+      },
+      "reference": {
+        "a6->a2": 3
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "paper-trail-unbounded",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
@@ -3244,6 +3535,36 @@
       "detail_vs_declared": "",
       "case": "g1-fig1-walk-all",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a1->a1": 1,
+        "a1->a2": 2,
+        "a1->a3": 3,
+        "a1->a4": 1,
+        "a1->a5": 3,
+        "a1->a6": 1
+      },
+      "reference": {
+        "a1->a3": 3,
+        "a1->a2": 2,
+        "a1->a5": 3,
+        "a1->a4": 1,
+        "a1->a1": 1,
+        "a1->a6": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g1-fig1-walk-all",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -3587,6 +3908,13 @@
       "detail": "no surface syntax in this dialect"
     },
     {
+      "case": "g1-fig1-walk-any",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
       "diagnostics": null,
       "diagnostics_supported": false,
       "declared_mode": null,
@@ -3782,6 +4110,36 @@
       "detail_vs_declared": "",
       "case": "g1-fig1-walk-all-shortest",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' WITH x, y, min(length(p)) AS m MATCH q=(x)-[:Transfer*1..5]->(y) WHERE length(q)=m RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a1->a1": 1,
+        "a1->a2": 1,
+        "a1->a3": 1,
+        "a1->a4": 1,
+        "a1->a5": 1,
+        "a1->a6": 1
+      },
+      "reference": {
+        "a1->a3": 1,
+        "a1->a2": 1,
+        "a1->a5": 1,
+        "a1->a4": 1,
+        "a1->a1": 1,
+        "a1->a6": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g1-fig1-walk-all-shortest",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -4034,7 +4392,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 ALL SHORTEST search is unimplemented [at 1:15]\nGRAPH g MATCH ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x....\n              ^, request_id = 1.1911779789972110472.1.0.15.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\002\"\n]",
+      "detail": "InvalidArgument: 400 ALL SHORTEST search is unimplemented [at 1:15]\nGRAPH g MATCH ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x....\n              ^, request_id = 1.6430587184614552429.1.0.15.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\002\"\n]",
       "query": "MATCH ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -4077,6 +4435,13 @@
     {
       "case": "g1-fig1-walk-any-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-walk-any-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -4277,6 +4642,36 @@
       "detail_vs_declared": "",
       "case": "g1-fig1-trail-all",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a1', 'a3'): 2, ('a1', 'a2'): 1, ('a1', 'a5'): 2, ('a1', 'a4'): 1, ('a1', 'a1'): 1, ('a1', 'a6'): 1}, observed {('a1', 'a6'): 1, ('a1', 'a1'): 1, ('a1', 'a4'): 1, ('a1', 'a5'): 3, ('a1', 'a2'): 2, ('a1', 'a3'): 3}",
+      "query": "MATCH p=(x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a1->a1": 1,
+        "a1->a2": 2,
+        "a1->a3": 3,
+        "a1->a4": 1,
+        "a1->a5": 3,
+        "a1->a6": 1
+      },
+      "reference": {
+        "a1->a3": 2,
+        "a1->a2": 1,
+        "a1->a5": 2,
+        "a1->a4": 1,
+        "a1->a1": 1,
+        "a1->a6": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g1-fig1-trail-all",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
@@ -4593,6 +4988,13 @@
     },
     {
       "case": "g1-fig1-trail-any",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-trail-any",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -4633,7 +5035,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"100ca655e62530a-1bf3\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ANY' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"fbf9d8ebb31a300e-20f4\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ANY' -> NoViableAltException\"}",
       "query": "MATCH TRAIL ANY (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -4656,7 +5058,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:21]\nGRAPH g MATCH TRAIL ANY (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.own...\n                    ^, request_id = 1.1911779789972110472.1.0.28.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:21]\nGRAPH g MATCH TRAIL ANY (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.own...\n                    ^, request_id = 1.6430587184614552429.1.0.28.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
       "query": "MATCH TRAIL ANY (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -4675,6 +5077,36 @@
       "detail_vs_declared": "",
       "case": "g1-fig1-trail-all-shortest",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' WITH x, y, min(length(p)) AS m MATCH q=(x)-[:Transfer*1..5]->(y) WHERE length(q)=m RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a1->a1": 1,
+        "a1->a2": 1,
+        "a1->a3": 1,
+        "a1->a4": 1,
+        "a1->a5": 1,
+        "a1->a6": 1
+      },
+      "reference": {
+        "a1->a3": 1,
+        "a1->a2": 1,
+        "a1->a5": 1,
+        "a1->a4": 1,
+        "a1->a1": 1,
+        "a1->a6": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g1-fig1-trail-all-shortest",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -4815,7 +5247,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"8ccb24eb192d36cc-1c06\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ALL' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"5ded74b24f9018f-2107\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ALL' -> NoViableAltException\"}",
       "query": "MATCH TRAIL ALL SHORTEST (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -4861,7 +5293,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:21]\nGRAPH g MATCH TRAIL ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WH...\n                    ^, request_id = 1.1911779789972110472.1.0.31.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:21]\nGRAPH g MATCH TRAIL ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WH...\n                    ^, request_id = 1.6430587184614552429.1.0.31.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
       "query": "MATCH TRAIL ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -4875,6 +5307,13 @@
     {
       "case": "g1-fig1-trail-any-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-trail-any-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -4921,7 +5360,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"10c9bb96bc1fb916-1c19\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ANY' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"2035823f2b53b4fd-211a\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ANY' -> NoViableAltException\"}",
       "query": "MATCH TRAIL ANY SHORTEST (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -4944,7 +5383,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:21]\nGRAPH g MATCH TRAIL ANY SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WH...\n                    ^, request_id = 1.1911779789972110472.1.0.34.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:21]\nGRAPH g MATCH TRAIL ANY SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WH...\n                    ^, request_id = 1.6430587184614552429.1.0.34.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
       "query": "MATCH TRAIL ANY SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -4958,6 +5397,13 @@
     {
       "case": "g1-fig1-acyclic-all",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-acyclic-all",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -5147,6 +5593,13 @@
     },
     {
       "case": "g1-fig1-acyclic-any",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-acyclic-any",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -5187,7 +5640,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"231ffaf77abd47bd-1c41\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ANY' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"b19e85c79f9fb274-2142\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ANY' -> NoViableAltException\"}",
       "query": "MATCH ACYCLIC ANY (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5210,7 +5663,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:23]\nGRAPH g MATCH ACYCLIC ANY (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.o...\n                      ^, request_id = 1.1911779789972110472.1.0.42.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:23]\nGRAPH g MATCH ACYCLIC ANY (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.o...\n                      ^, request_id = 1.6430587184614552429.1.0.42.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
       "query": "MATCH ACYCLIC ANY (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5224,6 +5677,13 @@
     {
       "case": "g1-fig1-acyclic-all-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-acyclic-all-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -5270,7 +5730,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"c1fcb87e8502f05c-1c54\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ALL' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"c85d95754068fba2-2155\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ALL' -> NoViableAltException\"}",
       "query": "MATCH ACYCLIC ALL SHORTEST (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5293,7 +5753,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:23]\nGRAPH g MATCH ACYCLIC ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) ...\n                      ^, request_id = 1.1911779789972110472.1.0.45.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:23]\nGRAPH g MATCH ACYCLIC ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) ...\n                      ^, request_id = 1.6430587184614552429.1.0.45.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
       "query": "MATCH ACYCLIC ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5307,6 +5767,13 @@
     {
       "case": "g1-fig1-acyclic-any-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-acyclic-any-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -5353,7 +5820,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"cddf8d53a6339615-1c67\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ANY' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"b163d25cb538ff8-2168\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ANY' -> NoViableAltException\"}",
       "query": "MATCH ACYCLIC ANY SHORTEST (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5376,7 +5843,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:23]\nGRAPH g MATCH ACYCLIC ANY SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) ...\n                      ^, request_id = 1.1911779789972110472.1.0.48.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:23]\nGRAPH g MATCH ACYCLIC ANY SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) ...\n                      ^, request_id = 1.6430587184614552429.1.0.48.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
       "query": "MATCH ACYCLIC ANY SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5390,6 +5857,13 @@
     {
       "case": "g1-fig1-simple-all",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-simple-all",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -5436,7 +5910,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"9ef8e0dbea118c28-1c7a\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"13060af8c0522134-217b\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
       "query": "MATCH SIMPLE (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5545,6 +6019,13 @@
     },
     {
       "case": "g1-fig1-simple-any",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-simple-any",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -5585,7 +6066,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"b80efbaca094f213-1c8d\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ANY'\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"86018027ef1b2778-218e\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ANY'\"}",
       "query": "MATCH SIMPLE ANY (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5608,7 +6089,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:22]\nGRAPH g MATCH SIMPLE ANY (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.ow...\n                     ^, request_id = 1.1911779789972110472.1.0.56.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:22]\nGRAPH g MATCH SIMPLE ANY (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.ow...\n                     ^, request_id = 1.6430587184614552429.1.0.56.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\",
       "query": "MATCH SIMPLE ANY (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5622,6 +6103,13 @@
     {
       "case": "g1-fig1-simple-all-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-simple-all-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -5668,7 +6156,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"ea095ae4890a637e-1ca0\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ALL'\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"faa9ca5690d9e11-21a1\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ALL'\"}",
       "query": "MATCH SIMPLE ALL SHORTEST (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5691,7 +6179,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:22]\nGRAPH g MATCH SIMPLE ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) W...\n                     ^, request_id = 1.1911779789972110472.1.0.59.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:22]\nGRAPH g MATCH SIMPLE ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) W...\n                     ^, request_id = 1.6430587184614552429.1.0.59.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\",
       "query": "MATCH SIMPLE ALL SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5705,6 +6193,13 @@
     {
       "case": "g1-fig1-simple-any-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-fig1-simple-any-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -5751,7 +6246,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"fd89046b002cc716-1cb3\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ANY'\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"cf3c9187f5ddfa9c-21b4\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ANY'\"}",
       "query": "MATCH SIMPLE ANY SHORTEST (x:Account)-[:Transfer*1..5]->(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5774,7 +6269,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:22]\nGRAPH g MATCH SIMPLE ANY SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) W...\n                     ^, request_id = 1.1911779789972110472.1.0.62.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:22]\nGRAPH g MATCH SIMPLE ANY SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) W...\n                     ^, request_id = 1.6430587184614552429.1.0.62.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\",
       "query": "MATCH SIMPLE ANY SHORTEST (x:Account)-[:Transfer]->{1,5}(y:Account) WHERE x.owner='Scott' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -5793,6 +6288,28 @@
       "detail_vs_declared": "",
       "case": "g1-loop-walk-all",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "x->x": 3,
+        "x->y": 2
+      },
+      "reference": {
+        "x->x": 3,
+        "x->y": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g1-loop-walk-all",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -5978,7 +6495,7 @@
       "surface": "iso-gql",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
-      "detail": "expected {('x', 'x'): 3, ('x', 'y'): 2}, observed {('x', 'y'): 2, ('x', 'x'): 2}",
+      "detail": "expected {('x', 'x'): 3, ('x', 'y'): 2}, observed {('x', 'x'): 2, ('x', 'y'): 2}",
       "query": "MATCH (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "x->x": 2,
@@ -6043,6 +6560,13 @@
     {
       "case": "g1-loop-walk-any",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-walk-any",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -6215,6 +6739,28 @@
       "detail_vs_declared": "",
       "case": "g1-loop-walk-all-shortest",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..2]->(y:N) WHERE x.name='x' WITH x, y, min(length(p)) AS m MATCH q=(x)-[:E*1..2]->(y) WHERE length(q)=m RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "reference": {
+        "x->x": 1,
+        "x->y": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g1-loop-walk-all-shortest",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -6403,7 +6949,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 ALL SHORTEST search is unimplemented [at 1:15]\nGRAPH g MATCH ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.e...\n              ^, request_id = 1.1911779789972110472.1.0.77.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\002\"\n]",
+      "detail": "InvalidArgument: 400 ALL SHORTEST search is unimplemented [at 1:15]\nGRAPH g MATCH ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.e...\n              ^, request_id = 1.6430587184614552429.1.0.77.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\002\"\n]",
       "query": "MATCH ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -6438,6 +6984,13 @@
     {
       "case": "g1-loop-walk-any-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-walk-any-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -6610,6 +7163,28 @@
       "detail_vs_declared": "",
       "case": "g1-loop-trail-all",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('x', 'x'): 2, ('x', 'y'): 2}, observed {('x', 'y'): 2, ('x', 'x'): 3}",
+      "query": "MATCH p=(x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "x->x": 3,
+        "x->y": 2
+      },
+      "reference": {
+        "x->x": 2,
+        "x->y": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g1-loop-trail-all",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
@@ -6846,6 +7421,13 @@
     },
     {
       "case": "g1-loop-trail-any",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-trail-any",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -6886,7 +7468,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"cabf6fa788416ec3-1cf9\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ANY' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"cc6d3c3b2782417d-21fa\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ANY' -> NoViableAltException\"}",
       "query": "MATCH TRAIL ANY (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -6909,7 +7491,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:21]\nGRAPH g MATCH TRAIL ANY (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid ...\n                    ^, request_id = 1.1911779789972110472.1.0.90.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:21]\nGRAPH g MATCH TRAIL ANY (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid ...\n                    ^, request_id = 1.6430587184614552429.1.0.90.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
       "query": "MATCH TRAIL ANY (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -6928,6 +7510,28 @@
       "detail_vs_declared": "",
       "case": "g1-loop-trail-all-shortest",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..2]->(y:N) WHERE x.name='x' WITH x, y, min(length(p)) AS m MATCH q=(x)-[:E*1..2]->(y) WHERE length(q)=m RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "x->x": 1,
+        "x->y": 1
+      },
+      "reference": {
+        "x->x": 1,
+        "x->y": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g1-loop-trail-all-shortest",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -7036,7 +7640,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"921176fe6144291f-1d03\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ALL' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"afa0579bb8b05ce2-2204\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ALL' -> NoViableAltException\"}",
       "query": "MATCH TRAIL ALL SHORTEST (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7074,7 +7678,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:21]\nGRAPH g MATCH TRAIL ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETU...\n                    ^, request_id = 1.1911779789972110472.1.0.93.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:21]\nGRAPH g MATCH TRAIL ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETU...\n                    ^, request_id = 1.6430587184614552429.1.0.93.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
       "query": "MATCH TRAIL ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7088,6 +7692,13 @@
     {
       "case": "g1-loop-trail-any-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-trail-any-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -7134,7 +7745,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"9a3ec0ac4fde8bed-1d0d\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ANY' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"79821f8f03771608-220e\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:12 - no viable alternative at input 'TRAIL ANY' -> NoViableAltException\"}",
       "query": "MATCH TRAIL ANY SHORTEST (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7157,7 +7768,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:21]\nGRAPH g MATCH TRAIL ANY SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETU...\n                    ^, request_id = 1.1911779789972110472.1.0.96.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:21]\nGRAPH g MATCH TRAIL ANY SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETU...\n                    ^, request_id = 1.6430587184614552429.1.0.96.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010\\0",
       "query": "MATCH TRAIL ANY SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7171,6 +7782,13 @@
     {
       "case": "g1-loop-acyclic-all",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-acyclic-all",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -7320,6 +7938,13 @@
     },
     {
       "case": "g1-loop-acyclic-any",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-acyclic-any",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -7360,7 +7985,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"5b119df5f588c878-1d23\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ANY' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"a7c42870fbee687c-2224\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ANY' -> NoViableAltException\"}",
       "query": "MATCH ACYCLIC ANY (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7383,7 +8008,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:23]\nGRAPH g MATCH ACYCLIC ANY (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.ei...\n                      ^, request_id = 1.1911779789972110472.1.0.104.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\01",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:23]\nGRAPH g MATCH ACYCLIC ANY (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.ei...\n                      ^, request_id = 1.6430587184614552429.1.0.104.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\01",
       "query": "MATCH ACYCLIC ANY (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7397,6 +8022,13 @@
     {
       "case": "g1-loop-acyclic-all-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-acyclic-all-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -7443,7 +8075,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"4c667abdd3846674-1d2d\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ALL' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"6b4d35c8bab9e9a3-222e\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ALL' -> NoViableAltException\"}",
       "query": "MATCH ACYCLIC ALL SHORTEST (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7466,7 +8098,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:23]\nGRAPH g MATCH ACYCLIC ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RE...\n                      ^, request_id = 1.1911779789972110472.1.0.107.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\01",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:23]\nGRAPH g MATCH ACYCLIC ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RE...\n                      ^, request_id = 1.6430587184614552429.1.0.107.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\01",
       "query": "MATCH ACYCLIC ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7480,6 +8112,13 @@
     {
       "case": "g1-loop-acyclic-any-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-acyclic-any-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -7526,7 +8165,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"9d6fae8282ad975-1d37\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ANY' -> NoViableAltException\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"396f7b4b8aa4993-2238\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:14 - no viable alternative at input 'ACYCLIC ANY' -> NoViableAltException\"}",
       "query": "MATCH ACYCLIC ANY SHORTEST (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7549,7 +8188,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:23]\nGRAPH g MATCH ACYCLIC ANY SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RE...\n                      ^, request_id = 1.1911779789972110472.1.0.110.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\01",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:23]\nGRAPH g MATCH ACYCLIC ANY SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RE...\n                      ^, request_id = 1.6430587184614552429.1.0.110.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\01",
       "query": "MATCH ACYCLIC ANY SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7563,6 +8202,13 @@
     {
       "case": "g1-loop-simple-all",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-simple-all",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -7609,7 +8255,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"e4480a6e4bb291e6-1d41\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"34a182a743d20a58-2242\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at '('\"}",
       "query": "MATCH SIMPLE (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7694,6 +8340,13 @@
     },
     {
       "case": "g1-loop-simple-any",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-simple-any",
       "engine": "duckpgq",
       "verdict": "REJECTS",
       "surface": "common-dialect",
@@ -7734,7 +8387,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"9b316f37f446e1c3-1d4b\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ANY'\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"af6ca2b7bd7c769f-224c\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ANY'\"}",
       "query": "MATCH SIMPLE ANY (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7757,7 +8410,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:22]\nGRAPH g MATCH SIMPLE ANY (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid...\n                     ^, request_id = 1.1911779789972110472.1.0.118.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:22]\nGRAPH g MATCH SIMPLE ANY (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid...\n                     ^, request_id = 1.6430587184614552429.1.0.118.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
       "query": "MATCH SIMPLE ANY (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7771,6 +8424,13 @@
     {
       "case": "g1-loop-simple-all-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-simple-all-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -7817,7 +8477,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"f832255f5b6797ce-1d55\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ALL'\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"9bd8f5e09103d9e2-2256\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ALL'\"}",
       "query": "MATCH SIMPLE ALL SHORTEST (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7840,7 +8500,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:22]\nGRAPH g MATCH SIMPLE ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RET...\n                     ^, request_id = 1.1911779789972110472.1.0.121.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ALL [at 1:22]\nGRAPH g MATCH SIMPLE ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RET...\n                     ^, request_id = 1.6430587184614552429.1.0.121.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
       "query": "MATCH SIMPLE ALL SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7854,6 +8514,13 @@
     {
       "case": "g1-loop-simple-any-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g1-loop-simple-any-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -7900,7 +8567,7 @@
       "engine": "arcadedb",
       "verdict": "REJECTS",
       "surface": "gql-prefix",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"7e0108f54aad2c56-1d5f\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ANY'\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"a9359c0132fa60e2-2260\",\"exception\":\"com.arcadedb.exception.CommandParsingException\",\"detail\":\"Syntax error at line 1:13 - missing '=' at 'ANY'\"}",
       "query": "MATCH SIMPLE ANY SHORTEST (x:N)-[:E*1..2]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7923,7 +8590,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:22]\nGRAPH g MATCH SIMPLE ANY SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RET...\n                     ^, request_id = 1.1911779789972110472.1.0.124.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
+      "detail": "InvalidArgument: 400 Syntax error: Unexpected keyword ANY [at 1:22]\nGRAPH g MATCH SIMPLE ANY SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RET...\n                     ^, request_id = 1.6430587184614552429.1.0.124.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nvalue: \"\\010",
       "query": "MATCH SIMPLE ANY SHORTEST (x:N)-[:E]->{1,2}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -7942,6 +8609,26 @@
       "detail_vs_declared": "",
       "case": "g2-none-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->b": 2
+      },
+      "reference": {
+        "a->b": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-none-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -8182,6 +8869,26 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-none-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->b": 2
+      },
+      "reference": {
+        "a->b": 2
+      }
+    },
+    {
       "case": "g2-none-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -8375,6 +9082,26 @@
     {
       "diagnostics": null,
       "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-0-0-walk",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1
+      },
+      "reference": {
+        "a->a": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
       "declared_mode": null,
       "verdict_vs_declared": null,
       "detail_vs_declared": "",
@@ -8544,7 +9271,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:30]\nGRAPH g MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.ei...\n                             ^, request_id = 1.1911779789972110472.1.0.137.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
+      "detail": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:30]\nGRAPH g MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.ei...\n                             ^, request_id = 1.6430587184614552429.1.0.137.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay",
       "query": "MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -8575,6 +9302,26 @@
       "detail_vs_declared": "",
       "case": "g2-0-0-trail",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1
+      },
+      "reference": {
+        "a->a": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-0-0-trail",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -8735,7 +9482,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:36]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s...\n                                   ^, request_id = 1.1911779789972110472.1.0.140.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageMode",
+      "detail": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:36]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s...\n                                   ^, request_id = 1.6430587184614552429.1.0.140.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageMode",
       "query": "MATCH TRAIL (x:N)-[:E]->{0,0}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -8766,6 +9513,28 @@
       "detail_vs_declared": "",
       "case": "g2-0-1-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 2
+      },
+      "reference": {
+        "a->a": 1,
+        "a->b": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-0-1-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -9029,6 +9798,28 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-0-1-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 1,
+        "a->b": 2
+      },
+      "reference": {
+        "a->a": 1,
+        "a->b": 2
+      }
+    },
+    {
       "case": "g2-0-1-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -9249,6 +10040,26 @@
       "detail_vs_declared": "",
       "case": "g2-1-1-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->b": 2
+      },
+      "reference": {
+        "a->b": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-1-1-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -9489,6 +10300,26 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-1-1-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->b": 2
+      },
+      "reference": {
+        "a->b": 2
+      }
+    },
+    {
       "case": "g2-1-1-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -9691,6 +10522,30 @@
       "detail_vs_declared": "",
       "case": "g2-1-3-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->b": 2,
+        "a->c": 2,
+        "a->a": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-1-3-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -9978,6 +10833,30 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-1-3-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->b": 2,
+        "a->c": 2,
+        "a->a": 2
+      }
+    },
+    {
       "case": "g2-1-3-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -10216,6 +11095,30 @@
       "detail_vs_declared": "expected {('a', 'a'): 3, ('a', 'b'): 2, ('a', 'c'): 2}, observed {('a', 'a'): 4, ('a', 'c'): 2, ('a', 'b'): 2}",
       "case": "g2-0-3-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a', 'a'): 3, ('a', 'b'): 2, ('a', 'c'): 2}, observed {('a', 'a'): 4, ('a', 'c'): 2, ('a', 'b'): 2}",
+      "query": "MATCH p=(x:N)-[:E*0..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 4,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->a": 3,
+        "a->b": 2,
+        "a->c": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "DIVERGES",
+      "detail_vs_declared": "expected {('a', 'a'): 3, ('a', 'b'): 2, ('a', 'c'): 2}, observed {('a', 'a'): 4, ('a', 'c'): 2, ('a', 'b'): 2}",
+      "case": "g2-0-3-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
@@ -10504,6 +11407,30 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "DIVERGES",
+      "detail_vs_declared": "expected {('a', 'a'): 3, ('a', 'b'): 2, ('a', 'c'): 2}, observed {('a', 'a'): 4, ('a', 'c'): 2, ('a', 'b'): 2}",
+      "case": "g2-0-3-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a', 'a'): 3, ('a', 'b'): 2, ('a', 'c'): 2}, observed {('a', 'a'): 4, ('a', 'c'): 2, ('a', 'b'): 2}",
+      "query": "MATCH p=(x:N)-[:E*0..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 4,
+        "a->b": 2,
+        "a->c": 2
+      },
+      "reference": {
+        "a->a": 3,
+        "a->b": 2,
+        "a->c": 2
+      }
+    },
+    {
       "case": "g2-0-3-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -10742,6 +11669,30 @@
       "detail_vs_declared": "",
       "case": "g2-2-4-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..4]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2,
+        "a->b": 4,
+        "a->c": 2
+      },
+      "reference": {
+        "a->c": 2,
+        "a->a": 2,
+        "a->b": 4
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-2-4-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -11035,6 +11986,30 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g2-2-4-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a', 'c'): 2, ('a', 'a'): 2, ('a', 'b'): 2}, observed {('a', 'a'): 2, ('a', 'c'): 2, ('a', 'b'): 4}",
+      "query": "MATCH p=(x:N)-[:E*2..4]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2,
+        "a->b": 4,
+        "a->c": 2
+      },
+      "reference": {
+        "a->c": 2,
+        "a->a": 2,
+        "a->b": 2
+      }
+    },
+    {
       "case": "g2-2-4-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -11273,6 +12248,30 @@
       "detail_vs_declared": "",
       "case": "g3-two-segment-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..2]->(m0:N)-[:E*1..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 4,
+        "a->b": 4,
+        "a->c": 2
+      },
+      "reference": {
+        "a->c": 2,
+        "a->a": 4,
+        "a->b": 4
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-two-segment-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -11552,6 +12551,30 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-two-segment-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a', 'c'): 2, ('a', 'a'): 4, ('a', 'b'): 2}, observed {('a', 'a'): 4, ('a', 'b'): 4, ('a', 'c'): 2}",
+      "query": "MATCH p=(x:N)-[:E*1..2]->(m0:N)-[:E*1..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 4,
+        "a->b": 4,
+        "a->c": 2
+      },
+      "reference": {
+        "a->c": 2,
+        "a->a": 4,
+        "a->b": 2
+      }
+    },
+    {
       "case": "g3-two-segment-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -11774,6 +12797,30 @@
       "detail_vs_declared": "",
       "case": "g3-dir-left-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..3]-(y:N) WHERE x.name='b' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "b->a": 2,
+        "b->b": 2,
+        "b->c": 2
+      },
+      "reference": {
+        "b->a": 2,
+        "b->c": 2,
+        "b->b": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-dir-left-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -12046,6 +13093,30 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-dir-left-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..3]-(y:N) WHERE x.name='b' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "b->a": 2,
+        "b->b": 2,
+        "b->c": 2
+      },
+      "reference": {
+        "b->a": 2,
+        "b->c": 2,
+        "b->b": 2
+      }
+    },
+    {
       "case": "g3-dir-left-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -12299,6 +13370,26 @@
     {
       "diagnostics": null,
       "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-dir-any-walk",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "u->u": 1
+      },
+      "reference": {
+        "u->u": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
       "declared_mode": null,
       "verdict_vs_declared": null,
       "detail_vs_declared": "",
@@ -12501,6 +13592,24 @@
       "reference": {}
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-dir-any-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {}, observed {('u', 'u'): 1}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "u->u": 1
+      },
+      "reference": {}
+    },
+    {
       "case": "g3-dir-any-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -12659,6 +13768,26 @@
       "detail_vs_declared": "",
       "case": "g3-interior-pred-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N) WHERE x.name='p' AND y.tag='Mark' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "p->r": 1
+      },
+      "reference": {
+        "p->r": 1
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-interior-pred-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -12899,6 +14028,26 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-interior-pred-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N) WHERE x.name='p' AND y.tag='Mark' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "p->r": 1
+      },
+      "reference": {
+        "p->r": 1
+      }
+    },
+    {
       "case": "g3-interior-pred-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -13118,6 +14267,28 @@
     {
       "diagnostics": null,
       "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-self-loop-walk",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..3]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "x->x": 6,
+        "x->y": 4
+      },
+      "reference": {
+        "x->x": 6,
+        "x->y": 4
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
       "declared_mode": null,
       "verdict_vs_declared": null,
       "detail_vs_declared": "",
@@ -13286,7 +14457,7 @@
       "surface": "iso-gql",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
-      "detail": "expected {('x', 'x'): 6, ('x', 'y'): 4}, observed {('x', 'x'): 4, ('x', 'y'): 2}",
+      "detail": "expected {('x', 'x'): 6, ('x', 'y'): 4}, observed {('x', 'y'): 2, ('x', 'x'): 4}",
       "query": "MATCH (x:N)-[:E]->{1,3}(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "x->x": 4,
@@ -13356,6 +14527,28 @@
       "detail_vs_declared": "",
       "case": "g3-self-loop-trail",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('x', 'x'): 4, ('x', 'y'): 2}, observed {('x', 'y'): 4, ('x', 'x'): 6}",
+      "query": "MATCH p=(x:N)-[:E*1..3]->(y:N) WHERE x.name='x' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "x->x": 6,
+        "x->y": 4
+      },
+      "reference": {
+        "x->x": 4,
+        "x->y": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-self-loop-trail",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
@@ -13591,6 +14784,28 @@
       "detail_vs_declared": "",
       "case": "g3-cycle2-walk",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "m->m": 2,
+        "m->n": 2
+      },
+      "reference": {
+        "m->n": 2,
+        "m->m": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-cycle2-walk",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "CONFORMS",
@@ -13861,6 +15076,28 @@
       }
     },
     {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": "CONFORMS",
+      "detail_vs_declared": "",
+      "case": "g3-cycle2-trail",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('m', 'n'): 1, ('m', 'm'): 1}, observed {('m', 'n'): 2, ('m', 'm'): 2}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "m->m": 2,
+        "m->n": 2
+      },
+      "reference": {
+        "m->n": 1,
+        "m->m": 1
+      }
+    },
+    {
       "case": "g3-cycle2-trail",
       "engine": "duckpgq",
       "verdict": "REJECTS",
@@ -14082,6 +15319,13 @@
     },
     {
       "case": "g4-star-walk-all",
+      "engine": "ladybugdb",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g4-star-walk-all",
       "engine": "duckpgq",
       "verdict": "CONFORMS",
       "surface": "common-dialect",
@@ -14127,7 +15371,7 @@
       "verdict": "CONFORMS",
       "surface": "gql-prefix",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"ef907e5ebb6f4682-1ec3\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
+      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"7a688dca9ebdae0b-23c4\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
       "query": "MATCH WALK (x:N)-[:E*0..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -14157,7 +15401,7 @@
       "verdict": "CONFORMS",
       "surface": "iso-gql",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.1911779789972110472.1.0.253.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
+      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.6430587184614552429.1.0.253.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
       "query": "MATCH WALK (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -14172,6 +15416,13 @@
     {
       "case": "g4-plus-walk-all",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g4-plus-walk-all",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -14223,7 +15474,7 @@
       "verdict": "CONFORMS",
       "surface": "gql-prefix",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"bdb81876c77837a7-1ecf\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
+      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"35559425dcf91f4c-23d0\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
       "query": "MATCH WALK (x:N)-[:E*1..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -14253,7 +15504,7 @@
       "verdict": "CONFORMS",
       "surface": "iso-gql",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.1911779789972110472.1.0.256.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
+      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.6430587184614552429.1.0.256.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
       "query": "MATCH WALK (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -14268,6 +15519,13 @@
     {
       "case": "g4-lower-bound-open-walk-all",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g4-lower-bound-open-walk-all",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -14319,7 +15577,7 @@
       "verdict": "CONFORMS",
       "surface": "gql-prefix",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"5c7a0ae745c08ca5-1edb\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
+      "detail": "rejected, as the standard requires: HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"7e38fd2b1cdd533-23dc\",\"exception\":\"java.lang.IllegalArgumentException\",\"detail\":\"WALK path mode requires an explicit maximum hop bound (e.g., -[*..10]->)\"}",
       "query": "MATCH WALK (x:N)-[:E*2..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -14349,7 +15607,7 @@
       "verdict": "CONFORMS",
       "surface": "iso-gql",
       "expect": "REJECT",
-      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{2,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.1911779789972110472.1.0.259.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
+      "detail": "rejected, as the standard requires: InvalidArgument: 400 Unbounded quantifier is not supported [at 1:32]\nGRAPH g MATCH WALK (x:N)-[:E]->{2,}(y:N) WHERE x.name='a' RETURN x.eid AS s, ...\n                               ^, request_id = 1.6430587184614552429.1.0.259.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nv",
       "query": "MATCH WALK (x:N)-[:E]->{2,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -14373,6 +15631,30 @@
       "expect": "ACCEPT",
       "verdict": "DIVERGES",
       "detail": "expected {('a', 'a'): 3, ('a', 'b'): 4, ('a', 'c'): 2}, observed {('a', 'b'): 2046, ('a', 'a'): 4092, ('a', 'c'): 2046}",
+      "query": "MATCH p=(x:N)-[:E*0..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 4092,
+        "a->b": 2046,
+        "a->c": 2046
+      },
+      "reference": {
+        "a->a": 3,
+        "a->b": 4,
+        "a->c": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": null,
+      "detail_vs_declared": "",
+      "case": "g4-star-trail-all",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ACCEPT",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a', 'a'): 3, ('a', 'b'): 4, ('a', 'c'): 2}, observed {('a', 'a'): 4092, ('a', 'c'): 2046, ('a', 'b'): 2046}",
       "query": "MATCH p=(x:N)-[:E*0..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "a->a": 4092,
@@ -14575,7 +15857,7 @@
       "verdict": "REJECTS",
       "surface": "iso-gql",
       "expect": "ACCEPT",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s,...\n                                ^, request_id = 1.1911779789972110472.1.0.262.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s,...\n                                ^, request_id = 1.6430587184614552429.1.0.262.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
       "query": "MATCH TRAIL (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -14605,6 +15887,13 @@
     {
       "case": "g4-star-walk-any-shortest",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g4-star-walk-any-shortest",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -14736,7 +16025,7 @@
       "verdict": "REJECTS",
       "surface": "iso-gql",
       "expect": "ACCEPT",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:40]\nGRAPH g MATCH ANY SHORTEST (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.ei...\n                                       ^, request_id = 1.1911779789972110472.1.0.265.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPa",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:40]\nGRAPH g MATCH ANY SHORTEST (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.ei...\n                                       ^, request_id = 1.6430587184614552429.1.0.265.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPa",
       "query": "MATCH ANY SHORTEST (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -14769,6 +16058,13 @@
     {
       "case": "g4-star-walk-any",
       "engine": "kuzu",
+      "verdict": "INEXPRESSIBLE",
+      "surface": "common-dialect",
+      "detail": "no surface syntax in this dialect"
+    },
+    {
+      "case": "g4-star-walk-any",
+      "engine": "ladybugdb",
       "verdict": "INEXPRESSIBLE",
       "surface": "common-dialect",
       "detail": "no surface syntax in this dialect"
@@ -14870,7 +16166,7 @@
       "verdict": "REJECTS",
       "surface": "iso-gql",
       "expect": "ACCEPT",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:31]\nGRAPH g MATCH ANY (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y...\n                              ^, request_id = 1.1911779789972110472.1.0.268.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nva",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:31]\nGRAPH g MATCH ANY (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y...\n                              ^, request_id = 1.6430587184614552429.1.0.268.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\nva",
       "query": "MATCH ANY (x:N)-[:E]->{0,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -14895,6 +16191,30 @@
       "detail_vs_declared": "",
       "case": "g5-star-bare",
       "engine": "kuzu",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a', 'a'): 3, ('a', 'b'): 4, ('a', 'c'): 2}, observed {('a', 'b'): 2046, ('a', 'c'): 2046, ('a', 'a'): 2046}",
+      "query": "MATCH p=(x:N)-[:E*]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2046,
+        "a->b": 2046,
+        "a->c": 2046
+      },
+      "reference": {
+        "a->a": 3,
+        "a->b": 4,
+        "a->c": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": null,
+      "detail_vs_declared": "",
+      "case": "g5-star-bare",
+      "engine": "ladybugdb",
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
@@ -15099,7 +16419,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->*(y:N) WHERE x.name='a' RETURN x.eid AS s, y....\n                                ^, request_id = 1.1911779789972110472.1.0.271.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->*(y:N) WHERE x.name='a' RETURN x.eid AS s, y....\n                                ^, request_id = 1.6430587184614552429.1.0.271.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
       "query": "MATCH TRAIL (x:N)-[:E]->*(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -15137,7 +16457,31 @@
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
-      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'c'): 2046, ('a', 'b'): 2046, ('a', 'a'): 2046}",
+      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'b'): 2046, ('a', 'a'): 2046, ('a', 'c'): 2046}",
+      "query": "MATCH p=(x:N)-[:E*]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2046,
+        "a->b": 2046,
+        "a->c": 2046
+      },
+      "reference": {
+        "a->b": 4,
+        "a->c": 2,
+        "a->a": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": null,
+      "detail_vs_declared": "",
+      "case": "g5-plus-bare",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'b'): 2046, ('a', 'c'): 2046, ('a', 'a'): 2046}",
       "query": "MATCH p=(x:N)-[:E*]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "a->a": 2046,
@@ -15338,7 +16682,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->+(y:N) WHERE x.name='a' RETURN x.eid AS s, y....\n                                ^, request_id = 1.1911779789972110472.1.0.274.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->+(y:N) WHERE x.name='a' RETURN x.eid AS s, y....\n                                ^, request_id = 1.6430587184614552429.1.0.274.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
       "query": "MATCH TRAIL (x:N)-[:E]->+(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {
@@ -15376,7 +16720,31 @@
       "surface": "common-dialect",
       "expect": "ANSWER",
       "verdict": "DIVERGES",
-      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'b'): 2046, ('a', 'c'): 2046, ('a', 'a'): 2046}",
+      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'c'): 2046, ('a', 'b'): 2046, ('a', 'a'): 2046}",
+      "query": "MATCH p=(x:N)-[:E*1..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
+      "observed": {
+        "a->a": 2046,
+        "a->b": 2046,
+        "a->c": 2046
+      },
+      "reference": {
+        "a->b": 4,
+        "a->c": 2,
+        "a->a": 2
+      }
+    },
+    {
+      "diagnostics": null,
+      "diagnostics_supported": false,
+      "declared_mode": "WALK",
+      "verdict_vs_declared": null,
+      "detail_vs_declared": "",
+      "case": "g5-plus-explicit",
+      "engine": "ladybugdb",
+      "surface": "common-dialect",
+      "expect": "ANSWER",
+      "verdict": "DIVERGES",
+      "detail": "expected {('a', 'b'): 4, ('a', 'c'): 2, ('a', 'a'): 2}, observed {('a', 'b'): 2046, ('a', 'a'): 2046, ('a', 'c'): 2046}",
       "query": "MATCH p=(x:N)-[:E*1..]->(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t",
       "observed": {
         "a->a": 2046,
@@ -15577,7 +16945,7 @@
       "engine": "spanner",
       "verdict": "REJECTS",
       "surface": "iso-gql",
-      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s,...\n                                ^, request_id = 1.1911779789972110472.1.0.277.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
+      "detail": "InvalidArgument: 400 Unbounded quantifier is not supported [at 1:33]\nGRAPH g MATCH TRAIL (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s,...\n                                ^, request_id = 1.6430587184614552429.1.0.277.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayload\"\n",
       "query": "MATCH TRAIL (x:N)-[:E]->{1,}(y:N) WHERE x.name='a' RETURN x.eid AS s, y.eid AS t"
     },
     {

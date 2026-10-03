@@ -19,8 +19,8 @@ from suite_all import CASES, ALIASES, GROUPS
 from capabilities import probe
 from engines_adapters import (AgeAdapter, ArcadeAdapter, BoltAdapter,
                               DuckPGQAdapter, EngineError, FalkorAdapter,
-                              KuzuAdapter, SamyamaAdapter, SpannerAdapter,
-                              SurrealAdapter)
+                              IsolatedKuzuAdapter, KuzuAdapter, SamyamaAdapter,
+                              SpannerAdapter, SurrealAdapter)
 
 REPEATS = 3
 
@@ -164,8 +164,10 @@ def build_engines(workdir):
         engines.append(KuzuAdapter(workdir))
     except Exception as e:
         print(f"  kuzu unavailable: {e}", file=sys.stderr)
+    # LadybugDB runs in its own interpreter: see IsolatedKuzuAdapter for why two
+    # wheels built from the same C++ sources cannot share one.
     try:
-        engines.append(KuzuAdapter(workdir, module="ladybug", name="ladybugdb"))
+        engines.append(IsolatedKuzuAdapter(workdir))
     except Exception as e:
         print(f"  ladybugdb unavailable: {e}", file=sys.stderr)
     try:

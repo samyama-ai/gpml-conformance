@@ -11,33 +11,33 @@
   "by_group": {
     "G1": {
       "constructs": 32,
-      "cells": 288,
-      "conforms": 62,
-      "diverges": 26,
+      "cells": 320,
+      "conforms": 68,
+      "diverges": 28,
       "rejects": 104,
-      "inexpressible": 96,
-      "s1": 0.2955,
-      "s2": 0.2
+      "inexpressible": 120,
+      "s1": 0.2917,
+      "s2": 0.2121
     },
     "G2": {
       "constructs": 14,
-      "cells": 126,
-      "conforms": 100,
-      "diverges": 14,
+      "cells": 140,
+      "conforms": 111,
+      "diverges": 17,
       "rejects": 12,
       "inexpressible": 0,
-      "s1": 0.1228,
-      "s2": 0.5385
+      "s1": 0.1328,
+      "s2": 0.5862
     },
     "G3": {
       "constructs": 12,
-      "cells": 108,
-      "conforms": 67,
-      "diverges": 30,
+      "cells": 120,
+      "conforms": 75,
+      "diverges": 34,
       "rejects": 11,
       "inexpressible": 0,
-      "s1": 0.3093,
-      "s2": 0.7317
+      "s1": 0.3119,
+      "s2": 0.7556
     },
     "G4": {
       "constructs": 6,
@@ -51,27 +51,34 @@
     },
     "G5": {
       "constructs": 3,
-      "cells": 27,
+      "cells": 30,
       "conforms": 14,
-      "diverges": 7,
+      "diverges": 10,
       "rejects": 6,
       "inexpressible": 0,
-      "s1": 0.3333,
-      "s2": 0.5385
+      "s1": 0.4167,
+      "s2": 0.625
     },
     "v1": {
       "constructs": 17,
-      "cells": 153,
-      "conforms": 66,
-      "diverges": 21,
-      "rejects": 12,
-      "inexpressible": 54,
-      "s1": 0.2414,
-      "s2": 0.6364
+      "cells": 170,
+      "conforms": 74,
+      "diverges": 24,
+      "rejects": 13,
+      "inexpressible": 59,
+      "s1": 0.2449,
+      "s2": 0.6486
     }
   },
   "s4_wellformedness": {
     "kuzu": {
+      "refused": 0,
+      "answered": 0,
+      "not_askable": 3,
+      "controls_accepted": 1,
+      "controls_total": 3
+    },
+    "ladybugdb": {
       "refused": 0,
       "answered": 0,
       "not_askable": 3,
@@ -151,6 +158,10 @@
   },
   "s5_spelling_agreement": {
     "kuzu": {
+      "g5-star-bare|g5-star-explicit": false,
+      "g5-plus-bare|g5-plus-explicit": true
+    },
+    "ladybugdb": {
       "g5-star-bare|g5-star-explicit": false,
       "g5-plus-bare|g5-plus-explicit": true
     },
@@ -270,21 +281,21 @@
       "pattern_probes": 350580
     }
   },
-  "n_engines": 11,
-  "n_engines_external": 9,
-  "n_cells": 924,
-  "n_cells_external": 702,
+  "n_engines": 12,
+  "n_engines_external": 10,
+  "n_cells": 1008,
+  "n_cells_external": 780,
   "repeats": 3,
-  "conforms": 309,
-  "diverges": 98,
-  "rejects": 145,
-  "inexpressible": 150,
+  "conforms": 342,
+  "diverges": 113,
+  "rejects": 146,
+  "inexpressible": 179,
   "nondeterministic": 0,
-  "s1_divergence_rate": 0.2408,
-  "s2_silence_ratio": 0.4033,
-  "disagreements": 243,
-  "divergences_specified": 52,
-  "divergences_defect": 46,
+  "s1_divergence_rate": 0.2484,
+  "s2_silence_ratio": 0.4363,
+  "disagreements": 259,
+  "divergences_specified": 62,
+  "divergences_defect": 51,
   "constructs_multi_class": 43,
   "constructs_single_class": 24,
   "classes_per_construct": {
@@ -358,10 +369,17 @@
   },
   "nondeterministic_selector_cells": 26,
   "constructs_measured": 67,
-  "metamorphic_violations_total": 39,
-  "metamorphic_violations_external": 39,
+  "metamorphic_violations_total": 44,
+  "metamorphic_violations_external": 44,
   "s2b": {
     "kuzu": {
+      "divergences": 16,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": false,
+      "irrelevant": 0
+    },
+    "ladybugdb": {
       "divergences": 16,
       "spoke": 0,
       "s2b": 1.0,
@@ -448,18 +466,19 @@
         "duckpgq",
         "falkordb",
         "kuzu",
+        "ladybugdb",
         "memgraph",
         "neo4j-2026",
         "spanner",
         "surrealdb"
       ],
-      "cells": 702,
-      "conforms": 309,
-      "diverges": 98,
-      "rejects": 145,
-      "inexpressible": 150,
-      "s1": 0.2408,
-      "s2": 0.4033
+      "cells": 780,
+      "conforms": 342,
+      "diverges": 113,
+      "rejects": 146,
+      "inexpressible": 179,
+      "s1": 0.2484,
+      "s2": 0.4363
     },
     "all_external_rows": {
       "engines": [
@@ -468,19 +487,20 @@
         "duckpgq",
         "falkordb",
         "kuzu",
+        "ladybugdb",
         "memgraph",
         "neo4j",
         "neo4j-2026",
         "spanner",
         "surrealdb"
       ],
-      "cells": 780,
-      "conforms": 354,
-      "diverges": 108,
-      "rejects": 145,
-      "inexpressible": 173,
-      "s1": 0.2338,
-      "s2": 0.4269
+      "cells": 858,
+      "conforms": 387,
+      "diverges": 123,
+      "rejects": 146,
+      "inexpressible": 202,
+      "s1": 0.2412,
+      "s2": 0.4572
     },
     "v1_constructs_v1_engines": {
       "engines": [
@@ -505,19 +525,20 @@
         "duckpgq",
         "falkordb",
         "kuzu",
+        "ladybugdb",
         "memgraph",
         "neo4j",
         "neo4j-2026",
         "spanner",
         "surrealdb"
       ],
-      "cells": 170,
-      "conforms": 78,
-      "diverges": 23,
-      "rejects": 12,
-      "inexpressible": 57,
-      "s1": 0.2277,
-      "s2": 0.6571
+      "cells": 187,
+      "conforms": 86,
+      "diverges": 26,
+      "rejects": 13,
+      "inexpressible": 62,
+      "s1": 0.2321,
+      "s2": 0.6667
     },
     "all_constructs_v1_engines": {
       "engines": [
@@ -538,6 +559,7 @@
   },
   "conforms_gql_prefix_by_engine": {
     "kuzu": 0,
+    "ladybugdb": 0,
     "duckpgq": 0,
     "neo4j": 21,
     "neo4j-2026": 42,
@@ -551,6 +573,7 @@
   },
   "metamorphic_dropped_by_engine": {
     "kuzu": 0,
+    "ladybugdb": 0,
     "duckpgq": 0,
     "neo4j": 0,
     "neo4j-2026": 0,
@@ -564,6 +587,7 @@
   },
   "metamorphic_lo0_by_engine": {
     "kuzu": 6,
+    "ladybugdb": 5,
     "duckpgq": 25,
     "neo4j": 0,
     "neo4j-2026": 0,
@@ -576,12 +600,12 @@
     "samyama-graph": 0
   },
   "level2": {
-    "comparable_cells": 102,
+    "comparable_cells": 112,
     "conforms_both": 65,
     "diverges_both": 15,
     "refined_by_level2": 0,
     "contradicts_level1": 2,
-    "not_projectable": 20
+    "not_projectable": 30
   },
   "metamorphic_violations_ours": 0,
   "snapshot_2026_09_07": {
@@ -626,6 +650,7 @@
   },
   "metamorphic_violations_by_engine": {
     "kuzu": 6,
+    "ladybugdb": 5,
     "duckpgq": 33,
     "neo4j": 0,
     "neo4j-2026": 0,
@@ -650,6 +675,7 @@
   ],
   "engines": {
     "kuzu": "0.11.3",
+    "ladybugdb": "0.21.2",
     "duckpgq": "1.4.1",
     "neo4j": "Neo4j Kernel 5.26.30",
     "neo4j-2026": "Neo4j Kernel 2026.04.0",
@@ -663,6 +689,14 @@
   },
   "per_engine": {
     "kuzu": {
+      "conforms": 33,
+      "diverges": 15,
+      "rejects": 1,
+      "inexpressible": 29,
+      "s1": 0.3125,
+      "s2": 0.9375
+    },
+    "ladybugdb": {
       "conforms": 33,
       "diverges": 15,
       "rejects": 1,

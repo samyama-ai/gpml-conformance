@@ -22,6 +22,14 @@
     },
     {
       "case": "mode-walk-bounded",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "RuntimeError: Binder exception: Variable r is not in scope.",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "mode-walk-bounded",
       "engine": "neo4j",
       "level2": "DIVERGES",
       "level1": "DIVERGES",
@@ -163,6 +171,14 @@
         "e1": 1,
         "e1 e2": 1
       }
+    },
+    {
+      "case": "mode-trail-bounded",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "DIVERGES",
+      "detail": "RuntimeError: Binder exception: Variable r is not in scope.",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
       "case": "mode-trail-bounded",
@@ -376,6 +392,14 @@
     },
     {
       "case": "walk-revisits-same-edge",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "RuntimeError: Binder exception: Variable r is not in scope.",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "walk-revisits-same-edge",
       "engine": "neo4j",
       "level2": "DIVERGES",
       "level1": "DIVERGES",
@@ -479,6 +503,14 @@
         "e2": 1,
         "e2 e3": 1
       }
+    },
+    {
+      "case": "quant-zero-lower-bound",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "RuntimeError: Binder exception: Variable r is not in scope.",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
       "case": "quant-zero-lower-bound",
@@ -650,6 +682,14 @@
     },
     {
       "case": "quant-zero-zero",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "RuntimeError: Binder exception: Variable r is not in scope.",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "quant-zero-zero",
       "engine": "neo4j",
       "level2": "CONFORMS",
       "level1": "CONFORMS",
@@ -761,6 +801,14 @@
         "e1": 1,
         "e2": 1
       }
+    },
+    {
+      "case": "parallel-edges",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "RuntimeError: Binder exception: Variable r is not in scope.",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
       "case": "parallel-edges",
@@ -884,6 +932,14 @@
     },
     {
       "case": "self-loop-trail",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "DIVERGES",
+      "detail": "RuntimeError: Binder exception: Variable x is not in scope.",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-trail",
       "engine": "neo4j",
       "level2": "REJECTS",
       "level1": "CONFORMS",
@@ -919,7 +975,7 @@
       "engine": "arcadedb",
       "level2": "REJECTS",
       "level1": "CONFORMS",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"fb0fce17c7345e5a-1a2c\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"84c763ec3c2af194-252e\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
       "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
@@ -951,7 +1007,7 @@
       "engine": "arcadedb",
       "level2": "REJECTS",
       "level1": "CONFORMS",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"c73516fff427ce06-1a36\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"f9a55d3ecbd81605-2538\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
       "query": "MATCH p=ACYCLIC (u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
@@ -979,6 +1035,14 @@
         "e2": 1,
         "e3": 1
       }
+    },
+    {
+      "case": "direction-any",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "RuntimeError: Binder exception: Variable r is not in scope.",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
       "case": "direction-any",
@@ -1121,6 +1185,14 @@
         "e1": 1,
         "e2": 1
       }
+    },
+    {
+      "case": "direction-left",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "RuntimeError: Binder exception: Variable r is not in scope.",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
       "case": "direction-left",
@@ -1454,6 +1526,14 @@
     },
     {
       "case": "paper-trail-unbounded",
+      "engine": "ladybugdb",
+      "level2": "REJECTS",
+      "level1": "DIVERGES",
+      "detail": "RuntimeError: Binder exception: Variable x is not in scope.",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "paper-trail-unbounded",
       "engine": "neo4j",
       "level2": "REJECTS",
       "level1": "CONFORMS",
@@ -1489,7 +1569,7 @@
       "engine": "arcadedb",
       "level2": "REJECTS",
       "level1": "CONFORMS",
-      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"4a571a440323faa1-1a84\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"1be92be2aa6f1311-2586\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
       "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
