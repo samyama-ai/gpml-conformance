@@ -1,0 +1,1769 @@
+{
+  "combinations": 16,
+  "observable_classes": 12,
+  "pairs": 120,
+  "separated": 114,
+  "sweep": {
+    "graphs_enumerated": 22474,
+    "max_bound": 5,
+    "max_edges": 5,
+    "max_nodes": 4,
+    "pattern_probes": 350580
+  },
+  "unobservable": [
+    [
+      [
+        "WALK",
+        "ALL SHORTEST"
+      ],
+      [
+        "TRAIL",
+        "ALL SHORTEST"
+      ]
+    ],
+    [
+      [
+        "WALK",
+        "ALL SHORTEST"
+      ],
+      [
+        "SIMPLE",
+        "ALL SHORTEST"
+      ]
+    ],
+    [
+      [
+        "WALK",
+        "ANY SHORTEST"
+      ],
+      [
+        "TRAIL",
+        "ANY SHORTEST"
+      ]
+    ],
+    [
+      [
+        "WALK",
+        "ANY SHORTEST"
+      ],
+      [
+        "SIMPLE",
+        "ANY SHORTEST"
+      ]
+    ],
+    [
+      [
+        "TRAIL",
+        "ALL SHORTEST"
+      ],
+      [
+        "SIMPLE",
+        "ALL SHORTEST"
+      ]
+    ],
+    [
+      [
+        "TRAIL",
+        "ANY SHORTEST"
+      ],
+      [
+        "SIMPLE",
+        "ANY SHORTEST"
+      ]
+    ]
+  ],
+  "witnesses": {
+    "('ACYCLIC', 'ALL SHORTEST')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL SHORTEST')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL SHORTEST')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL SHORTEST')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL SHORTEST')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ],
+      "nodes": 3,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL')|('ACYCLIC', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ALL')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY SHORTEST')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY SHORTEST')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY SHORTEST')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY SHORTEST')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ],
+      "nodes": 3,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('ACYCLIC', 'ANY')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('SIMPLE', 'ALL SHORTEST')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('SIMPLE', 'ALL')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('SIMPLE', 'ALL')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('SIMPLE', 'ALL')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('SIMPLE', 'ANY')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('SIMPLE', 'ANY')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL SHORTEST')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL SHORTEST')|('ACYCLIC', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL SHORTEST')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL SHORTEST')|('ACYCLIC', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL SHORTEST')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL SHORTEST')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL SHORTEST')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL SHORTEST')|('TRAIL', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('ACYCLIC', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('ACYCLIC', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('TRAIL', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('TRAIL', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ALL')|('TRAIL', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY SHORTEST')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY SHORTEST')|('ACYCLIC', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY SHORTEST')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY SHORTEST')|('ACYCLIC', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY SHORTEST')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY SHORTEST')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY SHORTEST')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('ACYCLIC', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('ACYCLIC', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('TRAIL', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('TRAIL', 'ANY')|('TRAIL', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('ACYCLIC', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('ACYCLIC', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('TRAIL', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('TRAIL', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('TRAIL', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL SHORTEST')|('WALK', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('ACYCLIC', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('ACYCLIC', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('TRAIL', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('TRAIL', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('TRAIL', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('TRAIL', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('WALK', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('WALK', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ALL')|('WALK', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('ACYCLIC', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('ACYCLIC', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('TRAIL', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('TRAIL', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY SHORTEST')|('TRAIL', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('ACYCLIC', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('ACYCLIC', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('ACYCLIC', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('ACYCLIC', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('SIMPLE', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('SIMPLE', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('SIMPLE', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('SIMPLE', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('TRAIL', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('TRAIL', 'ALL')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('TRAIL', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('TRAIL', 'ANY')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('WALK', 'ALL SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    },
+    "('WALK', 'ANY')|('WALK', 'ANY SHORTEST')": {
+      "anchor": "a",
+      "edges": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "nodes": 2,
+      "quantifier": [
+        1,
+        2
+      ]
+    }
+  }
+}

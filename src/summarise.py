@@ -4,7 +4,7 @@ from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(HERE, "src"))
-from suite import CASES
+from suite_all import CASES
 from diagnostics import classify, speaks_about_divergence
 
 BYID = {c.id: c for c in CASES}

@@ -79,11 +79,16 @@ def tagged() -> PropertyGraph:
     """A 2-hop chain whose interior node lacks the label carried by the endpoints.
 
         p:N,Mark  -->  q:N        -->  r:N,Mark
+
+    The same distinction is carried twice, as a second label and as a property, so the
+    construct can be asked of dialects with no label-expression syntax. A dialect that
+    cannot say `:N&Mark` is not wrong about interior-node binding; it just cannot be
+    asked that way, and the property form asks it anyway.
     """
     g = PropertyGraph()
-    g.add_node("p", labels=("N", "Mark"), name="p")
-    g.add_node("q", labels=("N",), name="q")
-    g.add_node("r", labels=("N", "Mark"), name="r")
+    g.add_node("p", labels=("N", "Mark"), name="p", tag="Mark")
+    g.add_node("q", labels=("N",), name="q", tag="plain")
+    g.add_node("r", labels=("N", "Mark"), name="r", tag="Mark")
     g.add_edge("e1", "p", "q", labels=("E",))
     g.add_edge("e2", "q", "r", labels=("E",))
     return g

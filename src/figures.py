@@ -16,7 +16,7 @@ from matplotlib.patches import Patch
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(HERE, "src"))
-from suite import CASES
+from suite_all import CASES
 
 CONFORMS, DIVERGES, REJECTS, ABSENT = "#1B7F5F", "#B42318", "#1D4ED8", "#C7CBD1"
 COLOR = {"CONFORMS": CONFORMS, "DIVERGES": DIVERGES, "REJECTS": REJECTS,

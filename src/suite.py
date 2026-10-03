@@ -52,6 +52,13 @@ class Case:
     # (samyama-ai/samyama-graph#1141), so those cells can now be measured rather than
     # excused. Engines that declare support get this text; the rest still get `cypher`.
     cypher_gql: Optional[str] = None
+    # Which dimension group generated this case (see docs/MATRIX-v2.md). v1's
+    # hand-picked cases are group "v1"; everything else names the group whose
+    # enumeration produced it, so the map can report coverage per dimension.
+    group: str = "v1"
+    # The rule this case tests, as a citable clause. The harness refuses to run a case
+    # with no clause: a query with no rule behind it is not a conformance test.
+    clause: str = "Deutsch et al. (arXiv:2112.06217), path-pattern core"
     # Same construct again, written with the quantified path pattern
     # `(()-[:E]->()){m,n}` rather than the legacy `-[:E*m..n]->`. Neo4j 2026.04 takes
     # the standard's restrictors only in this spelling and refuses them in the legacy

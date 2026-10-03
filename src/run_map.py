@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import fixtures
 from gpml_ref import Path, match
-from suite import CASES
+from suite_all import CASES, ALIASES, GROUPS
 from capabilities import probe
 from engines_adapters import (AgeAdapter, BoltAdapter, DuckPGQAdapter,
                               EngineError, KuzuAdapter, SamyamaAdapter)
