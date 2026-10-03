@@ -1,0 +1,87 @@
+name: suite
+
+# What CI can and cannot cover, stated rather than implied. Gate B and the separation
+# sweep need no engine and run on every push. The engines that ship a container run as
+# services. The rest -- the embedded ones, and any engine whose image is too large for a
+# hosted runner -- are measured locally by ./run.sh, and results/map.json records which
+# rows a given run actually produced. A green badge here means the oracle still
+# reproduces the standard's published answers and the engines CI can reach still behave
+# as recorded. It does not mean the whole matrix ran.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gate-b:
+    name: Gate B and the separation sweep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q -r requirements.txt
+      - name: Gate B -- the oracle must reproduce the standard's published answers
+        run: python -m pytest tests/ -q
+      - name: Separation sweep (small, exhaustive)
+        run: |
+          python tools/separation.py --max-nodes 3 --max-edges 4 --out /tmp/sep.json
+          python - <<'PY'
+          import json
+          d = json.load(open("/tmp/sep.json"))
+          assert d["observable_classes"] == 12, d["observable_classes"]
+          assert d["separated"] == 114, d["separated"]
+          print("separation holds:", d["observable_classes"], "classes")
+          PY
+      - name: The suite must generate and every case must carry a clause
+        run: |
+          python - <<'PY'
+          import sys; sys.path.insert(0, "src")
+          import fixtures
+          from gpml_ref import match
+          from suite_all import CASES, GROUPS
+          for c in CASES:
+              assert c.clause.strip(), c.id
+              if c.expect != "ACCEPT":
+                  match(fixtures.FIXTURES[c.fixture](), c.ref)   # a reference must exist
+          print(len(CASES), "constructs;", {g: len(v) for g, v in GROUPS.items()})
+          PY
+
+  engines:
+    name: Engines CI can reach
+    runs-on: ubuntu-latest
+    services:
+      neo4j:
+        image: neo4j:2026.04.0-community
+        env: {NEO4J_AUTH: neo4j/testpassword123}
+        ports: ["7690:7687"]
+      memgraph:
+        image: memgraph/memgraph:latest
+        ports: ["7689:7687"]
+      falkordb:
+        image: falkordb/falkordb:latest
+        ports: ["6380:6379"]
+      age:
+        image: apache/age:latest
+        env: {POSTGRES_PASSWORD: postgres}
+        ports: ["5433:5432"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q -r requirements.txt falkordb
+      - name: Gate A -- the adapters must transport the graph before anything is measured
+        run: python tools/verify_adapter.py
+      - name: Run the map over whichever engines came up
+        run: python src/run_map.py
+      - name: Summarise
+        run: python src/summarise.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results
+          path: |
+            results/map.json
+            results/summary.json
+            RESULTS.md

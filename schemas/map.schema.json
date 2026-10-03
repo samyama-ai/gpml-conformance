@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/samyama-ai/gpml-conformance/schemas/map.schema.json",
+  "title": "GPML conformance map",
+  "description": "results/map.json: one record per (construct, engine) cell, plus the engines measured. Published so that a tool can consume the map without parsing prose. Every field that can be absent says what its absence means.",
+  "type": "object",
+  "required": ["engines", "repeats", "cells"],
+  "properties": {
+    "engines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "dialect", "version"],
+        "properties": {
+          "name": {"type": "string", "description": "the column heading in the map"},
+          "dialect": {"enum": ["cypher", "gql", "pgq"],
+                      "description": "which of the four surface spellings this engine is sent"},
+          "version": {"type": "string",
+                      "description": "what the engine reported, not what was expected"},
+          "gql_syntax": {
+            "type": "object",
+            "description": "probed, not declared: which spellings of the standard's restrictor and selector prefixes this engine parses",
+            "additionalProperties": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "repeats": {"type": "integer", "minimum": 1,
+                "description": "how many times each cell was run to confirm the engine agrees with itself"},
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["case", "engine", "verdict"],
+        "properties": {
+          "case": {"type": "string", "description": "construct id; see src/suite_all.py"},
+          "engine": {"type": "string"},
+          "verdict": {
+            "enum": ["CONFORMS", "DIVERGES", "REJECTS", "INEXPRESSIBLE",
+                     "NONDETERMINISTIC", "LOAD_FAILED"],
+            "description": "INEXPRESSIBLE means the dialect has no way to say the construct, which is a fact about the language and not a defect. LOAD_FAILED is a harness failure, not a result."
+          },
+          "expect": {
+            "enum": ["ANSWER", "REJECT", "ACCEPT"],
+            "description": "what a conforming engine must do. Under REJECT a refusal scores CONFORMS. Absent means ANSWER."
+          },
+          "surface": {"type": "string",
+                      "description": "which rendering was sent: common-dialect, gql-prefix, iso-gql or vendor-extension"},
+          "query": {"type": "string", "description": "the exact text sent"},
+          "observed": {"type": "object", "additionalProperties": {"type": "integer"},
+                       "description": "the endpoint-pair multiset the engine returned, as \"s->t\": count"},
+          "reference": {"type": ["object", "null"],
+                        "additionalProperties": {"type": "integer"},
+                        "description": "the reference multiset. null where the selector is nondeterministic, so the standard fixes a specification rather than one answer."},
+          "detail": {"type": ["string", "array"],
+                     "description": "why, in the engine's own words where it refused"},
+          "declared_mode": {"type": ["string", "null"],
+                            "description": "the path mode the engine's own documentation assigns to an unprefixed variable-length pattern. null means the dialect is the standard, so there is no second axis; \"UNDOCUMENTED\" means the engine publishes no rule, which is a different fact."},
+          "verdict_vs_declared": {"type": ["string", "null"],
+                                  "description": "the same cell scored against the engine's own documented semantics instead of the standard's"},
+          "diagnostics": {"type": ["array", "null"],
+                          "description": "warnings or notifications the engine attached. null means this adapter cannot ask, which is not the same as an engine that was asked and said nothing."},
+          "diagnostics_supported": {"type": "boolean"}
+        }
+      }
+    }
+  }
+}
