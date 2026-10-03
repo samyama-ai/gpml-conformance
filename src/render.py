@@ -69,7 +69,8 @@ def quant_pgq(lo, hi) -> str:
     return f"{{{lo},{hi}}}"
 
 
-def prefix(restrictor: str, selector: str, explicit_walk: bool = False) -> str:
+def prefix(restrictor: str, selector: str, explicit_walk: bool = False,
+           order: str = "selector-first") -> str:
     """The standard's prefix keywords. WALK and ALL are the defaults and are written
     by saying nothing, which is how the standard's own examples write them.
 
@@ -79,8 +80,19 @@ def prefix(restrictor: str, selector: str, explicit_walk: bool = False) -> str:
     the dialect's own default mode -- for openCypher that default is TRAIL, which makes
     the pattern well-formed and the question unasked. WALK has to be said out loud.
     """
-    parts = [p for p in (("" if restrictor == "WALK" and not explicit_walk else restrictor),
-                         ("" if selector == "ALL" else selector)) if p]
+    r = "" if restrictor == "WALK" and not explicit_walk else restrictor
+    s = "" if selector == "ALL" else selector
+    # Keyword order, when both are present. The GQL grammar nests the path mode
+    # *inside* the search prefix -- `<any shortest path search> ::= ANY SHORTEST
+    # <path mode>?` -- so the standard's surface order is selector first. That is the
+    # opposite of the evaluation order the same specification fixes ("selectors are
+    # always applied after restrictors"), and the two are easy to conflate: an earlier
+    # version of this renderer wrote the evaluation order and recorded every engine
+    # that refused it as not implementing the composition at all.
+    #
+    # Engines disagree, so the order is probed rather than assumed, and this takes
+    # whichever the engine was found to accept.
+    parts = [p for p in ((r, s) if order == "mode-first" else (s, r)) if p]
     return (" ".join(parts) + " ") if parts else ""
 
 
@@ -139,7 +151,8 @@ PGQ_COLS = "COLUMNS (x.eid AS s, y.eid AS t)) SELECT s, t"
 
 def cypher_query(segs, *, edge_label, node_label, key, start_val,
                  restrictor="WALK", selector="ALL", extra_where=None,
-                 unbounded_as=None, spelling="legacy", explicit_walk=False) -> str | None:
+                 unbounded_as=None, spelling="legacy", explicit_walk=False,
+                 order="selector-first") -> str | None:
     """The openCypher text, or None where the dialect cannot say it.
 
     None is not a failing grade. A dialect with no ACYCLIC keyword is not wrong about
@@ -148,7 +161,7 @@ def cypher_query(segs, *, edge_label, node_label, key, start_val,
     pat = (cypher_pattern if spelling == "legacy" else qpp_pattern)(
         segs, edge_label, node_label, unbounded_as)
     where = _where(key, start_val, extra_where)
-    return (f"MATCH {prefix(restrictor, selector, explicit_walk)}{pat} "
+    return (f"MATCH {prefix(restrictor, selector, explicit_walk, order)}{pat} "
             f"WHERE {where} {RETURN_COLS}")
 
 
@@ -181,10 +194,11 @@ def cypher_common(segs, *, edge_label, node_label, key, start_val,
 
 def pgq_query(segs, *, edge_label, node_label, key, start_val,
               restrictor="WALK", selector="ALL", extra_where=None,
-              explicit_walk=False) -> str:
+              explicit_walk=False, order="selector-first") -> str:
     pat = pgq_pattern(segs, edge_label, node_label)
     where = _where(key, start_val, extra_where)
-    return (f"FROM GRAPH_TABLE(g MATCH {prefix(restrictor, selector, explicit_walk)}{pat} "
+    return (f"FROM GRAPH_TABLE(g MATCH "
+            f"{prefix(restrictor, selector, explicit_walk, order)}{pat} "
             f"WHERE {where} {PGQ_COLS}")
 
 
@@ -207,8 +221,50 @@ def gql_pattern(segs, edge_label, node_label) -> str:
 
 def gql_query(segs, *, edge_label, node_label, key, start_val,
               restrictor="WALK", selector="ALL", extra_where=None,
-              explicit_walk=False) -> str:
+              explicit_walk=False, order="selector-first") -> str:
     pat = gql_pattern(segs, edge_label, node_label)
     where = _where(key, start_val, extra_where)
-    return (f"MATCH {prefix(restrictor, selector, explicit_walk)}{pat} "
+    return (f"MATCH {prefix(restrictor, selector, explicit_walk, order)}{pat} "
             f"WHERE {where} {RETURN_COLS}")
+
+
+RESTRICTOR_WORDS = ("WALK", "TRAIL", "ACYCLIC", "SIMPLE")
+SELECTOR_WORDS = ("ALL SHORTEST", "ANY SHORTEST", "ANY", "ALL")
+
+
+def swap_prefix_order(query: str) -> str:
+    """Rewrite a generated query's path-pattern prefix from one keyword order to the
+    other, leaving everything else alone.
+
+    The standard's surface order is selector first; one engine in the matrix parses
+    only the reverse. Rather than pick a side, the suite sends whichever order the
+    engine was probed to accept, and this is the rewrite. It is deliberately a textual
+    transform over text this repository generated: the keywords sit immediately after
+    `MATCH `, in a fixed vocabulary, with no user input between them.
+
+    A query with fewer than two prefix keywords comes back unchanged, so this is safe
+    to apply to every query rather than only the ones that need it.
+    """
+    marker = "MATCH "
+    i = query.find(marker)
+    if i < 0:
+        return query
+    j = i + len(marker)
+    rest = query[j:]
+    # Peel the keywords off the front, longest first so ALL SHORTEST wins over ALL.
+    found: list[str] = []
+    while True:
+        up = rest.upper()
+        for w in sorted(SELECTOR_WORDS + RESTRICTOR_WORDS, key=len, reverse=True):
+            if up.startswith(w + " "):
+                found.append(w)
+                rest = rest[len(w) + 1:]
+                break
+        else:
+            break
+    sel = [w for w in found if w in SELECTOR_WORDS]
+    res = [w for w in found if w in RESTRICTOR_WORDS]
+    if not (sel and res):
+        return query                      # nothing to reorder
+    swapped = " ".join(res + sel) + " "
+    return query[:j] + swapped + rest

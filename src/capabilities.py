@@ -38,6 +38,8 @@ def _probe_graph() -> PropertyGraph:
 LEGACY = "MATCH {prefix}(x:{L})-[:{E}*1..2]->(y:{L}) RETURN x.eid AS s, y.eid AS t"
 QPP = ("MATCH {prefix}(x:{L}) (()-[:{E}]->()){{1,2}} (y:{L}) "
        "RETURN x.eid AS s, y.eid AS t")
+# The standard's own spelling, for engines that take GQL rather than openCypher.
+GQLQ = "MATCH {prefix}(x:{L})-[:{E}]->{{1,2}}(y:{L}) RETURN x.eid AS s, y.eid AS t"
 
 
 @dataclass
@@ -49,10 +51,26 @@ class GqlSyntax:
     selector_legacy: bool = False        # ANY SHORTEST with -[:E*1..2]->
     selector_qpp: bool = False           # ANY SHORTEST with the quantified form
     named_path_after_prefix: bool = False  # `TRAIL p = (...)`, the standard's order
+    # Which keyword order the engine parses when a restrictor and a selector appear
+    # together. The GQL grammar nests the path mode inside the search prefix --
+    # `<any shortest path search> ::= ANY SHORTEST <path mode>?` -- so selector first
+    # is the standard's surface order. It is the opposite of the *evaluation* order
+    # the same specification fixes, which is easy to conflate, and engines disagree.
+    # Asking is cheaper than choosing, and the answer is a result in its own right.
+    combined_selector_first: bool = False   # ANY SHORTEST TRAIL (...)
+    combined_mode_first: bool = False       # TRAIL ANY SHORTEST (...)
 
     def takes_prefixes(self) -> bool:
         return any((self.restrictor_legacy, self.restrictor_qpp,
                     self.selector_legacy, self.selector_qpp))
+
+    def prefix_order(self) -> str | None:
+        """Which order to send, or None if the engine takes neither."""
+        if self.combined_selector_first:
+            return "selector-first"
+        if self.combined_mode_first:
+            return "mode-first"
+        return None
 
     def as_dict(self) -> dict:
         return asdict(self)
@@ -60,7 +78,7 @@ class GqlSyntax:
 
 def probe(engine) -> GqlSyntax:
     """Ask one engine what it parses. Never raises: a refusal is the answer."""
-    if engine.dialect != "cypher":
+    if engine.dialect not in ("cypher", "gql"):
         return GqlSyntax()
     g = _probe_graph()
     try:
@@ -76,12 +94,27 @@ def probe(engine) -> GqlSyntax:
         except Exception:
             return False
 
+    if engine.dialect == "gql":
+        caps = GqlSyntax(
+            restrictor_legacy=accepts(GQLQ, "ACYCLIC "),
+            selector_legacy=accepts(GQLQ, "ANY SHORTEST "),
+            combined_selector_first=accepts(GQLQ, "ANY SHORTEST TRAIL "),
+            combined_mode_first=accepts(GQLQ, "TRAIL ANY SHORTEST "),
+        )
+        return caps
+
     caps = GqlSyntax(
         restrictor_legacy=accepts(LEGACY, "ACYCLIC "),
         restrictor_qpp=accepts(QPP, "ACYCLIC "),
         selector_legacy=accepts(LEGACY, "ANY SHORTEST "),
         selector_qpp=accepts(QPP, "ANY SHORTEST "),
     )
+    # Which keyword order, asked in whichever quantifier spelling the engine took, so
+    # a refusal here is about the order and not about the quantifier.
+    if caps.takes_prefixes():
+        tmpl = LEGACY if (caps.restrictor_legacy or caps.selector_legacy) else QPP
+        caps.combined_selector_first = accepts(tmpl, "ANY SHORTEST TRAIL ")
+        caps.combined_mode_first = accepts(tmpl, "TRAIL ANY SHORTEST ")
     # The standard writes `TRAIL p = (...)`. Ask in whichever quantifier spelling the
     # engine took above, so a refusal here is about the *order*, not the quantifier.
     if caps.restrictor_legacy or caps.restrictor_qpp:

@@ -12,12 +12,12 @@
     "G1": {
       "constructs": 32,
       "cells": 352,
-      "conforms": 88,
-      "diverges": 40,
-      "rejects": 104,
+      "conforms": 113,
+      "diverges": 57,
+      "rejects": 62,
       "inexpressible": 120,
-      "s1": 0.3125,
-      "s2": 0.2778
+      "s1": 0.3353,
+      "s2": 0.479
     },
     "G2": {
       "constructs": 14,
@@ -297,18 +297,18 @@
   "n_cells": 1092,
   "n_cells_external": 858,
   "repeats": 3,
-  "conforms": 401,
-  "diverges": 131,
-  "rejects": 147,
+  "conforms": 426,
+  "diverges": 148,
+  "rejects": 105,
   "inexpressible": 179,
   "nondeterministic": 0,
-  "s1_divergence_rate": 0.2462,
-  "s2_silence_ratio": 0.4712,
-  "disagreements": 278,
+  "s1_divergence_rate": 0.2578,
+  "s2_silence_ratio": 0.585,
+  "disagreements": 253,
   "divergences_specified": 62,
-  "divergences_defect": 69,
-  "constructs_multi_class": 44,
-  "constructs_single_class": 40,
+  "divergences_defect": 86,
+  "constructs_multi_class": 59,
+  "constructs_single_class": 25,
   "classes_per_construct": {
     "mode-walk-bounded": 3,
     "mode-trail-bounded": 2,
@@ -332,33 +332,33 @@
     "g1-fig1-walk-all-shortest": 2,
     "g1-fig1-walk-any-shortest": 3,
     "g1-fig1-trail-all": 2,
-    "g1-fig1-trail-any": 1,
-    "g1-fig1-trail-all-shortest": 1,
-    "g1-fig1-trail-any-shortest": 1,
+    "g1-fig1-trail-any": 4,
+    "g1-fig1-trail-all-shortest": 2,
+    "g1-fig1-trail-any-shortest": 3,
     "g1-fig1-acyclic-all": 1,
-    "g1-fig1-acyclic-any": 1,
-    "g1-fig1-acyclic-all-shortest": 1,
-    "g1-fig1-acyclic-any-shortest": 1,
+    "g1-fig1-acyclic-any": 3,
+    "g1-fig1-acyclic-all-shortest": 3,
+    "g1-fig1-acyclic-any-shortest": 3,
     "g1-fig1-simple-all": 1,
-    "g1-fig1-simple-any": 1,
+    "g1-fig1-simple-any": 3,
     "g1-fig1-simple-all-shortest": 1,
-    "g1-fig1-simple-any-shortest": 1,
+    "g1-fig1-simple-any-shortest": 2,
     "g1-loop-walk-all": 3,
     "g1-loop-walk-any": 4,
     "g1-loop-walk-all-shortest": 2,
     "g1-loop-walk-any-shortest": 3,
     "g1-loop-trail-all": 2,
-    "g1-loop-trail-any": 1,
-    "g1-loop-trail-all-shortest": 1,
-    "g1-loop-trail-any-shortest": 1,
+    "g1-loop-trail-any": 4,
+    "g1-loop-trail-all-shortest": 2,
+    "g1-loop-trail-any-shortest": 3,
     "g1-loop-acyclic-all": 1,
     "g1-loop-acyclic-any": 1,
-    "g1-loop-acyclic-all-shortest": 1,
-    "g1-loop-acyclic-any-shortest": 1,
+    "g1-loop-acyclic-all-shortest": 2,
+    "g1-loop-acyclic-any-shortest": 2,
     "g1-loop-simple-all": 2,
-    "g1-loop-simple-any": 1,
+    "g1-loop-simple-any": 3,
     "g1-loop-simple-all-shortest": 1,
-    "g1-loop-simple-any-shortest": 1,
+    "g1-loop-simple-any-shortest": 2,
     "g2-none-walk": 1,
     "g2-none-trail": 1,
     "g2-0-0-walk": 2,
@@ -395,7 +395,7 @@
     "g5-plus-bare": 2,
     "g5-plus-explicit": 2
   },
-  "nondeterministic_selector_cells": 44,
+  "nondeterministic_selector_cells": 76,
   "constructs_measured": 84,
   "metamorphic_violations_total": 44,
   "metamorphic_violations_external": 44,
@@ -415,7 +415,7 @@
       "irrelevant": 0
     },
     "duckpgq": {
-      "divergences": 20,
+      "divergences": 28,
       "spoke": 0,
       "s2b": 1.0,
       "channel": false,
@@ -450,7 +450,7 @@
       "irrelevant": 0
     },
     "arcadedb": {
-      "divergences": 19,
+      "divergences": 28,
       "spoke": 0,
       "s2b": 1.0,
       "channel": false,
@@ -509,12 +509,12 @@
         "surrealdb"
       ],
       "cells": 858,
-      "conforms": 401,
-      "diverges": 131,
-      "rejects": 147,
+      "conforms": 426,
+      "diverges": 148,
+      "rejects": 105,
       "inexpressible": 179,
-      "s1": 0.2462,
-      "s2": 0.4712
+      "s1": 0.2578,
+      "s2": 0.585
     },
     "all_external_rows": {
       "engines": [
@@ -532,12 +532,12 @@
         "surrealdb"
       ],
       "cells": 936,
-      "conforms": 446,
-      "diverges": 141,
-      "rejects": 147,
+      "conforms": 471,
+      "diverges": 158,
+      "rejects": 105,
       "inexpressible": 202,
-      "s1": 0.2402,
-      "s2": 0.4896
+      "s1": 0.2512,
+      "s2": 0.6008
     },
     "v1_constructs_v1_engines": {
       "engines": [
@@ -587,12 +587,12 @@
         "neo4j"
       ],
       "cells": 390,
-      "conforms": 161,
-      "diverges": 65,
-      "rejects": 54,
+      "conforms": 165,
+      "diverges": 73,
+      "rejects": 42,
       "inexpressible": 110,
-      "s1": 0.2876,
-      "s2": 0.5462
+      "s1": 0.3067,
+      "s2": 0.6348
     }
   },
   "conforms_gql_prefix_by_engine": {
@@ -603,12 +603,12 @@
     "neo4j-2026": 42,
     "memgraph": 0,
     "apache-age": 0,
-    "arcadedb": 34,
+    "arcadedb": 37,
     "falkordb": 0,
     "surrealdb": 0,
     "spanner": 0,
     "grafeo": 53,
-    "samyama-graph": 46
+    "samyama-graph": 64
   },
   "metamorphic_dropped_by_engine": {
     "kuzu": 0,
@@ -749,12 +749,12 @@
       "s2": 0.9375
     },
     "duckpgq": {
-      "conforms": 6,
-      "diverges": 20,
-      "rejects": 52,
+      "conforms": 10,
+      "diverges": 28,
+      "rejects": 40,
       "inexpressible": 0,
-      "s1": 0.7692,
-      "s2": 0.2778
+      "s1": 0.7368,
+      "s2": 0.4118
     },
     "neo4j": {
       "conforms": 45,
@@ -789,12 +789,12 @@
       "s2": 0.9091
     },
     "arcadedb": {
-      "conforms": 39,
-      "diverges": 18,
-      "rejects": 21,
+      "conforms": 42,
+      "diverges": 27,
+      "rejects": 9,
       "inexpressible": 0,
-      "s1": 0.3158,
-      "s2": 0.4615
+      "s1": 0.3913,
+      "s2": 0.75
     },
     "falkordb": {
       "conforms": 39,
@@ -805,12 +805,12 @@
       "s2": 1.0
     },
     "surrealdb": {
-      "conforms": 33,
+      "conforms": 51,
       "diverges": 6,
-      "rejects": 22,
+      "rejects": 4,
       "inexpressible": 17,
-      "s1": 0.1538,
-      "s2": 0.2143
+      "s1": 0.1053,
+      "s2": 0.6
     },
     "spanner": {
       "conforms": 36,
@@ -829,12 +829,12 @@
       "s2": 0.9474
     },
     "samyama-graph": {
-      "conforms": 50,
+      "conforms": 68,
       "diverges": 10,
-      "rejects": 18,
+      "rejects": 0,
       "inexpressible": 0,
-      "s1": 0.1667,
-      "s2": 0.3571
+      "s1": 0.1282,
+      "s2": 1.0
     }
   }
 }

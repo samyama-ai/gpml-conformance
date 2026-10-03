@@ -14,6 +14,7 @@ from collections import Counter
 sys.path.insert(0, os.path.dirname(__file__))
 
 import fixtures
+import render
 from gpml_ref import Path, match
 from suite_all import CASES, ALIASES, GROUPS
 from capabilities import probe
@@ -258,6 +259,18 @@ def main():
             else:
                 query = case.pgq
                 surface = "common-dialect"
+            # Send the prefix order this engine was probed to accept. The standard's
+            # order is selector first and that is what the renderers emit; an engine
+            # that parses only the reverse gets the reverse, so a refusal here is
+            # about the construct rather than about which way round we typed it.
+            prefix_order = "selector-first"
+            cap = caps.get(eng.name)
+            if query is not None and cap is not None:
+                want = cap.prefix_order()
+                if want == "mode-first":
+                    swapped = render.swap_prefix_order(query)
+                    if swapped != query:
+                        query, prefix_order = swapped, "mode-first"
             if query is None:
                 cells.append(dict(case=case.id, engine=eng.name, verdict="INEXPRESSIBLE",
                                   surface=surface,
@@ -359,6 +372,7 @@ def main():
                 verdict_vs_declared=declared_verdict,
                 detail_vs_declared=declared_detail,
                 case=case.id, engine=eng.name, surface=surface, expect=case.expect,
+                prefix_order=prefix_order,
                 verdict="CONFORMS" if ok else "DIVERGES",
                 detail=why, query=query,
                 observed={f"{k[0]}->{k[1]}": v for k, v in sorted(answers[0].items())},

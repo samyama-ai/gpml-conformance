@@ -22,19 +22,19 @@ Three questions, none of them previously measured:
 |---|---|---:|---:|---:|---:|---:|---:|
 | kuzu | 0.11.3 | 33 | 15 | 1 | 29 | 0.94 | not askable |
 | ladybugdb | 0.21.2 | 33 | 15 | 1 | 29 | 0.94 | not askable |
-| duckpgq | 1.4.1 | 6 | 20 | 52 | 0 | 0.28 | 3/3 |
+| duckpgq | 1.4.1 | 10 | 28 | 40 | 0 | 0.41 | 3/3 |
 | neo4j | Neo4j Kernel 5.26.30 | 45 | 10 | 0 | 23 | 1.00 | 3/3 |
 | neo4j-2026 | Neo4j Kernel 2026.04.0 | 46 | 9 | 23 | 0 | 0.28 | 3/3 |
 | memgraph | Memgraph 5.9.0 | 39 | 10 | 0 | 29 | 1.00 | not askable |
 | apache-age | age 1.8.0 | 38 | 10 | 1 | 29 | 0.91 | not askable |
-| arcadedb | 26.9.1 | 39 | 18 | 21 | 0 | 0.46 | 3/3 |
+| arcadedb | 26.9.1 | 42 | 27 | 9 | 0 | 0.75 | 3/3 |
 | falkordb | falkordb 8.10.2 | 39 | 10 | 0 | 29 | 1.00 | not askable |
-| surrealdb | surrealdb-3.3.0 | 33 | 6 | 22 | 17 | 0.21 | 0/3 |
+| surrealdb | surrealdb-3.3.0 | 51 | 6 | 4 | 17 | 0.60 | 0/3 |
 | spanner | cloud-spanner-emulator 1.5.58 | 36 | 0 | 25 | 17 | 0.00 | 3/3 |
 | grafeo | grafeo 0.5.40 | 59 | 18 | 1 | 0 | 0.95 | not askable |
-| samyama-graph *(ours)* | samyama v1.10.0 | 50 | 10 | 18 | 0 | 0.36 | 3/3 |
+| samyama-graph *(ours)* | samyama v1.10.0 | 68 | 10 | 0 | 0 | 1.00 | 3/3 |
 
-Over every engine but ours and the superseded Neo4j line: **S1 = 0.2462** of answered cells diverge, and **S2 = 0.4712** of disagreements are silent -- the query runs, returns a different multiset, raises nothing. The silence ratio is a property of the engine, not of the problem: the table above spans the whole range from 0 to 1.
+Over every engine but ours and the superseded Neo4j line: **S1 = 0.2578** of answered cells diverge, and **S2 = 0.585** of disagreements are silent -- the query runs, returns a different multiset, raises nothing. The silence ratio is a property of the engine, not of the problem: the table above spans the whole range from 0 to 1.
 
 The standard defines 16 restrictor x selector combinations. Over an exhaustive sweep of 22,474 directed multigraphs, 114 of 120 cell pairs have a separating witness and 6 have none: **12 of 16 combinations are observably different.** A shortest path is already simple, so the restrictor is unobservable under a shortest selector except for ACYCLIC.
 

@@ -48,33 +48,33 @@ Each cell is one exact multiset comparison, repeated 3 times to confirm the engi
 | `g1-fig1-walk-all-shortest` | ✓ | ✓ | ! | ✓ | ✓ | ✓ | ✓ | ✗ | ✓ | ✓ | ! | ✓ | ✓ |
 | `g1-fig1-walk-any-shortest` | – | – | ✗ | ✓ | ✓ | – | – | ✗ | – | ✓ | ✓ | ✓ | ✓ |
 | `g1-fig1-trail-all` | ✗ | ✗ | ! | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `g1-fig1-trail-any` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✗ | ! |
-| `g1-fig1-trail-all-shortest` | ✓ | ✓ | ! | ✓ | ! | ✓ | ✓ | ! | ✓ | ! | ! | ✓ | ! |
-| `g1-fig1-trail-any-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✓ | ! |
+| `g1-fig1-trail-any` | – | – | ✗ | – | ! | – | – | ✗ | – | ✓ | ! | ✗ | ✓ |
+| `g1-fig1-trail-all-shortest` | ✓ | ✓ | ! | ✓ | ! | ✓ | ✓ | ✗ | ✓ | ✓ | ! | ✓ | ✓ |
+| `g1-fig1-trail-any-shortest` | – | – | ✗ | – | ! | – | – | ✗ | – | ✓ | ! | ✓ | ✓ |
 | `g1-fig1-acyclic-all` | – | – | ! | – | ✓ | – | – | ✓ | – | ✓ | ✓ | ✓ | ✓ |
-| `g1-fig1-acyclic-any` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✗ | ! |
-| `g1-fig1-acyclic-all-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✗ | ! |
-| `g1-fig1-acyclic-any-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✗ | ! |
+| `g1-fig1-acyclic-any` | – | – | ✓ | – | ! | – | – | ✗ | – | ✓ | ! | ✗ | ✓ |
+| `g1-fig1-acyclic-all-shortest` | – | – | ! | – | ! | – | – | ✗ | – | ✓ | ! | ✗ | ✓ |
+| `g1-fig1-acyclic-any-shortest` | – | – | ✓ | – | ! | – | – | ✗ | – | ✓ | ! | ✗ | ✓ |
 | `g1-fig1-simple-all` | – | – | ! | – | ! | – | – | ! | – | ✓ | ✓ | ✓ | ✓ |
-| `g1-fig1-simple-any` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✗ | ! |
-| `g1-fig1-simple-all-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✓ | ! |
-| `g1-fig1-simple-any-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✓ | ! |
+| `g1-fig1-simple-any` | – | – | ✗ | – | ! | – | – | ! | – | ✓ | ! | ✗ | ✓ |
+| `g1-fig1-simple-all-shortest` | – | – | ! | – | ! | – | – | ! | – | ✓ | ! | ✓ | ✓ |
+| `g1-fig1-simple-any-shortest` | – | – | ✗ | – | ! | – | – | ! | – | ✓ | ! | ✓ | ✓ |
 | `g1-loop-walk-all` | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ |
 | `g1-loop-walk-any` | – | – | ✗ | ✓ | ✓ | – | – | ✗ | – | ✓ | ✓ | ✗ | ✓ |
 | `g1-loop-walk-all-shortest` | ✓ | ✓ | ! | ✓ | ✓ | ✓ | ✓ | ✗ | ✓ | ✓ | ! | ✓ | ✓ |
 | `g1-loop-walk-any-shortest` | – | – | ✗ | ✓ | ✓ | – | – | ✗ | – | ✓ | ✓ | ✓ | ✓ |
 | `g1-loop-trail-all` | ✗ | ✗ | ! | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `g1-loop-trail-any` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✗ | ! |
-| `g1-loop-trail-all-shortest` | ✓ | ✓ | ! | ✓ | ! | ✓ | ✓ | ! | ✓ | ! | ! | ✓ | ! |
-| `g1-loop-trail-any-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✓ | ! |
+| `g1-loop-trail-any` | – | – | ✗ | – | ! | – | – | ✗ | – | ✓ | ! | ✗ | ✓ |
+| `g1-loop-trail-all-shortest` | ✓ | ✓ | ! | ✓ | ! | ✓ | ✓ | ✗ | ✓ | ✓ | ! | ✓ | ✓ |
+| `g1-loop-trail-any-shortest` | – | – | ✗ | – | ! | – | – | ✗ | – | ✓ | ! | ✓ | ✓ |
 | `g1-loop-acyclic-all` | – | – | ! | – | ✓ | – | – | ✓ | – | ✓ | ✓ | ✓ | ✓ |
-| `g1-loop-acyclic-any` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✓ | ! |
-| `g1-loop-acyclic-all-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✗ | ! |
-| `g1-loop-acyclic-any-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✗ | ! |
+| `g1-loop-acyclic-any` | – | – | ✓ | – | ! | – | – | ✓ | – | ✓ | ! | ✓ | ✓ |
+| `g1-loop-acyclic-all-shortest` | – | – | ! | – | ! | – | – | ✓ | – | ✓ | ! | ✗ | ✓ |
+| `g1-loop-acyclic-any-shortest` | – | – | ✓ | – | ! | – | – | ✓ | – | ✓ | ! | ✗ | ✓ |
 | `g1-loop-simple-all` | – | – | ! | – | ! | – | – | ! | – | ✓ | ✓ | ✗ | ✓ |
-| `g1-loop-simple-any` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✗ | ! |
-| `g1-loop-simple-all-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✓ | ! |
-| `g1-loop-simple-any-shortest` | – | – | ! | – | ! | – | – | ! | – | ! | ! | ✓ | ! |
+| `g1-loop-simple-any` | – | – | ✗ | – | ! | – | – | ! | – | ✓ | ! | ✗ | ✓ |
+| `g1-loop-simple-all-shortest` | – | – | ! | – | ! | – | – | ! | – | ✓ | ! | ✓ | ✓ |
+| `g1-loop-simple-any-shortest` | – | – | ✗ | – | ! | – | – | ! | – | ✓ | ! | ✓ | ✓ |
 | `g2-none-walk` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `g2-none-trail` | ✓ | ✓ | ! | ✓ | ! | ✓ | ✓ | ✓ | ✓ | ! | ✓ | ✓ | ✓ |
 | `g2-0-0-walk` | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ! | ✓ | ✓ |
@@ -121,18 +121,18 @@ S1 is divergences over the cells the engine answered. S2 is divergences over div
 |---|---:|---:|---:|---:|---:|---:|
 | kuzu | 33 | 15 | 1 | 29 | 0.31 | 0.94 |
 | ladybugdb | 33 | 15 | 1 | 29 | 0.31 | 0.94 |
-| duckpgq | 6 | 20 | 52 | 0 | 0.77 | 0.28 |
+| duckpgq | 10 | 28 | 40 | 0 | 0.74 | 0.41 |
 | neo4j | 45 | 10 | 0 | 23 | 0.18 | 1.00 |
 | neo4j-2026 | 46 | 9 | 23 | 0 | 0.16 | 0.28 |
 | memgraph | 39 | 10 | 0 | 29 | 0.20 | 1.00 |
 | apache-age | 38 | 10 | 1 | 29 | 0.21 | 0.91 |
-| arcadedb | 39 | 18 | 21 | 0 | 0.32 | 0.46 |
+| arcadedb | 42 | 27 | 9 | 0 | 0.39 | 0.75 |
 | falkordb | 39 | 10 | 0 | 29 | 0.20 | 1.00 |
-| surrealdb | 33 | 6 | 22 | 17 | 0.15 | 0.21 |
+| surrealdb | 51 | 6 | 4 | 17 | 0.11 | 0.60 |
 | spanner | 36 | 0 | 25 | 17 | 0.00 | 0.00 |
 | grafeo | 59 | 18 | 1 | 0 | 0.23 | 0.95 |
-| samyama-graph *(ours — excluded from the totals)* | 50 | 10 | 18 | 0 | 0.17 | 0.36 |
-| **all five external engines** | 401 | 131 | 147 | 179 | **0.25** | **0.47** |
+| samyama-graph *(ours — excluded from the totals)* | 68 | 10 | 0 | 0 | 0.13 | 1.00 |
+| **all five external engines** | 426 | 148 | 105 | 179 | **0.26** | **0.58** |
 
 ## Attribution: language difference or implementation defect?
 
@@ -183,11 +183,21 @@ A divergence from the ISO reference is only a defect if the engine also departs 
 | `g1-fig1-walk-any-shortest` | arcadedb | diverges | **diverges — defect** |
 | `g1-fig1-trail-all` | kuzu | diverges | conforms — the deviation is documented |
 | `g1-fig1-trail-all` | ladybugdb | diverges | conforms — the deviation is documented |
+| `g1-fig1-trail-any` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-fig1-trail-any` | arcadedb | diverges | **diverges — defect** |
 | `g1-fig1-trail-any` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-fig1-trail-all-shortest` | arcadedb | diverges | **diverges — defect** |
+| `g1-fig1-trail-any-shortest` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-fig1-trail-any-shortest` | arcadedb | diverges | **diverges — defect** |
+| `g1-fig1-acyclic-any` | arcadedb | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g1-fig1-acyclic-any` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-fig1-acyclic-all-shortest` | arcadedb | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g1-fig1-acyclic-all-shortest` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-fig1-acyclic-any-shortest` | arcadedb | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g1-fig1-acyclic-any-shortest` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-fig1-simple-any` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g1-fig1-simple-any` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-fig1-simple-any-shortest` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g1-loop-walk-all` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g1-loop-walk-all` | neo4j-2026 | diverges | conforms — the deviation is documented |
 | `g1-loop-walk-all` | memgraph | diverges | conforms — the deviation is documented |
@@ -203,11 +213,18 @@ A divergence from the ISO reference is only a defect if the engine also departs 
 | `g1-loop-walk-any-shortest` | arcadedb | diverges | **diverges — defect** |
 | `g1-loop-trail-all` | kuzu | diverges | conforms — the deviation is documented |
 | `g1-loop-trail-all` | ladybugdb | diverges | conforms — the deviation is documented |
+| `g1-loop-trail-any` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-loop-trail-any` | arcadedb | diverges | **diverges — defect** |
 | `g1-loop-trail-any` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-loop-trail-all-shortest` | arcadedb | diverges | **diverges — defect** |
+| `g1-loop-trail-any-shortest` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-loop-trail-any-shortest` | arcadedb | diverges | **diverges — defect** |
 | `g1-loop-acyclic-all-shortest` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g1-loop-acyclic-any-shortest` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g1-loop-simple-all` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-loop-simple-any` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g1-loop-simple-any` | grafeo | diverges | **n/a — the dialect is the standard, so this is a defect** |
+| `g1-loop-simple-any-shortest` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g2-0-0-walk` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g2-0-1-walk` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g2-1-3-walk` | duckpgq | diverges | **n/a — the dialect is the standard, so this is a defect** |
@@ -272,7 +289,7 @@ A divergence from the ISO reference is only a defect if the engine also departs 
 | `g5-plus-explicit` | kuzu | diverges | **n/a — the dialect is the standard, so this is a defect** |
 | `g5-plus-explicit` | ladybugdb | diverges | **n/a — the dialect is the standard, so this is a defect** |
 
-**62 of 131 divergences are specified language differences** — the engine does exactly what it documents. The remaining **69** are departures from the standard the engine itself implements.
+**62 of 148 divergences are specified language differences** — the engine does exactly what it documents. The remaining **86** are departures from the standard the engine itself implements.
 
 ## S2b — divergences delivered with neither an error nor a relevant diagnostic
 
@@ -282,18 +299,18 @@ S2 counts a rejection as the engine having spoken. S2b asks a narrower question:
 |---|---:|---:|---:|---|---:|
 | kuzu | 16 | 0 | 1.00 | no | 0 |
 | ladybugdb | 16 | 0 | 1.00 | no | 0 |
-| duckpgq | 20 | 0 | 1.00 | no | 0 |
+| duckpgq | 28 | 0 | 1.00 | no | 0 |
 | neo4j | 10 | 0 | 1.00 | yes | 0 |
 | neo4j-2026 | 9 | 0 | 1.00 | yes | 0 |
 | memgraph | 10 | 0 | 1.00 | yes | 50 |
 | apache-age | 10 | 0 | 1.00 | yes | 0 |
-| arcadedb | 19 | 0 | 1.00 | no | 0 |
+| arcadedb | 28 | 0 | 1.00 | no | 0 |
 | falkordb | 10 | 0 | 1.00 | no | 0 |
 | surrealdb | 9 | 0 | 1.00 | no | 0 |
 | spanner | 0 | 0 | n/a | no | 0 |
 | grafeo | 18 | 0 | 1.00 | no | 0 |
 | samyama-graph *(ours)* | 10 | 9 | 0.10 | yes | 0 |
-| **all five external** | 147 | 0 | **1.00** | | |
+| **all five external** | 164 | 0 | **1.00** | | |
 
 Every diagnostic credited above was checked rather than counted: `PathModeAffectsResult` claims that naming the path mode would change the answer, and that claim was re-tested by running the same pattern under each mode. All verified true; no false positives.
 
@@ -325,33 +342,33 @@ How many distinct answers the engines that accepted the query gave. One class me
 | `g1-fig1-walk-all-shortest` | 2 | {kuzu, ladybugdb, neo4j-2026, memgraph, apache-age, falkordb, surrealdb, grafeo} / {arcadedb} |
 | `g1-fig1-walk-any-shortest` | 3 | {duckpgq} / {neo4j-2026, surrealdb, spanner, grafeo} / {arcadedb} |
 | `g1-fig1-trail-all` | 2 | {kuzu, ladybugdb} / {neo4j-2026, memgraph, apache-age, arcadedb, falkordb, surrealdb, spanner, grafeo} |
-| `g1-fig1-trail-any` | 1 | {grafeo} |
-| `g1-fig1-trail-all-shortest` | 1 | {kuzu, ladybugdb, memgraph, apache-age, falkordb, grafeo} |
-| `g1-fig1-trail-any-shortest` | 1 | {grafeo} |
+| `g1-fig1-trail-any` | 4 | {duckpgq} / {arcadedb} / {surrealdb} / {grafeo} |
+| `g1-fig1-trail-all-shortest` | 2 | {kuzu, ladybugdb, memgraph, apache-age, falkordb, surrealdb, grafeo} / {arcadedb} |
+| `g1-fig1-trail-any-shortest` | 3 | {duckpgq} / {arcadedb} / {surrealdb, grafeo} |
 | `g1-fig1-acyclic-all` | 1 | {neo4j-2026, arcadedb, surrealdb, spanner, grafeo} |
-| `g1-fig1-acyclic-any` | 1 | {grafeo} |
-| `g1-fig1-acyclic-all-shortest` | 1 | {grafeo} |
-| `g1-fig1-acyclic-any-shortest` | 1 | {grafeo} |
+| `g1-fig1-acyclic-any` | 3 | {duckpgq, surrealdb} / {arcadedb} / {grafeo} |
+| `g1-fig1-acyclic-all-shortest` | 3 | {arcadedb} / {surrealdb} / {grafeo} |
+| `g1-fig1-acyclic-any-shortest` | 3 | {duckpgq, surrealdb} / {arcadedb} / {grafeo} |
 | `g1-fig1-simple-all` | 1 | {surrealdb, spanner, grafeo} |
-| `g1-fig1-simple-any` | 1 | {grafeo} |
-| `g1-fig1-simple-all-shortest` | 1 | {grafeo} |
-| `g1-fig1-simple-any-shortest` | 1 | {grafeo} |
+| `g1-fig1-simple-any` | 3 | {duckpgq} / {surrealdb} / {grafeo} |
+| `g1-fig1-simple-all-shortest` | 1 | {surrealdb, grafeo} |
+| `g1-fig1-simple-any-shortest` | 2 | {duckpgq} / {surrealdb, grafeo} |
 | `g1-loop-walk-all` | 3 | {kuzu, ladybugdb, spanner, grafeo} / {duckpgq} / {neo4j-2026, memgraph, apache-age, arcadedb, falkordb, surrealdb} |
 | `g1-loop-walk-any` | 4 | {duckpgq} / {neo4j-2026, surrealdb, spanner} / {arcadedb} / {grafeo} |
 | `g1-loop-walk-all-shortest` | 2 | {kuzu, ladybugdb, neo4j-2026, memgraph, apache-age, falkordb, surrealdb, grafeo} / {arcadedb} |
 | `g1-loop-walk-any-shortest` | 3 | {duckpgq} / {neo4j-2026, surrealdb, spanner, grafeo} / {arcadedb} |
 | `g1-loop-trail-all` | 2 | {kuzu, ladybugdb} / {neo4j-2026, memgraph, apache-age, arcadedb, falkordb, surrealdb, spanner, grafeo} |
-| `g1-loop-trail-any` | 1 | {grafeo} |
-| `g1-loop-trail-all-shortest` | 1 | {kuzu, ladybugdb, memgraph, apache-age, falkordb, grafeo} |
-| `g1-loop-trail-any-shortest` | 1 | {grafeo} |
+| `g1-loop-trail-any` | 4 | {duckpgq} / {arcadedb} / {surrealdb} / {grafeo} |
+| `g1-loop-trail-all-shortest` | 2 | {kuzu, ladybugdb, memgraph, apache-age, falkordb, surrealdb, grafeo} / {arcadedb} |
+| `g1-loop-trail-any-shortest` | 3 | {duckpgq} / {arcadedb} / {surrealdb, grafeo} |
 | `g1-loop-acyclic-all` | 1 | {neo4j-2026, arcadedb, surrealdb, spanner, grafeo} |
-| `g1-loop-acyclic-any` | 1 | {grafeo} |
-| `g1-loop-acyclic-all-shortest` | 1 | {grafeo} |
-| `g1-loop-acyclic-any-shortest` | 1 | {grafeo} |
+| `g1-loop-acyclic-any` | 1 | {duckpgq, arcadedb, surrealdb, grafeo} |
+| `g1-loop-acyclic-all-shortest` | 2 | {arcadedb, surrealdb} / {grafeo} |
+| `g1-loop-acyclic-any-shortest` | 2 | {duckpgq, arcadedb, surrealdb} / {grafeo} |
 | `g1-loop-simple-all` | 2 | {surrealdb, spanner} / {grafeo} |
-| `g1-loop-simple-any` | 1 | {grafeo} |
-| `g1-loop-simple-all-shortest` | 1 | {grafeo} |
-| `g1-loop-simple-any-shortest` | 1 | {grafeo} |
+| `g1-loop-simple-any` | 3 | {duckpgq} / {surrealdb} / {grafeo} |
+| `g1-loop-simple-all-shortest` | 1 | {surrealdb, grafeo} |
+| `g1-loop-simple-any-shortest` | 2 | {duckpgq} / {surrealdb, grafeo} |
 | `g2-none-walk` | 1 | {kuzu, ladybugdb, duckpgq, neo4j-2026, memgraph, apache-age, arcadedb, falkordb, surrealdb, spanner, grafeo} |
 | `g2-none-trail` | 1 | {kuzu, ladybugdb, memgraph, apache-age, arcadedb, falkordb, spanner, grafeo} |
 | `g2-0-0-walk` | 2 | {kuzu, ladybugdb, neo4j-2026, memgraph, apache-age, arcadedb, falkordb, surrealdb, grafeo} / {duckpgq} |
