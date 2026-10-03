@@ -1,22 +1,281 @@
 {
-  "n_constructs": 17,
-  "n_engines": 7,
-  "n_engines_external": 5,
-  "n_cells": 119,
-  "n_cells_external": 85,
+  "n_constructs": 84,
+  "constructs_by_group": {
+    "G1": 32,
+    "G2": 14,
+    "G3": 12,
+    "G4": 6,
+    "G5": 3,
+    "v1": 17
+  },
+  "by_group": {
+    "G1": {
+      "constructs": 32,
+      "cells": 256,
+      "conforms": 50,
+      "diverges": 26,
+      "rejects": 84,
+      "inexpressible": 96,
+      "s1": 0.3421,
+      "s2": 0.2364
+    },
+    "G2": {
+      "constructs": 14,
+      "cells": 112,
+      "conforms": 88,
+      "diverges": 14,
+      "rejects": 10,
+      "inexpressible": 0,
+      "s1": 0.1373,
+      "s2": 0.5833
+    },
+    "G3": {
+      "constructs": 12,
+      "cells": 96,
+      "conforms": 55,
+      "diverges": 30,
+      "rejects": 11,
+      "inexpressible": 0,
+      "s1": 0.3529,
+      "s2": 0.7317
+    },
+    "G4": {
+      "constructs": 6,
+      "cells": 0,
+      "conforms": 0,
+      "diverges": 0,
+      "rejects": 0,
+      "inexpressible": 0,
+      "s1": null,
+      "s2": null
+    },
+    "G5": {
+      "constructs": 3,
+      "cells": 24,
+      "conforms": 14,
+      "diverges": 7,
+      "rejects": 3,
+      "inexpressible": 0,
+      "s1": 0.3333,
+      "s2": 0.7
+    },
+    "v1": {
+      "constructs": 17,
+      "cells": 136,
+      "conforms": 66,
+      "diverges": 21,
+      "rejects": 12,
+      "inexpressible": 37,
+      "s1": 0.2414,
+      "s2": 0.6364
+    }
+  },
+  "s4_wellformedness": {
+    "kuzu": {
+      "refused": 0,
+      "answered": 0,
+      "not_askable": 3,
+      "controls_accepted": 1,
+      "controls_total": 3
+    },
+    "duckpgq": {
+      "refused": 3,
+      "answered": 0,
+      "not_askable": 0,
+      "controls_accepted": 2,
+      "controls_total": 3
+    },
+    "neo4j": {
+      "refused": 3,
+      "answered": 0,
+      "not_askable": 0,
+      "controls_accepted": 3,
+      "controls_total": 3
+    },
+    "neo4j-2026": {
+      "refused": 3,
+      "answered": 0,
+      "not_askable": 0,
+      "controls_accepted": 3,
+      "controls_total": 3
+    },
+    "memgraph": {
+      "refused": 0,
+      "answered": 0,
+      "not_askable": 3,
+      "controls_accepted": 1,
+      "controls_total": 3
+    },
+    "apache-age": {
+      "refused": 0,
+      "answered": 0,
+      "not_askable": 3,
+      "controls_accepted": 1,
+      "controls_total": 3
+    },
+    "arcadedb": {
+      "refused": 3,
+      "answered": 0,
+      "not_askable": 0,
+      "controls_accepted": 3,
+      "controls_total": 3
+    },
+    "falkordb": {
+      "refused": 0,
+      "answered": 0,
+      "not_askable": 3,
+      "controls_accepted": 1,
+      "controls_total": 3
+    },
+    "surrealdb": {
+      "refused": 0,
+      "answered": 3,
+      "not_askable": 0,
+      "controls_accepted": 3,
+      "controls_total": 3
+    },
+    "samyama-graph": {
+      "refused": 3,
+      "answered": 0,
+      "not_askable": 0,
+      "controls_accepted": 3,
+      "controls_total": 3
+    }
+  },
+  "s5_spelling_agreement": {
+    "kuzu": {
+      "g5-star-bare|g5-star-explicit": false,
+      "g5-plus-bare|g5-plus-explicit": true
+    },
+    "duckpgq": {
+      "g5-star-bare|g5-star-explicit": null,
+      "g5-plus-bare|g5-plus-explicit": null
+    },
+    "neo4j": {
+      "g5-star-bare|g5-star-explicit": false,
+      "g5-plus-bare|g5-plus-explicit": true
+    },
+    "neo4j-2026": {
+      "g5-star-bare|g5-star-explicit": true,
+      "g5-plus-bare|g5-plus-explicit": true
+    },
+    "memgraph": {
+      "g5-star-bare|g5-star-explicit": false,
+      "g5-plus-bare|g5-plus-explicit": true
+    },
+    "apache-age": {
+      "g5-star-bare|g5-star-explicit": false,
+      "g5-plus-bare|g5-plus-explicit": true
+    },
+    "arcadedb": {
+      "g5-star-bare|g5-star-explicit": false,
+      "g5-plus-bare|g5-plus-explicit": true
+    },
+    "falkordb": {
+      "g5-star-bare|g5-star-explicit": false,
+      "g5-plus-bare|g5-plus-explicit": true
+    },
+    "surrealdb": {
+      "g5-star-bare|g5-star-explicit": true,
+      "g5-plus-bare|g5-plus-explicit": true
+    },
+    "samyama-graph": {
+      "g5-star-bare|g5-star-explicit": false,
+      "g5-plus-bare|g5-plus-explicit": true
+    }
+  },
+  "s6_separation": {
+    "observable_classes": 12,
+    "combinations": 16,
+    "pairs_separated": 114,
+    "pairs": 120,
+    "unobservable": [
+      [
+        [
+          "WALK",
+          "ALL SHORTEST"
+        ],
+        [
+          "TRAIL",
+          "ALL SHORTEST"
+        ]
+      ],
+      [
+        [
+          "WALK",
+          "ALL SHORTEST"
+        ],
+        [
+          "SIMPLE",
+          "ALL SHORTEST"
+        ]
+      ],
+      [
+        [
+          "WALK",
+          "ANY SHORTEST"
+        ],
+        [
+          "TRAIL",
+          "ANY SHORTEST"
+        ]
+      ],
+      [
+        [
+          "WALK",
+          "ANY SHORTEST"
+        ],
+        [
+          "SIMPLE",
+          "ANY SHORTEST"
+        ]
+      ],
+      [
+        [
+          "TRAIL",
+          "ALL SHORTEST"
+        ],
+        [
+          "SIMPLE",
+          "ALL SHORTEST"
+        ]
+      ],
+      [
+        [
+          "TRAIL",
+          "ANY SHORTEST"
+        ],
+        [
+          "SIMPLE",
+          "ANY SHORTEST"
+        ]
+      ]
+    ],
+    "sweep": {
+      "graphs_enumerated": 22474,
+      "max_bound": 5,
+      "max_edges": 5,
+      "max_nodes": 4,
+      "pattern_probes": 350580
+    }
+  },
+  "n_engines": 10,
+  "n_engines_external": 8,
+  "n_cells": 840,
+  "n_cells_external": 624,
   "repeats": 3,
-  "conforms": 44,
-  "diverges": 15,
-  "rejects": 11,
-  "inexpressible": 15,
+  "conforms": 273,
+  "diverges": 98,
+  "rejects": 120,
+  "inexpressible": 133,
   "nondeterministic": 0,
-  "s1_divergence_rate": 0.2542,
-  "s2_silence_ratio": 0.5769,
-  "disagreements": 26,
-  "divergences_specified": 9,
-  "divergences_defect": 6,
-  "constructs_multi_class": 9,
-  "constructs_single_class": 7,
+  "s1_divergence_rate": 0.2642,
+  "s2_silence_ratio": 0.4495,
+  "disagreements": 218,
+  "divergences_specified": 52,
+  "divergences_defect": 46,
+  "constructs_multi_class": 43,
+  "constructs_single_class": 24,
   "classes_per_construct": {
     "mode-walk-bounded": 3,
     "mode-trail-bounded": 2,
@@ -31,61 +290,133 @@
     "direction-left": 1,
     "interior-node-unconstrained": 1,
     "selector-all-shortest": 1,
-    "selector-any-shortest": 2,
-    "selector-any": 2,
-    "paper-trail-unbounded": 2
+    "selector-any-shortest": 3,
+    "selector-any": 3,
+    "paper-trail-unbounded": 2,
+    "g1-fig1-walk-all": 3,
+    "g1-fig1-walk-any": 3,
+    "g1-fig1-walk-all-shortest": 2,
+    "g1-fig1-walk-any-shortest": 3,
+    "g1-fig1-trail-all": 2,
+    "g1-fig1-trail-all-shortest": 1,
+    "g1-fig1-acyclic-all": 1,
+    "g1-fig1-simple-all": 1,
+    "g1-loop-walk-all": 3,
+    "g1-loop-walk-any": 3,
+    "g1-loop-walk-all-shortest": 2,
+    "g1-loop-walk-any-shortest": 3,
+    "g1-loop-trail-all": 2,
+    "g1-loop-trail-all-shortest": 1,
+    "g1-loop-acyclic-all": 1,
+    "g1-loop-simple-all": 1,
+    "g2-none-walk": 1,
+    "g2-none-trail": 1,
+    "g2-0-0-walk": 2,
+    "g2-0-0-trail": 1,
+    "g2-0-1-walk": 2,
+    "g2-0-1-trail": 1,
+    "g2-1-1-walk": 1,
+    "g2-1-1-trail": 1,
+    "g2-1-3-walk": 2,
+    "g2-1-3-trail": 1,
+    "g2-0-3-walk": 3,
+    "g2-0-3-trail": 2,
+    "g2-2-4-walk": 3,
+    "g2-2-4-trail": 2,
+    "g3-two-segment-walk": 2,
+    "g3-two-segment-trail": 2,
+    "g3-dir-left-walk": 1,
+    "g3-dir-left-trail": 1,
+    "g3-dir-any-walk": 2,
+    "g3-dir-any-trail": 2,
+    "g3-interior-pred-walk": 1,
+    "g3-interior-pred-trail": 1,
+    "g3-self-loop-walk": 3,
+    "g3-self-loop-trail": 2,
+    "g3-cycle2-walk": 3,
+    "g3-cycle2-trail": 2,
+    "g4-star-walk-all": 2,
+    "g4-plus-walk-all": 2,
+    "g4-lower-bound-open-walk-all": 2,
+    "g4-star-trail-all": 2,
+    "g4-star-walk-any-shortest": 2,
+    "g4-star-walk-any": 2,
+    "g5-star-bare": 3,
+    "g5-plus-bare": 2,
+    "g5-plus-explicit": 2
   },
-  "nondeterministic_selector_cells": 4,
-  "constructs_measured": 16,
+  "nondeterministic_selector_cells": 22,
+  "constructs_measured": 67,
   "metamorphic_violations_total": 39,
   "metamorphic_violations_external": 39,
   "s2b": {
     "kuzu": {
-      "divergences": 3,
+      "divergences": 16,
       "spoke": 0,
       "s2b": 1.0,
       "channel": false,
       "irrelevant": 0
     },
     "duckpgq": {
-      "divergences": 6,
+      "divergences": 20,
       "spoke": 0,
       "s2b": 1.0,
       "channel": false,
       "irrelevant": 0
     },
     "neo4j": {
-      "divergences": 2,
+      "divergences": 10,
       "spoke": 0,
       "s2b": 1.0,
       "channel": true,
       "irrelevant": 0
     },
     "neo4j-2026": {
-      "divergences": 2,
+      "divergences": 9,
       "spoke": 0,
       "s2b": 1.0,
       "channel": true,
       "irrelevant": 0
     },
     "memgraph": {
-      "divergences": 2,
+      "divergences": 10,
       "spoke": 0,
       "s2b": 1.0,
       "channel": true,
-      "irrelevant": 12
+      "irrelevant": 50
     },
     "apache-age": {
-      "divergences": 2,
+      "divergences": 10,
       "spoke": 0,
       "s2b": 1.0,
       "channel": true,
       "irrelevant": 0
     },
+    "arcadedb": {
+      "divergences": 19,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": false,
+      "irrelevant": 0
+    },
+    "falkordb": {
+      "divergences": 10,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": false,
+      "irrelevant": 0
+    },
+    "surrealdb": {
+      "divergences": 9,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": false,
+      "irrelevant": 0
+    },
     "samyama-graph": {
-      "divergences": 2,
-      "spoke": 2,
-      "s2b": 0.0,
+      "divergences": 10,
+      "spoke": 9,
+      "s2b": 0.1,
       "channel": true,
       "irrelevant": 0
     }
@@ -95,35 +426,43 @@
     "headline_newest_per_product": {
       "engines": [
         "apache-age",
+        "arcadedb",
         "duckpgq",
+        "falkordb",
         "kuzu",
         "memgraph",
-        "neo4j-2026"
+        "neo4j-2026",
+        "surrealdb"
       ],
-      "conforms": 44,
-      "diverges": 15,
-      "rejects": 11,
-      "inexpressible": 15,
-      "s1": 0.2542,
-      "s2": 0.5769
+      "cells": 624,
+      "conforms": 273,
+      "diverges": 98,
+      "rejects": 120,
+      "inexpressible": 133,
+      "s1": 0.2642,
+      "s2": 0.4495
     },
     "all_external_rows": {
       "engines": [
         "apache-age",
+        "arcadedb",
         "duckpgq",
+        "falkordb",
         "kuzu",
         "memgraph",
         "neo4j",
-        "neo4j-2026"
+        "neo4j-2026",
+        "surrealdb"
       ],
-      "conforms": 56,
-      "diverges": 17,
-      "rejects": 11,
-      "inexpressible": 18,
-      "s1": 0.2329,
-      "s2": 0.6071
+      "cells": 702,
+      "conforms": 318,
+      "diverges": 108,
+      "rejects": 120,
+      "inexpressible": 156,
+      "s1": 0.2535,
+      "s2": 0.4737
     },
-    "as_published_5_engines": {
+    "v1_constructs_v1_engines": {
       "engines": [
         "apache-age",
         "duckpgq",
@@ -131,22 +470,62 @@
         "memgraph",
         "neo4j"
       ],
+      "cells": 85,
       "conforms": 42,
       "diverges": 15,
       "rejects": 10,
       "inexpressible": 18,
       "s1": 0.2632,
       "s2": 0.6
+    },
+    "v1_constructs_all_engines": {
+      "engines": [
+        "apache-age",
+        "arcadedb",
+        "duckpgq",
+        "falkordb",
+        "kuzu",
+        "memgraph",
+        "neo4j",
+        "neo4j-2026",
+        "surrealdb"
+      ],
+      "cells": 153,
+      "conforms": 78,
+      "diverges": 23,
+      "rejects": 12,
+      "inexpressible": 40,
+      "s1": 0.2277,
+      "s2": 0.6571
+    },
+    "all_constructs_v1_engines": {
+      "engines": [
+        "apache-age",
+        "duckpgq",
+        "kuzu",
+        "memgraph",
+        "neo4j"
+      ],
+      "cells": 390,
+      "conforms": 161,
+      "diverges": 65,
+      "rejects": 54,
+      "inexpressible": 110,
+      "s1": 0.2876,
+      "s2": 0.5462
     }
   },
   "conforms_gql_prefix_by_engine": {
     "kuzu": 0,
     "duckpgq": 0,
-    "neo4j": 2,
-    "neo4j-2026": 4,
+    "neo4j": 21,
+    "neo4j-2026": 42,
     "memgraph": 0,
     "apache-age": 0,
-    "samyama-graph": 5
+    "arcadedb": 34,
+    "falkordb": 0,
+    "surrealdb": 0,
+    "samyama-graph": 46
   },
   "metamorphic_dropped_by_engine": {
     "kuzu": 0,
@@ -155,6 +534,9 @@
     "neo4j-2026": 0,
     "memgraph": 0,
     "apache-age": 0,
+    "arcadedb": 0,
+    "falkordb": 0,
+    "surrealdb": 0,
     "samyama-graph": 0
   },
   "metamorphic_lo0_by_engine": {
@@ -164,6 +546,9 @@
     "neo4j-2026": 0,
     "memgraph": 0,
     "apache-age": 0,
+    "arcadedb": 0,
+    "falkordb": 0,
+    "surrealdb": 0,
     "samyama-graph": 0
   },
   "level2": {
@@ -222,6 +607,9 @@
     "neo4j-2026": 0,
     "memgraph": 0,
     "apache-age": 0,
+    "arcadedb": 0,
+    "falkordb": 0,
+    "surrealdb": 0,
     "samyama-graph": 0
   },
   "metamorphic_clean_engines": [
@@ -229,6 +617,9 @@
     "neo4j-2026",
     "memgraph",
     "apache-age",
+    "arcadedb",
+    "falkordb",
+    "surrealdb",
     "samyama-graph"
   ],
   "engines": {
@@ -238,64 +629,91 @@
     "neo4j-2026": "Neo4j Kernel 2026.04.0",
     "memgraph": "Memgraph 5.9.0",
     "apache-age": "age 1.8.0",
-    "samyama-graph": "samyama v1.8.0 (reports 1.8.0)"
+    "arcadedb": "26.9.1 (build 9cea8e848fa57d275b8d614328245508cd76614a/1788462493960/main)",
+    "falkordb": "falkordb 8.10.2",
+    "surrealdb": "surrealdb-3.3.0",
+    "samyama-graph": "samyama v1.8.0 (reports 1.10.0)"
   },
   "per_engine": {
     "kuzu": {
-      "conforms": 8,
-      "diverges": 3,
+      "conforms": 33,
+      "diverges": 15,
       "rejects": 1,
-      "inexpressible": 5,
-      "s1": 0.2727,
-      "s2": 0.75
+      "inexpressible": 29,
+      "s1": 0.3125,
+      "s2": 0.9375
     },
     "duckpgq": {
-      "conforms": 3,
-      "diverges": 6,
-      "rejects": 8,
+      "conforms": 6,
+      "diverges": 20,
+      "rejects": 52,
       "inexpressible": 0,
-      "s1": 0.6667,
-      "s2": 0.4286
+      "s1": 0.7692,
+      "s2": 0.2778
     },
     "neo4j": {
-      "conforms": 12,
-      "diverges": 2,
+      "conforms": 45,
+      "diverges": 10,
       "rejects": 0,
-      "inexpressible": 3,
-      "s1": 0.1429,
+      "inexpressible": 23,
+      "s1": 0.1818,
       "s2": 1.0
     },
     "neo4j-2026": {
-      "conforms": 14,
-      "diverges": 2,
-      "rejects": 1,
+      "conforms": 46,
+      "diverges": 9,
+      "rejects": 23,
       "inexpressible": 0,
-      "s1": 0.125,
-      "s2": 0.6667
+      "s1": 0.1636,
+      "s2": 0.2812
     },
     "memgraph": {
-      "conforms": 10,
-      "diverges": 2,
+      "conforms": 39,
+      "diverges": 10,
       "rejects": 0,
-      "inexpressible": 5,
-      "s1": 0.1667,
+      "inexpressible": 29,
+      "s1": 0.2041,
       "s2": 1.0
     },
     "apache-age": {
-      "conforms": 9,
-      "diverges": 2,
+      "conforms": 38,
+      "diverges": 10,
       "rejects": 1,
-      "inexpressible": 5,
-      "s1": 0.1818,
-      "s2": 0.6667
+      "inexpressible": 29,
+      "s1": 0.2083,
+      "s2": 0.9091
+    },
+    "arcadedb": {
+      "conforms": 39,
+      "diverges": 18,
+      "rejects": 21,
+      "inexpressible": 0,
+      "s1": 0.3158,
+      "s2": 0.4615
+    },
+    "falkordb": {
+      "conforms": 39,
+      "diverges": 10,
+      "rejects": 0,
+      "inexpressible": 29,
+      "s1": 0.2041,
+      "s2": 1.0
+    },
+    "surrealdb": {
+      "conforms": 33,
+      "diverges": 6,
+      "rejects": 22,
+      "inexpressible": 17,
+      "s1": 0.1538,
+      "s2": 0.2143
     },
     "samyama-graph": {
-      "conforms": 15,
-      "diverges": 2,
-      "rejects": 0,
+      "conforms": 50,
+      "diverges": 10,
+      "rejects": 18,
       "inexpressible": 0,
-      "s1": 0.1176,
-      "s2": 1.0
+      "s1": 0.1667,
+      "s2": 0.3571
     }
   }
 }

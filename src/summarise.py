@@ -4,7 +4,8 @@ from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(HERE, "src"))
-from suite_all import CASES
+from suite_all import CASES, GROUPS, resolve
+from suite_v2 import G5_PAIRS
 from diagnostics import classify, speaks_about_divergence
 
 BYID = {c.id: c for c in CASES}
@@ -49,21 +50,42 @@ def _level2_summary():
     }
 
 
-def _aggregates(m):
-    """S1 and S2 under each engine set worth naming."""
+AS_PUBLISHED = {"kuzu", "duckpgq", "neo4j", "memgraph", "apache-age"}
+
+
+def _aggregates(m, answer_cases, v1_cases):
+    """S1 and S2 under each population worth naming.
+
+    Widening the matrix changes the denominator, so a bare S1 from this run is not
+    comparable to the published one. Each population is named and reported, and the
+    one that reproduces the published figure keeps both the old engine set and the
+    old construct set -- change one thing at a time or the comparison says nothing.
+    """
     sets = {
-        "headline_newest_per_product": lambda e: e not in OURS and e not in SUPERSEDED,
-        "all_external_rows": lambda e: e not in OURS,
-        "as_published_5_engines": lambda e: e in {"kuzu", "duckpgq", "neo4j",
-                                                  "memgraph", "apache-age"},
+        "headline_newest_per_product": (
+            lambda c: c["engine"] not in OURS and c["engine"] not in SUPERSEDED
+            and c["case"] in answer_cases),
+        "all_external_rows": (
+            lambda c: c["engine"] not in OURS and c["case"] in answer_cases),
+        # v1's constructs, v1's engines: what the published paper measured.
+        "v1_constructs_v1_engines": (
+            lambda c: c["engine"] in AS_PUBLISHED and c["case"] in v1_cases),
+        # v1's constructs, every external engine now in the matrix: isolates the
+        # effect of adding engines.
+        "v1_constructs_all_engines": (
+            lambda c: c["engine"] not in OURS and c["case"] in v1_cases),
+        # Every construct, v1's engines: isolates the effect of adding constructs.
+        "all_constructs_v1_engines": (
+            lambda c: c["engine"] in AS_PUBLISHED and c["case"] in answer_cases),
     }
     out = {}
     for name, keep in sets.items():
-        t = Counter(c["verdict"] for c in m["cells"] if keep(c["engine"]))
+        t = Counter(c["verdict"] for c in m["cells"] if keep(c))
         answered = t["CONFORMS"] + t["DIVERGES"]
         den = t["DIVERGES"] + t["REJECTS"]
         out[name] = {
-            "engines": sorted({c["engine"] for c in m["cells"] if keep(c["engine"])}),
+            "engines": sorted({c["engine"] for c in m["cells"] if keep(c)}),
+            "cells": sum(1 for c in m["cells"] if keep(c)),
             "conforms": t["CONFORMS"], "diverges": t["DIVERGES"],
             "rejects": t["REJECTS"], "inexpressible": t["INEXPRESSIBLE"],
             "s1": round(t["DIVERGES"] / answered, 4) if answered else None,
@@ -140,9 +162,17 @@ def main():
 
     acc = {e: Counter() for e in engines}
     for c in m["cells"]:
-        acc[c["engine"]][c["verdict"]] += 1
+        if c["case"] in {x.id for x in CASES if x.expect == "ANSWER"}:
+            acc[c["engine"]][c["verdict"]] += 1
+    # S1 and S2 are statistics about *answers*. G4 asks whether an engine refuses a
+    # pattern the standard makes ill-formed and G5 asks whether two spellings of one
+    # quantifier agree; in both a rejection can be the conforming act, so folding them
+    # into a divergence rate would mix two different questions into one decimal. They
+    # get their own statistics below, and the answer population is stated explicitly.
+    ANSWER_CASES = {c.id for c in CASES if c.expect == "ANSWER"}
     external = [c for c in m["cells"]
-                if c["engine"] not in OURS and c["engine"] not in SUPERSEDED]
+                if c["engine"] not in OURS and c["engine"] not in SUPERSEDED
+                and c["case"] in ANSWER_CASES]
     tot = Counter(c["verdict"] for c in external)
     ext_engines = [e for e in engines
                    if e not in OURS and e not in SUPERSEDED]
@@ -243,6 +273,81 @@ def main():
             grouping = " / ".join("{" + ", ".join(v) + "}" for v in classes.values())
             L.append(f"| `{c.id}` | {len(classes)} | {grouping} |")
 
+    # ---- S4: does the engine refuse what the standard makes ill-formed? ----
+    g4_reject = [c for c in CASES if c.expect == "REJECT"]
+    g4_accept = [c for c in CASES if c.expect == "ACCEPT"]
+    s4 = {}
+    L.append("\n## S4 — well-formedness enforcement\n")
+    L.append("Sec. 5 makes an unbounded quantifier ill-formed unless a restrictor or a "
+             "selector is in scope. Refusing such a pattern is the conforming act and "
+             "answering it is the defect — a direction no answer comparison can see. "
+             "The accept controls are not decoration: an engine that refuses everything "
+             "would otherwise score a clean sweep.\n")
+    L.append("| engine | ill-formed refused | ill-formed answered | not askable | "
+             "well-formed controls accepted |")
+    L.append("|---|---:|---:|---:|---:|")
+    for e in engines:
+        ref = sum(1 for c in g4_reject if grid[(c.id, e)]["verdict"] == "CONFORMS")
+        ans = sum(1 for c in g4_reject if grid[(c.id, e)]["verdict"] == "DIVERGES")
+        na = sum(1 for c in g4_reject
+                 if grid[(c.id, e)]["verdict"] == "INEXPRESSIBLE")
+        ctl = sum(1 for c in g4_accept
+                  if grid[(c.id, e)]["verdict"] in ("CONFORMS", "DIVERGES"))
+        s4[e] = {"refused": ref, "answered": ans, "not_askable": na,
+                 "controls_accepted": ctl, "controls_total": len(g4_accept)}
+        L.append(f"| {e} | {ref} | {ans} | {na} | {ctl}/{len(g4_accept)} |")
+
+    # ---- S5: does one engine answer two spellings of one quantifier the same? ----
+    s5 = {}
+    L.append("\n## S5 — spelling self-contradiction\n")
+    L.append("Two ways of writing one quantifier, which the standard says mean the same "
+             "thing. An engine that answers them differently contradicts itself, and the "
+             "contradiction needs no reference semantics to see. Reported per engine and "
+             "never as a rate: with four cases a rate is a count wearing a decimal "
+             "point.\n")
+    L.append("| engine | " + " | ".join(f"`{a}` vs `{b}`" for a, b in G5_PAIRS) + " |")
+    L.append("|---" * (len(G5_PAIRS) + 1) + "|")
+    for e in engines:
+        row, rec = [], {}
+        for a, b in G5_PAIRS:
+            ca, cb = grid.get((resolve(a), e)), grid.get((resolve(b), e))
+            if not ca or not cb:
+                row.append("—"); rec[f"{a}|{b}"] = None; continue
+            if ca["verdict"] == "REJECTS" or cb["verdict"] == "REJECTS":
+                row.append("not askable"); rec[f"{a}|{b}"] = None; continue
+            same = ca.get("observed") == cb.get("observed")
+            row.append("same" if same else "**differ**")
+            rec[f"{a}|{b}"] = bool(same)
+        s5[e] = rec
+        L.append(f"| {e} | " + " | ".join(row) + " |")
+
+    # ---- S6: how much of the grid is observable at all? ----
+    s6 = None
+    sep_path = os.path.join(HERE, "results", "separation.json")
+    if os.path.exists(sep_path):
+        sep = json.load(open(sep_path))
+        s6 = {"observable_classes": sep["observable_classes"],
+              "combinations": sep["combinations"],
+              "pairs_separated": sep["separated"], "pairs": sep["pairs"],
+              "unobservable": sep["unobservable"], "sweep": sep["sweep"]}
+        L.append("\n## S6 — how much of the grid any graph can tell apart\n")
+        L.append(f"The standard defines {sep['combinations']} restrictor x selector "
+                 f"combinations. Over an exhaustive sweep of "
+                 f"{sep['sweep']['graphs_enumerated']:,} directed multigraphs and "
+                 f"{sep['sweep']['pattern_probes']:,} pattern probes, "
+                 f"{sep['separated']} of {sep['pairs']} cell pairs have a separating "
+                 f"witness and {sep['pairs'] - sep['separated']} have none. "
+                 f"**{sep['observable_classes']} observable classes.**\n")
+        L.append("| combinations with no separating witness |")
+        L.append("|---|")
+        for a, b in sep["unobservable"]:
+            L.append(f"| `{a[0]} {a[1]}` = `{b[0]} {b[1]}` |")
+        L.append("\nA shortest path is already simple, so the restrictor is "
+                 "unobservable under a shortest selector except for ACYCLIC, which "
+                 "forbids the closed walk the others allow. This bounds what S3 can "
+                 "mean: a construct cannot show more answer classes than the semantics "
+                 "has.\n")
+
     L.append("\n## Metamorphic self-consistency\n")
     L.append("These need no reference semantics: they hold under WALK, TRAIL, ACYCLIC "
              "and SIMPLE alike, because no restrictor mentions the quantifier bounds. "
@@ -274,8 +379,29 @@ def main():
                 cl.add(json.dumps(cell.get("observed"), sort_keys=True))
         if cl:
             classes_per_construct[c.id] = len(cl)
+    by_group = {}
+    for gname, ids in sorted(GROUPS.items()):
+        gcells = [c for c in m["cells"]
+                  if c["case"] in set(ids) and c["engine"] not in OURS
+                  and c["engine"] not in SUPERSEDED and c["case"] in ANSWER_CASES]
+        gt = Counter(c["verdict"] for c in gcells)
+        ga = gt["CONFORMS"] + gt["DIVERGES"]
+        gd = gt["DIVERGES"] + gt["REJECTS"]
+        by_group[gname] = {
+            "constructs": len(ids), "cells": len(gcells),
+            "conforms": gt["CONFORMS"], "diverges": gt["DIVERGES"],
+            "rejects": gt["REJECTS"], "inexpressible": gt["INEXPRESSIBLE"],
+            "s1": round(gt["DIVERGES"] / ga, 4) if ga else None,
+            "s2": round(gt["DIVERGES"] / gd, 4) if gd else None,
+        }
+
     summary = {
         "n_constructs": len(CASES),
+        "constructs_by_group": {g: len(ids) for g, ids in sorted(GROUPS.items())},
+        "by_group": by_group,
+        "s4_wellformedness": s4,
+        "s5_spelling_agreement": s5,
+        "s6_separation": s6,
         "n_engines": len(engines),
         "n_engines_external": len(ext_engines),
         "n_cells": len(m["cells"]),
@@ -311,7 +437,8 @@ def main():
         # The same statistics under each defensible engine set, so the headline's
         # choice is checkable rather than asserted. `headline` is one row per
         # product at its newest measured version; the others are stated for contrast.
-        "aggregates": _aggregates(m),
+        "aggregates": _aggregates(m, ANSWER_CASES,
+                                  {c.id for c in CASES if c.group == "v1"}),
         # Of each engine's conforming cells, how many it could only answer through the
         # standard's prefix keywords rather than the common openCypher rendering. A
         # conforming cell reached that way is not portable to an engine without them.
