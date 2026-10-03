@@ -37,19 +37,31 @@ def _counter(rows, diagnostics=None) -> Answer:
 
 
 class KuzuAdapter:
+    """Kuzu, and its live fork.
+
+    Kuzu itself is frozen: 0.11.3 is the final release, the repository was archived
+    on 2025-10-10 and Kuzu Inc. was acquired. Its row can never change again, which
+    is worth saying in a conformance table -- a divergence here is permanent, not a
+    bug someone might fix. LadybugDB continues the same codebase under the same
+    embedded Python API, so the same adapter drives both and the lineage stays in
+    the matrix with a version that can still move.
+    """
+
     name = "kuzu"
     dialect = "cypher"
     version = None
 
-    def __init__(self, workdir: str):
-        import kuzu
-        self._kuzu = kuzu
+    def __init__(self, workdir: str, module: str = "kuzu", name: str | None = None):
+        import importlib
+        self._kuzu = importlib.import_module(module)
         self.workdir = workdir
-        self.version = kuzu.__version__
+        if name:
+            self.name = name
+        self.version = getattr(self._kuzu, "__version__", "unknown")
 
     def load(self, g: PropertyGraph, primary: str, edge_label: str):
         import shutil, os, uuid
-        path = os.path.join(self.workdir, f"kuzu-{uuid.uuid4().hex}")
+        path = os.path.join(self.workdir, f"{self.name}-{uuid.uuid4().hex}")
         shutil.rmtree(path, ignore_errors=True)
         self.db = self._kuzu.Database(path)
         self.con = self._kuzu.Connection(self.db)
@@ -81,7 +93,7 @@ class KuzuAdapter:
         rows = []
         while r.has_next():
             rows.append(r.get_next())
-        # Kuzu 0.11 exposes no warning or notification channel on a query result.
+        # Neither Kuzu 0.11 nor LadybugDB exposes a warning or notification channel.
         return _counter(rows, None)
 
 
@@ -619,4 +631,94 @@ class SurrealAdapter:
                 raise EngineError(str(part.get("result"))[:300])
             for r in (part.get("result") or []):
                 rows.append((r.get("s"), r.get("t")))
+        return _counter(rows, None)
+
+
+class SpannerAdapter:
+    """Google Spanner Graph, through the free Cloud Spanner emulator.
+
+    The emulator runs offline with no account, no IAM and no TLS, and since v1.5.30 it
+    serves property graphs. It is the only free local engine in the matrix that ships
+    the standard's path modes and selectors together, and the vendor publishes a
+    per-feature ISO conformance table, so its row can be read against its own claim.
+
+    Spanner's property-graph labels are fixed by DDL, so one database is created per
+    (node label, edge label) pair the fixtures use -- two pairs in all -- and rows are
+    cleared between fixtures rather than the schema rebuilt.
+    """
+
+    name = "spanner"
+    dialect = "gql"
+
+    _COLS = ("eid", "name", "tag", "owner")
+
+    def __init__(self, project="gpml", instance="gpml-inst", host=None):
+        import os as _os
+        from google.cloud import spanner
+        if host:
+            _os.environ["SPANNER_EMULATOR_HOST"] = host
+        _os.environ.setdefault("SPANNER_EMULATOR_HOST", "localhost:9010")
+        _os.environ.setdefault("GOOGLE_CLOUD_PROJECT", project)
+        self._spanner = spanner
+        self._client = spanner.Client(project=project)
+        self._instance = self._client.instance(
+            instance,
+            configuration_name=f"projects/{project}/instanceConfigs/emulator-config",
+            node_count=1)
+        if not self._instance.exists():
+            self._instance.create().result(180)
+        self._dbs: dict[tuple, object] = {}
+        self._db = None
+        self.version = self._version()
+
+    def _version(self):
+        # The emulator reports no version over the API. The image tag is the fact, and
+        # the caller sets it; recording "emulator" alone would be a version string that
+        # cannot be traced to an image.
+        import os as _os
+        return f"cloud-spanner-emulator {_os.environ.get('CF_SPANNER_TAG', '1.5.58')}"
+
+    def _ddl(self, primary: str, edge_label: str):
+        cols = ", ".join(f"{c} STRING(64)" for c in self._COLS[1:])
+        return [
+            f"CREATE TABLE {primary} (eid STRING(64) NOT NULL, {cols}) "
+            f"PRIMARY KEY (eid)",
+            f"CREATE TABLE {edge_label} (src STRING(64) NOT NULL, "
+            f"eid STRING(64) NOT NULL, dst STRING(64) NOT NULL, "
+            f"FOREIGN KEY (src) REFERENCES {primary} (eid), "
+            f"FOREIGN KEY (dst) REFERENCES {primary} (eid)) PRIMARY KEY (src, eid)",
+            f"CREATE PROPERTY GRAPH g "
+            f"NODE TABLES ({primary} KEY (eid) LABEL {primary} PROPERTIES ALL COLUMNS) "
+            f"EDGE TABLES ({edge_label} KEY (src, eid) "
+            f"SOURCE KEY (src) REFERENCES {primary} (eid) "
+            f"DESTINATION KEY (dst) REFERENCES {primary} (eid) "
+            f"LABEL {edge_label} PROPERTIES ALL COLUMNS)",
+        ]
+
+    def load(self, g: PropertyGraph, primary: str, edge_label: str):
+        key = (primary, edge_label)
+        if key not in self._dbs:
+            dbid = f"g-{primary.lower()}-{edge_label.lower()}"[:30]
+            db = self._instance.database(dbid, ddl_statements=self._ddl(primary, edge_label))
+            if not db.exists():
+                db.create().result(300)
+            self._dbs[key] = db
+        self._db = self._dbs[key]
+        self._primary, self._edge = primary, edge_label
+        with self._db.batch() as b:
+            b.delete(table=edge_label, keyset=self._spanner.KeySet(all_=True))
+            b.delete(table=primary, keyset=self._spanner.KeySet(all_=True))
+        with self._db.batch() as b:
+            b.insert(table=primary, columns=self._COLS,
+                     values=[(n.id,) + tuple(dict(n.props).get(c) for c in self._COLS[1:])
+                             for n in g.nodes.values()])
+            b.insert(table=edge_label, columns=("src", "eid", "dst"),
+                     values=[(e.src, e.id, e.dst) for e in g.edges.values()])
+
+    def run(self, q: str) -> Answer:
+        try:
+            with self._db.snapshot() as snap:
+                rows = [tuple(r) for r in snap.execute_sql(f"GRAPH g {q}")]
+        except Exception as ex:
+            raise EngineError(f"{type(ex).__name__}: {ex}") from ex
         return _counter(rows, None)

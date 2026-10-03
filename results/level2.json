@@ -94,6 +94,42 @@
     },
     {
       "case": "mode-walk-bounded",
+      "engine": "arcadedb",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1',): 1, ('e1', 'e2'): 1, ('e1', 'e2', 'e1'): 1, ('e1', 'e2', 'e1', 'e2'): 1}, observed {('e1',): 1, ('e1', 'e2'): 1}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-walk-bounded",
+      "engine": "falkordb",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1',): 1, ('e1', 'e2'): 1, ('e1', 'e2', 'e1'): 1, ('e1', 'e2', 'e1', 'e2'): 1}, observed {('e1',): 1, ('e1', 'e2'): 1}",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1,
+        "e1 e2 e1": 1,
+        "e1 e2 e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-walk-bounded",
       "engine": "samyama-graph",
       "level2": "DIVERGES",
       "level1": "DIVERGES",
@@ -194,6 +230,38 @@
     },
     {
       "case": "mode-trail-bounded",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-trail-bounded",
+      "engine": "falkordb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..4]->(y:N) WHERE x.name='m' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "mode-trail-bounded",
       "engine": "samyama-graph",
       "level2": "CONFORMS",
       "level1": "CONFORMS",
@@ -215,6 +283,26 @@
       "level1": "CONFORMS",
       "detail": "",
       "query": "MATCH p=ACYCLIC (x:N) (()-[:E]->()){1,3} (y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "mode-acyclic-bounded",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=ACYCLIC (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
       "observed": {
         "e1": 1,
         "e1 e3": 1,
@@ -325,6 +413,30 @@
     {
       "case": "walk-revisits-same-edge",
       "engine": "apache-age",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1', 'e1'): 1}, observed {}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {},
+      "reference": {
+        "e1 e1": 1
+      }
+    },
+    {
+      "case": "walk-revisits-same-edge",
+      "engine": "arcadedb",
+      "level2": "DIVERGES",
+      "level1": "DIVERGES",
+      "detail": "expected {('e1', 'e1'): 1}, observed {}",
+      "query": "MATCH p=(x:N)-[:E*2..2]-(y:N) WHERE x.name='u' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {},
+      "reference": {
+        "e1 e1": 1
+      }
+    },
+    {
+      "case": "walk-revisits-same-edge",
+      "engine": "falkordb",
       "level2": "DIVERGES",
       "level1": "DIVERGES",
       "detail": "expected {('e1', 'e1'): 1}, observed {}",
@@ -458,6 +570,50 @@
     },
     {
       "case": "quant-zero-lower-bound",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "quant-zero-lower-bound",
+      "engine": "falkordb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..2]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      },
+      "reference": {
+        "": 1,
+        "e1": 1,
+        "e1 e3": 1,
+        "e2": 1,
+        "e2 e3": 1
+      }
+    },
+    {
+      "case": "quant-zero-lower-bound",
       "engine": "samyama-graph",
       "level2": "CONFORMS",
       "level1": "CONFORMS",
@@ -537,6 +693,34 @@
     {
       "case": "quant-zero-zero",
       "engine": "apache-age",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1
+      },
+      "reference": {
+        "": 1
+      }
+    },
+    {
+      "case": "quant-zero-zero",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*0..0]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "": 1
+      },
+      "reference": {
+        "": 1
+      }
+    },
+    {
+      "case": "quant-zero-zero",
+      "engine": "falkordb",
       "level2": "CONFORMS",
       "level1": "CONFORMS",
       "detail": "",
@@ -644,6 +828,38 @@
     },
     {
       "case": "parallel-edges",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "parallel-edges",
+      "engine": "falkordb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "parallel-edges",
       "engine": "samyama-graph",
       "level2": "CONFORMS",
       "level1": "CONFORMS",
@@ -700,6 +916,22 @@
     },
     {
       "case": "self-loop-trail",
+      "engine": "arcadedb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"fb0fce17c7345e5a-1a2c\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-trail",
+      "engine": "falkordb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "ResponseError: 'x' not defined",
+      "query": "MATCH p=(u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-trail",
       "engine": "samyama-graph",
       "level2": "REJECTS",
       "level1": "CONFORMS",
@@ -713,6 +945,14 @@
       "level1": "CONFORMS",
       "detail": "CypherSyntaxError: {neo4j_code: Neo.ClientError.Statement.SyntaxError} {message: Variable `x` not defined (line 1, column 72 (offset: 71))\n\"MATCH p=ACYCLIC (u:N) (()-[:E]->()){1,2} (v:N) WHERE u.name=",
       "query": "MATCH p=ACYCLIC (u:N) (()-[:E]->()){1,2} (v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "self-loop-acyclic",
+      "engine": "arcadedb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"c73516fff427ce06-1a36\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
+      "query": "MATCH p=ACYCLIC (u:N)-[:E*1..2]->(v:N) WHERE u.name='x' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {
       "case": "self-loop-acyclic",
@@ -797,6 +1037,42 @@
     {
       "case": "direction-any",
       "engine": "apache-age",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      }
+    },
+    {
+      "case": "direction-any",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1,
+        "e3": 1
+      }
+    },
+    {
+      "case": "direction-any",
+      "engine": "falkordb",
       "level2": "CONFORMS",
       "level1": "CONFORMS",
       "detail": "",
@@ -912,6 +1188,38 @@
     },
     {
       "case": "direction-left",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "direction-left",
+      "engine": "falkordb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)<-[:E*1..1]-(y:N) WHERE x.name='b' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e2": 1
+      },
+      "reference": {
+        "e1": 1,
+        "e2": 1
+      }
+    },
+    {
+      "case": "direction-left",
       "engine": "samyama-graph",
       "level2": "CONFORMS",
       "level1": "CONFORMS",
@@ -957,6 +1265,34 @@
     {
       "case": "interior-node-unconstrained",
       "engine": "memgraph",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "interior-node-unconstrained",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "CONFORMS",
+      "detail": "",
+      "query": "MATCH p=(x:N)-[:E*2..2]->(y:N:Mark) WHERE x.name='p' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1 e2": 1
+      },
+      "reference": {
+        "e1 e2": 1
+      }
+    },
+    {
+      "case": "interior-node-unconstrained",
+      "engine": "falkordb",
       "level2": "CONFORMS",
       "level1": "CONFORMS",
       "detail": "",
@@ -1020,6 +1356,23 @@
     },
     {
       "case": "selector-any-shortest",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "DIVERGES",
+      "detail": "",
+      "query": "MATCH p=ANY SHORTEST (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e1 e3 e4": 1,
+        "e2": 1,
+        "e2 e3": 1,
+        "e2 e3 e4": 1
+      },
+      "reference": null
+    },
+    {
+      "case": "selector-any-shortest",
       "engine": "samyama-graph",
       "level2": "CONFORMS",
       "level1": "CONFORMS",
@@ -1054,6 +1407,23 @@
       "detail": "",
       "query": "MATCH p=ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
       "observed": {
+        "e2": 1,
+        "e2 e3": 1,
+        "e2 e3 e4": 1
+      },
+      "reference": null
+    },
+    {
+      "case": "selector-any",
+      "engine": "arcadedb",
+      "level2": "CONFORMS",
+      "level1": "DIVERGES",
+      "detail": "",
+      "query": "MATCH p=ANY (x:N)-[:E*1..3]->(y:N) WHERE x.name='a' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t",
+      "observed": {
+        "e1": 1,
+        "e1 e3": 1,
+        "e1 e3 e4": 1,
         "e2": 1,
         "e2 e3": 1,
         "e2 e3 e4": 1
@@ -1112,6 +1482,22 @@
       "level2": "REJECTS",
       "level1": "CONFORMS",
       "detail": "UndefinedColumn: could not find rte for x\nLINE 1: ... WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s...\n                                                             ^\nHINT:  variable x do",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "paper-trail-unbounded",
+      "engine": "arcadedb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "HTTP 400: {\"error\":\"Cannot execute command\",\"requestId\":\"4a571a440323faa1-1a84\",\"exception\":\"com.arcadedb.exception.CommandSemanticException\",\"detail\":\"UndefinedVariable: Variable 'x' not defined\"}",
+      "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
+    },
+    {
+      "case": "paper-trail-unbounded",
+      "engine": "falkordb",
+      "level2": "REJECTS",
+      "level1": "CONFORMS",
+      "detail": "ResponseError: 'x' not defined",
       "query": "MATCH p=(a:Account)-[:Transfer*0..8]->(b:Account) WHERE a.owner='Dave' AND b.owner='Aretha' RETURN x.eid AS s, [r IN relationships(p) | r.eid] AS t"
     },
     {

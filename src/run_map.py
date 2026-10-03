@@ -19,7 +19,8 @@ from suite_all import CASES, ALIASES, GROUPS
 from capabilities import probe
 from engines_adapters import (AgeAdapter, ArcadeAdapter, BoltAdapter,
                               DuckPGQAdapter, EngineError, FalkorAdapter,
-                              KuzuAdapter, SamyamaAdapter, SurrealAdapter)
+                              KuzuAdapter, SamyamaAdapter, SpannerAdapter,
+                              SurrealAdapter)
 
 REPEATS = 3
 
@@ -56,6 +57,12 @@ DECLARED_MODE = {
     # edges, so "WALK (the ISO default) and TRAIL both reduce to today's edge-unique
     # traversal". TRAIL is therefore its declared mode for every pattern.
     "surrealdb": "TRAIL",
+    # Spanner Graph documents the standard's own default, and an unprefixed pattern
+    # measures as WALK, so there is no second axis to score it against.
+    "spanner": None,
+    # LadybugDB continues the Kuzu codebase, and inherits its documented WALK
+    # semantics until it says otherwise.
+    "ladybugdb": "WALK",
 }
 
 def pick_cypher_rendering(case, cap):
@@ -158,6 +165,10 @@ def build_engines(workdir):
     except Exception as e:
         print(f"  kuzu unavailable: {e}", file=sys.stderr)
     try:
+        engines.append(KuzuAdapter(workdir, module="ladybug", name="ladybugdb"))
+    except Exception as e:
+        print(f"  ladybugdb unavailable: {e}", file=sys.stderr)
+    try:
         engines.append(DuckPGQAdapter(workdir))
     except Exception as e:
         print(f"  duckpgq unavailable: {e}", file=sys.stderr)
@@ -191,6 +202,10 @@ def build_engines(workdir):
         engines.append(SurrealAdapter())
     except Exception as e:
         print(f"  surrealdb unavailable: {e}", file=sys.stderr)
+    try:
+        engines.append(SpannerAdapter())
+    except Exception as e:
+        print(f"  spanner unavailable: {e}", file=sys.stderr)
     # The authors' own engine, measured at the release a user can install, like every
     # other row. SAMYAMA_BIN points at the newest release build. No development head is
     # measured: no other vendor's unreleased work is, and measuring ours would flatter us.

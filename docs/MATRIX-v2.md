@@ -162,3 +162,15 @@ engine which it takes (`src/capabilities.py`) rather than deciding from a hardco
 Every case carries a `clause` field naming the specific rule it tests — a section or
 figure of Deutsch et al. (arXiv:2112.06217) and, where it differs, the ISO clause. A case
 with no clause is not a conformance case and the harness refuses to run it.
+
+## Engines not in the matrix, and why
+
+Named here so the absences are declared rather than silent.
+
+| engine | blocker |
+|---|---|
+| LadybugDB 0.21.2 | The live MIT fork of Kuzu, whose own row is frozen for good. The adapter is written and works in isolation; the wheel resolves its C API shared library through a separate download step (`LBUG_C_API_LIB_PATH`) that fails once `kuzu` is imported in the same process. Fixable by running that row in its own process, which the harness does not yet do. |
+| Oracle Database 23ai Free | The only free local SQL/PGQ besides DuckPGQ. ~9 GB on disk and documented as having no path modes and no selectors, so it is a breadth row rather than an insight row. |
+| Amazon Neptune, BigQuery Graph | No free offline runtime at any price. Cloud endpoints only. |
+| TigerGraph, NebulaGraph OSS, ArangoDB, SAP HANA, AnzoGraph, Aerospike | No path modes, no selectors, and in several cases a licence key or a commercial-use restriction. |
+| Ultipa GQLDB | The widest published GQL conformance claim of any vendor, including a per-feature table and a stated TRAIL default. No Docker image; installs through a shell script. Worth the effort next. |

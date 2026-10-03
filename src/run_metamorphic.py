@@ -17,6 +17,13 @@ CY = ("MATCH p=(x:{L})-[:{E}*{lo}..{hi}]->(y:{L}) WHERE x.eid='{s}' "
       "RETURN x.eid AS s, y.eid AS t")
 PG = ("FROM GRAPH_TABLE(g MATCH (x:{L})-[e:{E}]->{{{lo},{hi}}}(y:{L}) "
       "WHERE x.eid='{s}' COLUMNS (x.eid AS s, y.eid AS t)) SELECT s, t")
+# The standard's own spelling, for engines that take GQL rather than openCypher or
+# SQL/PGQ. Without it the two engines with the widest GQL surface drop every query
+# and contribute a violation count of zero, which reads as "found nothing wrong"
+# when it means "was never asked".
+GQ = ("MATCH (x:{L})-[:{E}]->{{{lo},{hi}}}(y:{L}) WHERE x.eid='{s}' "
+      "RETURN x.eid AS s, y.eid AS t")
+TEMPLATES = {"cypher": CY, "gql": GQ, "pgq": PG}
 
 STARTS = {"micro": "a", "cycle2": "m", "loop": "x", "single": "u",
           "tagged": "p", "fig1": "a6"}
@@ -38,7 +45,7 @@ def main():
         E = fixtures.EDGE_LABEL[fx]
         for eng in engines:
             eng.load(g, L, E)
-            tmpl = CY if eng.dialect == "cypher" else PG
+            tmpl = TEMPLATES.get(eng.dialect, PG)
 
             def run(lo, hi, _e=eng, _t=tmpl, _fx=fx):
                 q = _t.format(L=L, E=E, lo=lo, hi=hi, s=start)

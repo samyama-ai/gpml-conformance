@@ -736,5 +736,54 @@
       "start": "a6"
     }
   ],
-  "dropped": []
+  "dropped": [
+    {
+      "engine": "spanner",
+      "fixture": "micro",
+      "lo": 0,
+      "hi": 0,
+      "query": "MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='a' RETURN x.eid AS s, y.eid AS t",
+      "error": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:30]\nGRAPH g MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='a' RETURN x.eid AS s, y.eid...\n                             ^, request_id = 1.16102340086956346936.1.0.5.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPayl"
+    },
+    {
+      "engine": "spanner",
+      "fixture": "cycle2",
+      "lo": 0,
+      "hi": 0,
+      "query": "MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='m' RETURN x.eid AS s, y.eid AS t",
+      "error": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:30]\nGRAPH g MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='m' RETURN x.eid AS s, y.eid...\n                             ^, request_id = 1.16102340086956346936.1.0.22.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay"
+    },
+    {
+      "engine": "spanner",
+      "fixture": "loop",
+      "lo": 0,
+      "hi": 0,
+      "query": "MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='x' RETURN x.eid AS s, y.eid AS t",
+      "error": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:30]\nGRAPH g MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='x' RETURN x.eid AS s, y.eid...\n                             ^, request_id = 1.16102340086956346936.1.0.39.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay"
+    },
+    {
+      "engine": "spanner",
+      "fixture": "single",
+      "lo": 0,
+      "hi": 0,
+      "query": "MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='u' RETURN x.eid AS s, y.eid AS t",
+      "error": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:30]\nGRAPH g MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='u' RETURN x.eid AS s, y.eid...\n                             ^, request_id = 1.16102340086956346936.1.0.56.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay"
+    },
+    {
+      "engine": "spanner",
+      "fixture": "tagged",
+      "lo": 0,
+      "hi": 0,
+      "query": "MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='p' RETURN x.eid AS s, y.eid AS t",
+      "error": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:30]\nGRAPH g MATCH (x:N)-[:E]->{0,0}(y:N) WHERE x.eid='p' RETURN x.eid AS s, y.eid...\n                             ^, request_id = 1.16102340086956346936.1.0.73.1 [type_url: \"type.googleapis.com/googlesql.ErrorMessageModeForPay"
+    },
+    {
+      "engine": "spanner",
+      "fixture": "fig1",
+      "lo": 0,
+      "hi": 0,
+      "query": "MATCH (x:Account)-[:Transfer]->{0,0}(y:Account) WHERE x.eid='a6' RETURN x.eid AS s, y.eid AS t",
+      "error": "InvalidArgument: 400 Value of upper bound must be greater than zero [at 1:43]\nGRAPH g MATCH (x:Account)-[:Transfer]->{0,0}(y:Account) WHERE x.eid='a6' RETU...\n                                          ^, request_id = 1.16102340086956346936.1.0.92.1 [type_url: \"type.googleapis.com/googlesql.ErrorMess"
+    }
+  ]
 }
