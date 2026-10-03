@@ -19,7 +19,7 @@ from suite_all import CASES, ALIASES, GROUPS
 from capabilities import probe
 from engines_adapters import (AgeAdapter, ArcadeAdapter, BoltAdapter,
                               DuckPGQAdapter, EngineError, FalkorAdapter,
-                              KuzuAdapter, SamyamaAdapter)
+                              KuzuAdapter, SamyamaAdapter, SurrealAdapter)
 
 REPEATS = 3
 
@@ -52,6 +52,10 @@ DECLARED_MODE = {
     # so there is no second axis", while this means the engine has no documented
     # semantics to be held to, so a divergence here cannot be excused by a manual.
     "falkordb": "UNDOCUMENTED",
+    # SurrealDB documents the deviation itself: its match mode is fixed to distinct
+    # edges, so "WALK (the ISO default) and TRAIL both reduce to today's edge-unique
+    # traversal". TRAIL is therefore its declared mode for every pattern.
+    "surrealdb": "TRAIL",
 }
 
 def pick_cypher_rendering(case, cap):
@@ -183,6 +187,10 @@ def build_engines(workdir):
         engines.append(FalkorAdapter())
     except Exception as e:
         print(f"  falkordb unavailable: {e}", file=sys.stderr)
+    try:
+        engines.append(SurrealAdapter())
+    except Exception as e:
+        print(f"  surrealdb unavailable: {e}", file=sys.stderr)
     # The authors' own engine, measured at the release a user can install, like every
     # other row. SAMYAMA_BIN points at the newest release build. No development head is
     # measured: no other vendor's unreleased work is, and measuring ours would flatter us.
@@ -215,6 +223,12 @@ def main():
         for eng in engines:
             if eng.dialect == "cypher":
                 query, surface = pick_cypher_rendering(case, caps.get(eng.name))
+            elif eng.dialect == "gql":
+                # The standard's own spelling, sent as written. An engine on this
+                # dialect is not being asked to translate anything, so a rejection
+                # here is a statement about the standard's syntax, not about a
+                # dialect's.
+                query, surface = case.gql, "iso-gql"
             else:
                 query = case.pgq
                 surface = "common-dialect"

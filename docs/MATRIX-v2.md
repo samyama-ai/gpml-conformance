@@ -83,9 +83,14 @@ Shape x restrictor {WALK, TRAIL}, selector ALL. **16 cells.**
 | segment with an interior node predicate | whether the quantifier binds the node pattern |
 | direction `<-` | reverse traversal |
 | direction `-` on directed edges | whether an undirected step may re-cross its own edge |
-| undirected edges in the graph | GPML Sec. 2 orientation-free connection |
-| edge label disjunction `[:E\|F]` | label matching is disjunctive on edges |
-| parallel edges under each restrictor | edge identity vs endpoint identity |
+| self-loop fixture | one edge and one node, both repeated |
+| 2-cycle fixture | separates WALK from TRAIL using forward edges only |
+| parallel edges | two edges with the same endpoints are two paths |
+
+**Dropped from this group, with the reason.** Edge label disjunction `[:E|F]` and
+undirected edges both need a second edge label or a second edge kind in the loader, and
+every adapter registers exactly one. Changing that touches ten adapters to measure two
+constructs, and several engines have no undirected edge type at all. Declared as a gap.
 
 ### G4 — what the standard requires to be *rejected*
 
@@ -121,11 +126,26 @@ reported once and cross-referenced, not double-counted.
 | G2 quantifier x restrictor | 14 | yes |
 | G3 shape x restrictor | 16 | yes |
 | G4 well-formedness | 6 | yes |
-| G5 v1 retained | 17 | no |
-| **distinct constructs after dedup** | **~60** | |
+| G5 spelling pairs | 4 | yes |
+| G6 v1 retained | 17 | no |
+| **distinct constructs after dedup** | **84** | |
 
-Against v1's 17. The exact post-dedup count is computed by the harness and published in
-`results/summary.json`; it is not asserted here.
+Against v1's 17. Five cells deduplicate: four G3 shapes regenerate G2 cells and the
+`*0..` spelling is the same query as a G4 control. The harness publishes the count it
+actually ran.
+
+## Surface spellings
+
+One construct, four spellings, and an engine parses one of them. The runner asks each
+engine which it takes (`src/capabilities.py`) rather than deciding from a hardcoded list.
+
+| rendering | shape | who takes it |
+|---|---|---|
+| `cypher` | `-[:E*1..3]->`, no restrictor or selector keyword | every openCypher engine |
+| `cypher_gql` | the same, with the standard's prefixes | ArcadeDB, Samyama |
+| `cypher_qpp` | `(()-[:E]->()){1,3}` with the prefixes | Neo4j 2026.04 |
+| `gql` | `-[:E]->{1,3}` -- the standard's own spelling | SurrealDB |
+| `pgq` | `GRAPH_TABLE(... MATCH ...)` | DuckPGQ |
 
 ## What stays out, and why
 

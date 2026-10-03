@@ -543,3 +543,80 @@ class FalkorAdapter:
         except Exception as ex:
             raise EngineError(f"{type(ex).__name__}: {ex}") from ex
         return _counter([tuple(r) for r in res.result_set], None)
+
+
+class SurrealAdapter:
+    """SurrealDB, over its ISO GQL endpoint.
+
+    The widest GQL path-pattern surface of any engine that runs locally for free:
+    all four path modes, ALL / ANY / ALL SHORTEST / ANY SHORTEST and the counted
+    forms, and the full quantifier set. Its own documentation states a deviation
+    before anyone measures it -- the match mode is fixed to distinct edges, so WALK
+    and TRAIL both reduce to edge-unique traversal -- which makes it the one row in
+    the matrix where a declared divergence can be checked against the declaration.
+
+    Data goes in through SurrealQL, which is the only way to put it there; the
+    measurement itself is always sent to /gql.
+    """
+
+    name = "surrealdb"
+    dialect = "gql"                      # takes the standard's own spelling, not openCypher's
+
+    def __init__(self, base="http://localhost:8010", ns="gpml", db="gpml",
+                 auth=("root", "root")):
+        import requests
+        self._requests = requests
+        self.base, self.ns, self.db, self.auth = base.rstrip("/"), ns, db, auth
+        self._headers = {"Accept": "application/json",
+                         "surreal-ns": ns, "surreal-db": db}
+        self._sql(f"DEFINE NAMESPACE IF NOT EXISTS {ns};")
+        self._sql(f"DEFINE DATABASE IF NOT EXISTS {db};")
+        self.version = self._version()
+
+    def _version(self):
+        try:
+            return self._requests.get(f"{self.base}/version", timeout=20).text.strip()
+        except Exception:
+            return "unknown"
+
+    def _post(self, path, body, content_type):
+        h = dict(self._headers)
+        h["Content-Type"] = content_type
+        r = self._requests.post(f"{self.base}{path}", data=body.encode(), headers=h,
+                                auth=self.auth, timeout=120)
+        if r.status_code >= 400:
+            raise EngineError(f"HTTP {r.status_code}: {r.text[:300]}")
+        return r.json()
+
+    def _sql(self, stmt):
+        out = self._post("/sql", stmt, "text/plain")
+        for part in (out if isinstance(out, list) else [out]):
+            if isinstance(part, dict) and part.get("status") == "ERR":
+                raise EngineError(str(part.get("result"))[:300])
+        return out
+
+    def load(self, g: PropertyGraph, primary: str, edge_label: str):
+        for t in (edge_label, primary):
+            try:
+                self._sql(f"REMOVE TABLE IF EXISTS {t};")
+            except EngineError:
+                pass
+        for n in g.nodes.values():
+            props = ", ".join(f"{k}='{v}'" for k, v in n.props)
+            sep = ", " if props else ""
+            self._sql(f"CREATE {primary}:{n.id} SET eid='{n.id}'{sep}{props};")
+        for e in g.edges.values():
+            lbl = sorted(e.labels)[0] if e.labels else "REL"
+            self._sql(f"RELATE {primary}:{e.src}->{lbl}->{primary}:{e.dst} "
+                      f"SET eid='{e.id}';")
+
+    def run(self, q: str) -> Answer:
+        out = self._post("/gql", q, "text/plain")
+        parts = out if isinstance(out, list) else [out]
+        rows = []
+        for part in parts:
+            if isinstance(part, dict) and part.get("status") == "ERR":
+                raise EngineError(str(part.get("result"))[:300])
+            for r in (part.get("result") or []):
+                rows.append((r.get("s"), r.get("t")))
+        return _counter(rows, None)

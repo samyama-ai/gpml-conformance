@@ -186,3 +186,29 @@ def pgq_query(segs, *, edge_label, node_label, key, start_val,
     where = _where(key, start_val, extra_where)
     return (f"FROM GRAPH_TABLE(g MATCH {prefix(restrictor, selector, explicit_walk)}{pat} "
             f"WHERE {where} {PGQ_COLS}")
+
+
+def gql_pattern(segs, edge_label, node_label) -> str:
+    """`(x:N)-[:E]->{1,3}(y:N)` -- the standard's own quantifier spelling.
+
+    GQL writes the quantifier after the edge pattern, as SQL/PGQ does, not inside the
+    brackets as openCypher's `*lo..hi` does and not around a parenthesised sub-pattern
+    as Neo4j's quantified path patterns do. Three spellings of one construct, and an
+    engine takes one of them.
+    """
+    out = [f"(x:{node_label})"]
+    for i, s in enumerate(segs):
+        open_, close = ARROW[s["direction"]]
+        end = "y" if i == len(segs) - 1 else f"m{i}"
+        lab = f":{node_label}" if s.get("end_label") is None else f":{s['end_label']}"
+        out.append(f"{open_}:{edge_label}{close}{quant_pgq(s['lo'], s['hi'])}({end}{lab})")
+    return "".join(out)
+
+
+def gql_query(segs, *, edge_label, node_label, key, start_val,
+              restrictor="WALK", selector="ALL", extra_where=None,
+              explicit_walk=False) -> str:
+    pat = gql_pattern(segs, edge_label, node_label)
+    where = _where(key, start_val, extra_where)
+    return (f"MATCH {prefix(restrictor, selector, explicit_walk)}{pat} "
+            f"WHERE {where} {RETURN_COLS}")

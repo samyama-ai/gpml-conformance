@@ -52,6 +52,11 @@ class Case:
     # (samyama-ai/samyama-graph#1141), so those cells can now be measured rather than
     # excused. Engines that declare support get this text; the rest still get `cypher`.
     cypher_gql: Optional[str] = None
+    # The ISO GQL rendering: the standard's own spelling, quantifier after the edge
+    # pattern as in `-[:E]->{1,3}`. Distinct from cypher_gql (openCypher's `*lo..hi`
+    # with the standard's prefixes) and from cypher_qpp (a parenthesised sub-pattern
+    # with a quantifier). Three spellings, and an engine parses one of them.
+    gql: Optional[str] = None
     # What a conforming engine must do with this query.
     #   ANSWER  compare the answer to the reference -- the default, and every v1 case
     #   REJECT  the standard makes this pattern ill-formed; running it is the defect

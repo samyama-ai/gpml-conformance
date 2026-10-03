@@ -106,6 +106,8 @@ def g1() -> list[Case]:
                                                    spelling="qpp", **kw),
                     pgq=render.pgq_query(segs, restrictor=restrictor,
                                          selector=selector, **kw),
+                    gql=render.gql_query(segs, restrictor=restrictor,
+                                         selector=selector, **kw),
                     group="G1",
                     clause=f"{CLAUSE_RESTRICTOR}; {CLAUSE_SELECTOR}",
                     note=f"G1 cell ({restrictor}, {selector}) on the {fixture} bed.",
@@ -151,6 +153,7 @@ def g2() -> list[Case]:
                 cypher_qpp=render.cypher_query(segs, restrictor=restrictor,
                                                spelling="qpp", **kw),
                 pgq=render.pgq_query(segs, restrictor=restrictor, **kw),
+                gql=render.gql_query(segs, restrictor=restrictor, **kw),
                 group="G2",
                 clause=CLAUSE_QUANT,
                 note=f"G2 quantifier form {name} under {restrictor}.",
@@ -231,6 +234,7 @@ def g3() -> list[Case]:
                 cypher_qpp=render.cypher_query(segs, restrictor=restrictor,
                                                spelling="qpp", **kw),
                 pgq=render.pgq_query(segs, restrictor=restrictor, **kw),
+                gql=render.gql_query(segs, restrictor=restrictor, **kw),
                 group="G3",
                 clause=(CLAUSE_INTERIOR if name == "interior-pred" else CLAUSE_QUANT),
                 note=f"G3 {note}.",
@@ -293,6 +297,7 @@ def g4() -> list[Case]:
             cypher_qpp=render.cypher_query(segs, restrictor=restrictor,
                                            selector=selector, spelling="qpp", **kw4),
             pgq=render.pgq_query(segs, restrictor=restrictor, selector=selector, **kw4),
+            gql=render.gql_query(segs, restrictor=restrictor, selector=selector, **kw4),
             group="G4",
             clause=CLAUSE_UNBOUNDED,
             expect=expect,
@@ -337,6 +342,7 @@ def g5() -> list[Case]:
             gql = render.cypher_query(segs, restrictor=restrictor, **kw)
             qpp = render.cypher_query(segs, restrictor=restrictor, spelling="qpp", **kw)
             pgq = render.pgq_query(segs, restrictor=restrictor, **kw)
+            gqlq = render.gql_query(segs, restrictor=restrictor, **kw)
         else:
             # Hand-written on purpose: the point of the case is the exact symbol.
             cy = (f"MATCH p=(x:{node_label})-[:{edge_label}{_BARE_LEGACY[lo]}]->"
@@ -350,6 +356,9 @@ def g5() -> list[Case]:
             pgq = (f"FROM GRAPH_TABLE(g MATCH {restrictor} (x:{node_label})"
                    f"-[e0:{edge_label}]->{_BARE_PGQ[lo]}(y:{node_label}) "
                    f"WHERE x.{key}='{anchor}' {render.PGQ_COLS}")
+            gqlq = (f"MATCH {restrictor} (x:{node_label})-[:{edge_label}]->"
+                    f"{_BARE_PGQ[lo]}(y:{node_label}) "
+                    f"WHERE x.{key}='{anchor}' {render.RETURN_COLS}")
         out.append(Case(
             id=f"g5-{name}",
             construct=f"quantifier spelling: {why}",
@@ -357,7 +366,7 @@ def g5() -> list[Case]:
             ref=PathPattern(start=_start(fixture, anchor),
                             segments=(_seg(fixture, lo, UNBOUNDED),),
                             restrictor=restrictor, selector="ALL"),
-            cypher=cy, cypher_gql=gql, cypher_qpp=qpp, pgq=pgq,
+            cypher=cy, cypher_gql=gql, cypher_qpp=qpp, pgq=pgq, gql=gqlq,
             group="G5",
             clause="Deutsch et al. Sec. 5: `*` abbreviates {0,} and `+` abbreviates {1,}",
             note=f"G5 {why}. Paired with its sibling: an engine that answers the two "
