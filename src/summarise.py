@@ -111,6 +111,71 @@ def _snapshot_summary():
     return {e: {**dict(v), "metamorphic": meta.get(e, 0)} for e, v in out.items()}
 
 
+
+def _write_readme_scorecard(summary, engines, ver, acc, s4, sep):
+    """Rewrite the generated block in README.md.
+
+    A README that restates a measurement is a second copy of it, and two copies drift.
+    The one in README.md is written from the same summary the paper's claims registry
+    resolves against, so there is one number and one place it comes from.
+    """
+    path = os.path.join(HERE, "README.md")
+    if not os.path.exists(path):
+        return
+    begin, end = ("<!-- BEGIN GENERATED: scorecard -->",
+                  "<!-- END GENERATED: scorecard -->")
+    text = open(path).read()
+    if begin not in text or end not in text:
+        return
+    hl = summary["aggregates"]["headline_newest_per_product"]
+    L = [begin, ""]
+    L.append(f"**{summary['n_constructs']} constructs x {summary['n_engines']} engines "
+             f"= {summary['n_cells']} cells.** Each cell is one exact multiset "
+             f"comparison, run {summary['repeats']} times to confirm the engine agrees "
+             f"with itself.")
+    L.append("")
+    L.append("| engine | version | conforms | diverges | rejects | inexpressible | "
+             "silence ratio | refuses ill-formed |")
+    L.append("|---|---|---:|---:|---:|---:|---:|---:|")
+    for e in engines:
+        a = acc[e]
+        den = a["DIVERGES"] + a["REJECTS"]
+        s2 = f"{a['DIVERGES']/den:.2f}" if den else "n/a"
+        g4 = s4.get(e, {})
+        askable = g4.get("refused", 0) + g4.get("answered", 0)
+        ill = f"{g4.get('refused', 0)}/{askable}" if askable else "not askable"
+        mark = " *(ours)*" if e in OURS else ""
+        # Some engines report a build hash after the version. The version is the fact;
+        # the hash makes the table unreadable and is in results/map.json either way.
+        v = ver[e].split(" (build")[0]
+        L.append(f"| {e}{mark} | {v} | {a['CONFORMS']} | {a['DIVERGES']} | "
+                 f"{a['REJECTS']} | {a['INEXPRESSIBLE']} | {s2} | {ill} |")
+    L.append("")
+    L.append(f"Over every engine but ours and the superseded Neo4j line: "
+             f"**S1 = {hl['s1']}** of answered cells diverge, and "
+             f"**S2 = {hl['s2']}** of disagreements are silent -- the query runs, "
+             f"returns a different multiset, raises nothing. The silence ratio is a "
+             f"property of the engine, not of the problem: the table above spans the "
+             f"whole range from 0 to 1.")
+    if sep:
+        L.append("")
+        L.append(f"The standard defines {sep['combinations']} restrictor x selector "
+                 f"combinations. Over an exhaustive sweep of "
+                 f"{sep['sweep']['graphs_enumerated']:,} directed multigraphs, "
+                 f"{sep['pairs_separated']} of {sep['pairs']} cell pairs have a "
+                 f"separating witness and "
+                 f"{sep['pairs'] - sep['pairs_separated']} have none: "
+                 f"**{sep['observable_classes']} of {sep['combinations']} combinations "
+                 f"are observably different.** A shortest path is already simple, so "
+                 f"the restrictor is unobservable under a shortest selector except for "
+                 f"ACYCLIC.")
+    L.append("")
+    L.append(end)
+    out = text[:text.index(begin)] + "\n".join(L) + text[text.index(end) + len(end):]
+    open(path, "w").write(out)
+    print(f"wrote {path} (generated block)")
+
+
 def main():
     m = json.load(open(os.path.join(HERE, "results", "map.json")))
     mm = json.load(open(os.path.join(HERE, "results", "metamorphic.json")))
@@ -483,6 +548,7 @@ def main():
     }
     sdest = os.path.join(HERE, "results", "summary.json")
     json.dump(summary, open(sdest, "w"), indent=2)
+    _write_readme_scorecard(summary, engines, ver, acc, s4, s6)
     print(f"wrote {sdest}")
 
 

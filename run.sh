@@ -13,7 +13,8 @@ fi
 PYBIN="$VENV/bin/python"
 
 echo "== starting engines"
-docker rm -f cf-neo4j cf-neo4j-2026 cf-memgraph cf-age >/dev/null 2>&1 || true
+docker rm -f cf-neo4j cf-neo4j-2026 cf-memgraph cf-age cf-arcade cf-falkor \
+  cf-surreal cf-spanner >/dev/null 2>&1 || true
 docker run -d --name cf-neo4j -p 7688:7687 \
   -e NEO4J_AUTH=neo4j/testpassword123 neo4j:5.26-community >/dev/null
 # The 2026 line is a separate row in the map, not a replacement: it is where the
@@ -25,6 +26,17 @@ docker run -d --name cf-neo4j-2026 -p 7690:7687 \
 docker run -d --name cf-memgraph -p 7689:7687 memgraph/memgraph:latest >/dev/null
 docker run -d --name cf-age -p 5433:5432 -e POSTGRES_PASSWORD=postgres \
   apache/age:latest >/dev/null
+# Every engine the map has a row for has to be started here. A row whose container
+# run.sh does not start scores LOAD_FAILED across the board and the map ships with a
+# hole in it -- which is how the neo4j-2026 column was empty for a week.
+docker run -d --name cf-arcade -p 7693:7687 -p 2480:2480 \
+  -e JAVA_OPTS="-Darcadedb.server.rootPassword=playwithdata -Darcadedb.server.defaultDatabases=gpml[root]" \
+  arcadedata/arcadedb:26.9.1 >/dev/null
+docker run -d --name cf-falkor -p 6380:6379 falkordb/falkordb:latest >/dev/null
+docker run -d --name cf-surreal -p 8010:8000 surrealdb/surrealdb:latest \
+  start --user root --pass root >/dev/null
+docker run -d --name cf-spanner -p 9010:9010 -p 9020:9020 \
+  gcr.io/cloud-spanner-emulator/emulator:1.5.58 >/dev/null
 
 echo "== waiting for engines"
 for _ in $(seq 1 60); do
@@ -54,6 +66,9 @@ echo "== Gate B: the reference must reproduce the standard's published answers"
 
 echo "== conformance map"
 "$PYBIN" src/run_map.py
+
+echo "== level 2: edge-sequence refinement"
+"$PYBIN" src/run_level2.py
 
 echo "== metamorphic self-consistency"
 "$PYBIN" src/run_metamorphic.py
