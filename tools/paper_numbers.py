@@ -64,8 +64,12 @@ def main() -> int:
         den = a.get("DIVERGES", 0) + a.get("REJECTS", 0)
         return a.get("DIVERGES", 0) / den if den else None
 
-    silent = [e for e in acc if s2(e) == 1.0]
-    visible = [e for e in acc if s2(e) == 0.0]
+    # Excluded from these two the way our row is excluded from every statistic --
+    # but named in the prose, because leaving our own engine out of an unflattering
+    # list would be using the conflict-of-interest rule to flatter ourselves.
+    OURS = {"samyama-graph"}
+    silent = [e for e in acc if s2(e) == 1.0 and e not in OURS]
+    visible = [e for e in acc if s2(e) == 0.0 and e not in OURS]
 
     m = {
         "nConstructs": S["n_constructs"],
@@ -155,6 +159,13 @@ def main() -> int:
     ours = next((e for e in M["engines"] if e["name"] == "samyama-graph"), None)
     if ours:
         m["oursVersion"] = ours["version"].replace("samyama ", "")
+    o = s2("samyama-graph")
+    if o is not None:
+        m["oursSilence"] = o
+    a = acc.get("samyama-graph", {})
+    m["oursConforms"] = a.get("CONFORMS", 0)
+    m["oursDiverges"] = a.get("DIVERGES", 0)
+    m["oursRejects"] = a.get("REJECTS", 0)
 
     # The per-engine table, generated for the same reason the macros are: a table of
     # eleven rows retyped into a manuscript is eleven chances for a number to drift.
