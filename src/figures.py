@@ -156,11 +156,106 @@ def fig_metamorphic(mm, m, path):
     plt.close(fig)
 
 
-if __name__ == "__main__":
+
+
+def fig_silence(m, path):
+    """Two panels sharing the engine axis: what each engine returned, and how much of
+    its disagreement was silent.
+
+    Two measures on different scales, so two panels rather than two y-axes. The left
+    panel is composition in cells; the right is a ratio in [0,1]. A dual axis would put
+    them on one frame and invite the reader to compare a count against a fraction.
+
+    Population: the cells where an answer is the thing being compared. The
+    well-formedness and spelling groups ask a different question, where a rejection can
+    be the conforming act, so folding them in would put two questions behind one bar.
+    """
+    from suite_all import CASES as _CASES
+    answer_cases = {c.id for c in _CASES if c.expect == "ANSWER"}
+    engines = [e["name"] for e in m["engines"]]
+    acc = {e: Counter() for e in engines}
+    for c in m["cells"]:
+        if c["case"] in answer_cases:
+            acc[c["engine"]][c["verdict"]] += 1
+
+    order = ["CONFORMS", "DIVERGES", "REJECTS", "INEXPRESSIBLE"]
+    rows = sorted(engines, key=lambda e: _silence(acc[e]) if _silence(acc[e]) is not None else -1)
+
+    fig, (axL, axR) = plt.subplots(
+        1, 2, figsize=(11.6, 0.42 * len(rows) + 1.9),
+        gridspec_kw={"width_ratios": [2.4, 1]})
+
+    for i, e in enumerate(rows):
+        x = 0
+        for v in order:
+            n = acc[e][v]
+            if not n:
+                continue
+            # 2px surface gap between segments, as between the map's cells.
+            axL.add_patch(plt.Rectangle((x + 0.6, i - 0.33), max(n - 1.2, 0.4), 0.66,
+                                        facecolor=COLOR[v], edgecolor="none"))
+            if n >= 7:
+                axL.text(x + n / 2, i, f"{GLYPH[v]} {n}", ha="center", va="center",
+                         color="white" if v != "INEXPRESSIBLE" else "#4A5260",
+                         fontsize=8.5, fontweight="bold")
+            x += n
+    axL.set_xlim(0, max(sum(acc[e].values()) for e in rows) * 1.02)
+    axL.set_ylim(-0.7, len(rows) - 0.3)
+    axL.set_yticks(range(len(rows)))
+    axL.set_yticklabels(rows, fontsize=9)
+    axL.set_xlabel("cells", fontsize=9)
+    axL.set_title("what the engine returned", fontsize=10, loc="left", color=INK)
+    for sp in ("top", "right", "left"):
+        axL.spines[sp].set_visible(False)
+    axL.grid(axis="x", color="#EEF1F4", linewidth=0.8)
+    axL.set_axisbelow(True)
+
+    for i, e in enumerate(rows):
+        s = _silence(acc[e])
+        if s is None:
+            axR.text(0.02, i, "no disagreement", va="center", fontsize=8.5, color=MUTED)
+            continue
+        axR.add_patch(plt.Rectangle((0, i - 0.33), s, 0.66,
+                                    facecolor=DIVERGES, edgecolor="none"))
+        axR.text(s + 0.03 if s < 0.8 else s - 0.03, i, f"{s:.2f}",
+                 va="center", ha="left" if s < 0.8 else "right",
+                 fontsize=8.5, fontweight="bold",
+                 color=INK if s < 0.8 else "white")
+    axR.set_xlim(0, 1.08)
+    axR.set_ylim(-0.7, len(rows) - 0.3)
+    axR.set_yticks([])
+    axR.set_xlabel("silence ratio $S_2$", fontsize=9)
+    axR.set_title("how much of it was silent", fontsize=10, loc="left", color=INK)
+    for sp in ("top", "right", "left"):
+        axR.spines[sp].set_visible(False)
+    axR.grid(axis="x", color="#EEF1F4", linewidth=0.8)
+    axR.set_axisbelow(True)
+
+    fig.legend(handles=[Patch(facecolor=COLOR[v], label=f"{GLYPH[v]}  {v.lower()}")
+                        for v in order],
+               loc="lower center", ncol=4, frameon=False, fontsize=9,
+               bbox_to_anchor=(0.5, -0.02))
+    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    fig.savefig(os.path.join(path, "fig4_silence.png"), dpi=200,
+                bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
+def _silence(c):
+    den = c["DIVERGES"] + c["REJECTS"]
+    return c["DIVERGES"] / den if den else None
+
+
+def main():
     m, mm = load()
     outdir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "figures")
     os.makedirs(outdir, exist_ok=True)
     fig_map(m, os.path.join(outdir, "fig1_map.png"))
     fig_attribution(m, os.path.join(outdir, "fig2_attribution.png"))
     fig_metamorphic(mm, m, os.path.join(outdir, "fig3_metamorphic.png"))
+    fig_silence(m, outdir)
     print("wrote", outdir)
+
+
+if __name__ == "__main__":
+    main()
