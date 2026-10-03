@@ -25,7 +25,12 @@ OURS = {"samyama-graph"}
 # paper's claims registry can resolve whichever it quotes.
 SUPERSEDED = {"neo4j"}          # superseded by neo4j-2026 in the headline set
 
-SYM = {"CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": "–",
+# ENGINE_UNAVAILABLE and LOAD_FAILED share a glyph with nothing else: both mean the
+# cell was never measured. They are not verdicts about the query and are excluded from
+# every statistic; the map still shows them so a reader can see the hole rather than
+# mistake it for a result.
+SYM = {"ENGINE_UNAVAILABLE": "∅", "LOAD_FAILED": "∅",
+       "CONFORMS": "✓", "DIVERGES": "✗", "REJECTS": "!", "INEXPRESSIBLE": "–",
        "NONDETERMINISTIC": "?", "LOAD_FAILED": "∅"}
 
 

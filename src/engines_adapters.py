@@ -13,7 +13,18 @@ from graph import PropertyGraph
 
 
 class EngineError(Exception):
-    pass
+    """The engine refused the query. A verdict, not a failure."""
+
+
+class EngineUnavailable(Exception):
+    """The engine could not be reached, or died mid-query.
+
+    Deliberately NOT a subclass of EngineError. A refusal is a conforming act for an
+    ill-formed pattern and a visible disagreement for a well-formed one, so an engine
+    that crashed must never be scored as one -- a container that runs out of memory
+    would otherwise be recorded as an engine that correctly refused, and the map would
+    publish a dead process as a result.
+    """
 
 
 @dataclass
@@ -375,18 +386,22 @@ class SamyamaAdapter:
             return _json.loads(r.read().decode())
 
     def _version(self):
-        """Report the build first, the self-reported version second.
+        """Report the build label, and flag it if the binary disagrees.
 
-        The build label comes from the git tag and is authoritative. The
-        `engine_version` field is only supplementary -- and older releases do not
-        return it at all, so falling back to "unknown" would have labelled the
-        release row with no version while the development row carried one.
+        The build label comes from the git tag and is authoritative; the engine's own
+        `engine_version` field is the cross-check. When the two agree the row carries
+        one version, which is all a reader needs. When they disagree the row says so,
+        because a table that silently prints the label it was told would hide exactly
+        the case where the wrong binary was measured.
         """
         try:
             v = self._post("RETURN 1").get("engine_version")
         except Exception:
             v = None
-        return f"samyama {self.build}" + (f" (reports {v})" if v else "")
+        label = self.build.lstrip("v")
+        if v and str(v).lstrip("v") != label:
+            return f"samyama {self.build} (binary reports {v})"
+        return f"samyama {self.build}"
 
     def load(self, g: PropertyGraph, primary: str, edge_label: str):
         self._start()          # a fresh --ephemeral process is the only trusted reset
@@ -445,9 +460,26 @@ class ArcadeAdapter:
         self.base, self.db, self.auth = base.rstrip("/"), db, auth
         self.version = self._version()
 
+
+    def _http(self, fn, *a, **kw):
+        """Run an HTTP call, telling a refusal apart from a dead engine.
+
+        A 4xx or 5xx with a body is the engine answering: it parsed the request and
+        said no. A transport failure -- connection reset, closed socket, timeout -- is
+        the engine not being there, which is not a verdict about the query.
+        """
+        try:
+            return fn(*a, **kw)
+        except Exception as ex:
+            if type(ex).__name__ in ("ConnectionError", "ReadTimeout", "Timeout",
+                                     "ChunkedEncodingError", "ConnectTimeout"):
+                raise EngineUnavailable(f"{self.name}: {type(ex).__name__}: "
+                                        f"{str(ex)[:160]}") from ex
+            raise
+
     def _post(self, path, payload):
-        r = self._requests.post(f"{self.base}{path}", json=payload, auth=self.auth,
-                                timeout=60)
+        r = self._http(self._requests.post, f"{self.base}{path}", json=payload,
+                       auth=self.auth, timeout=60)
         if r.status_code >= 400:
             raise EngineError(f"HTTP {r.status_code}: {r.text[:300]}")
         return r.json()
@@ -553,6 +585,8 @@ class FalkorAdapter:
         try:
             res = self._graph.query(q)
         except Exception as ex:
+            if "Connection" in type(ex).__name__ or "closed" in str(ex).lower():
+                raise EngineUnavailable(f"{self.name}: {ex}") from ex
             raise EngineError(f"{type(ex).__name__}: {ex}") from ex
         return _counter([tuple(r) for r in res.result_set], None)
 
@@ -591,11 +625,28 @@ class SurrealAdapter:
         except Exception:
             return "unknown"
 
+
+    def _http(self, fn, *a, **kw):
+        """Run an HTTP call, telling a refusal apart from a dead engine.
+
+        A 4xx or 5xx with a body is the engine answering: it parsed the request and
+        said no. A transport failure -- connection reset, closed socket, timeout -- is
+        the engine not being there, which is not a verdict about the query.
+        """
+        try:
+            return fn(*a, **kw)
+        except Exception as ex:
+            if type(ex).__name__ in ("ConnectionError", "ReadTimeout", "Timeout",
+                                     "ChunkedEncodingError", "ConnectTimeout"):
+                raise EngineUnavailable(f"{self.name}: {type(ex).__name__}: "
+                                        f"{str(ex)[:160]}") from ex
+            raise
+
     def _post(self, path, body, content_type):
         h = dict(self._headers)
         h["Content-Type"] = content_type
-        r = self._requests.post(f"{self.base}{path}", data=body.encode(), headers=h,
-                                auth=self.auth, timeout=120)
+        r = self._http(self._requests.post, f"{self.base}{path}", data=body.encode(),
+                       headers=h, auth=self.auth, timeout=120)
         if r.status_code >= 400:
             raise EngineError(f"HTTP {r.status_code}: {r.text[:300]}")
         return r.json()
@@ -760,13 +811,13 @@ class IsolatedKuzuAdapter:
 
     def _call(self, msg):
         if self._proc.poll() is not None:
-            raise EngineError(f"{self.name} worker exited "
-                              f"with code {self._proc.returncode}")
+            raise EngineUnavailable(f"{self.name} worker exited "
+                                    f"with code {self._proc.returncode}")
         self._proc.stdin.write(self._json.dumps(msg) + "\n")
         self._proc.stdin.flush()
         line = self._proc.stdout.readline()
         if not line:
-            raise EngineError(f"{self.name} worker closed the pipe")
+            raise EngineUnavailable(f"{self.name} worker closed the pipe")
         out = self._json.loads(line)
         if not out.get("ok"):
             raise EngineError(out.get("error", "unknown worker error"))
@@ -791,3 +842,101 @@ class IsolatedKuzuAdapter:
             self._proc.wait(timeout=10)
         except Exception:
             self._proc.kill()
+
+
+class GrafeoAdapter:
+    """Grafeo, over its HTTP query endpoint.
+
+    A small Apache-2.0 engine that ships the standard's path modes and selectors. It is
+    in the matrix because it is the second engine measured that implements the
+    restrictors, and the first that is not backed by a large vendor -- which is the
+    difference between "a big team can do this" and "this is implementable".
+
+    Its release notes describe fixing silent wrong results in other clauses, so its own
+    maintainers treat that failure mode as live. A conformance suite is worth most
+    against a target like that.
+    """
+
+    name = "grafeo"
+    dialect = "cypher"
+
+    def __init__(self, base="http://localhost:7475"):
+        import requests
+        self._requests = requests
+        self.base = base.rstrip("/")
+        self.version = self._version()
+
+    def _version(self):
+        try:
+            r = self._requests.get(f"{self.base}/health", timeout=10)
+            if r.ok:
+                v = r.json().get("version")
+                if v:
+                    return f"grafeo {v}"
+        except Exception:
+            pass
+        return "grafeo unknown"
+
+
+    def _http(self, fn, *a, **kw):
+        """Run an HTTP call, telling a refusal apart from a dead engine.
+
+        A 4xx or 5xx with a body is the engine answering: it parsed the request and
+        said no. A transport failure -- connection reset, closed socket, timeout -- is
+        the engine not being there, which is not a verdict about the query.
+        """
+        try:
+            return fn(*a, **kw)
+        except Exception as ex:
+            if type(ex).__name__ in ("ConnectionError", "ReadTimeout", "Timeout",
+                                     "ChunkedEncodingError", "ConnectTimeout"):
+                raise EngineUnavailable(f"{self.name}: {type(ex).__name__}: "
+                                        f"{str(ex)[:160]}") from ex
+            raise
+
+    def _query(self, q):
+        r = self._http(self._requests.post, f"{self.base}/query",
+                       json={"query": q}, timeout=120)
+        if r.status_code >= 400:
+            raise EngineError(f"HTTP {r.status_code}: {r.text[:300]}")
+        body = r.json()
+        if isinstance(body, dict) and body.get("error"):
+            raise EngineError(str(body["error"])[:300])
+        return body
+
+    def load(self, g: PropertyGraph, primary: str, edge_label: str):
+        # An ill-formed unbounded pattern OOM-kills this engine
+        # (reproducers/grafeo-walk-unbounded-oom.py), so the container is set to
+        # restart and `load` waits for it to come back. The wait is here and not in
+        # `run`: a query that kills the engine must still be recorded as having killed
+        # it, not retried until it looks like a refusal.
+        for attempt in range(30):
+            try:
+                self._query("RETURN 1")
+                break
+            except EngineUnavailable:
+                import time as _time
+                _time.sleep(2)
+        # No DDL: the store is schemaless, so the fixture is cleared and rewritten.
+        try:
+            self._query("MATCH (n) DETACH DELETE n")
+        except EngineError:
+            self._query("MATCH (n) DELETE n")
+        for n in g.nodes.values():
+            labels = "".join(f":{l}" for l in sorted(n.labels))
+            props = ", ".join(f"{k}: '{v}'" for k, v in n.props)
+            sep = ", " if props else ""
+            self._query(f"CREATE (x{labels} {{eid: '{n.id}'{sep}{props}}})")
+        for e in g.edges.values():
+            lbl = sorted(e.labels)[0] if e.labels else "REL"
+            self._query(f"MATCH (a),(b) WHERE a.eid='{e.src}' AND b.eid='{e.dst}' "
+                        f"CREATE (a)-[:{lbl} {{eid:'{e.id}'}}]->(b)")
+
+    def run(self, q: str) -> Answer:
+        body = self._query(q)
+        cols = body.get("columns") or []
+        rows = []
+        for r in body.get("rows") or []:
+            if len(r) >= 2:
+                rows.append((r[0], r[1]))
+        return _counter(rows, None)

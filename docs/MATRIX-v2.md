@@ -174,3 +174,30 @@ Named here so the absences are declared rather than silent.
 | Amazon Neptune, BigQuery Graph | No free offline runtime at any price. Cloud endpoints only. |
 | TigerGraph, NebulaGraph OSS, ArangoDB, SAP HANA, AnzoGraph, Aerospike | No path modes, no selectors, and in several cases a licence key or a commercial-use restriction. |
 | Ultipa GQLDB | The widest published GQL conformance claim of any vendor, including a per-feature table and a stated TRAIL default. No Docker image; installs through a shell script. Worth the effort next. |
+
+## Which engine to add next, and the rule
+
+The matrix does not get better by getting longer. A sixth openCypher-only engine returns
+the same verdicts as the five already here, for the same reason, and moves nothing. The
+selection rule is therefore:
+
+**Add an engine that ships the standard's vocabulary, or that sits on the other
+standard.** An engine with restrictor or selector keywords can refuse what it has not
+implemented, so it lands at a different point on the silence axis and the axis becomes a
+spectrum rather than two clusters. An SQL/PGQ engine tests the quantifier and
+well-formedness side through a different front end.
+
+By that rule, ranked:
+
+| candidate | what it buys | cost |
+|---|---|---|
+| **Ultipa GQLDB** | The widest published GQL conformance claim of any vendor -- a per-feature table including all four modes, all four selectors and `SHORTEST k` -- plus a stated TRAIL default, which is a declared departure to check. | No Docker image; installs through a shell script, free tier capped at 1M elements. |
+| **Oracle Database 23ai Free** | The only free local SQL/PGQ besides DuckPGQ. Documented as having no path modes and no selectors, so it is a clean documented-negative row, and it settles a contradiction in its own docs about whether `{n,m}` works under `GRAPH_TABLE`. | ~9 GB on disk. |
+| **TuGraph** | Implements the opengql grammar, speaks Bolt, so near-zero adapter work. | Last release 2025-03; per-feature support unverified. |
+| **MillenniumDB** | Named in the independent survey as claiming GQL; not yet investigated. | Unknown. |
+
+Not worth adding, and why: NebulaGraph OSS, Dgraph, ArangoDB, TigerGraph, SAP HANA,
+AnzoGraph and PuppyGraph ship no path modes and no selectors, so each would be a sixth
+copy of a row already here. Neptune and BigQuery Graph have no free offline runtime at
+any price. Aerospike Graph needs a time-limited feature key. AnzoGraph's licence-free
+image is EOL.

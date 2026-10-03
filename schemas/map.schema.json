@@ -37,8 +37,8 @@
           "engine": {"type": "string"},
           "verdict": {
             "enum": ["CONFORMS", "DIVERGES", "REJECTS", "INEXPRESSIBLE",
-                     "NONDETERMINISTIC", "LOAD_FAILED"],
-            "description": "INEXPRESSIBLE means the dialect has no way to say the construct, which is a fact about the language and not a defect. LOAD_FAILED is a harness failure, not a result."
+                     "NONDETERMINISTIC", "LOAD_FAILED", "ENGINE_UNAVAILABLE"],
+            "description": "INEXPRESSIBLE means the dialect has no way to say the construct, which is a fact about the language and not a defect. LOAD_FAILED is a harness failure, not a result. ENGINE_UNAVAILABLE means the engine died or became unreachable mid-query, which is not a verdict about the query and is excluded from every statistic."
           },
           "expect": {
             "enum": ["ANSWER", "REJECT", "ACCEPT"],

@@ -14,7 +14,7 @@ PYBIN="$VENV/bin/python"
 
 echo "== starting engines"
 docker rm -f cf-neo4j cf-neo4j-2026 cf-memgraph cf-age cf-arcade cf-falkor \
-  cf-surreal cf-spanner >/dev/null 2>&1 || true
+  cf-surreal cf-spanner cf-grafeo >/dev/null 2>&1 || true
 docker run -d --name cf-neo4j -p 7688:7687 \
   -e NEO4J_AUTH=neo4j/testpassword123 neo4j:5.26-community >/dev/null
 # The 2026 line is a separate row in the map, not a replacement: it is where the
@@ -33,6 +33,12 @@ docker run -d --name cf-arcade -p 2480:2480 \
   -e JAVA_OPTS="-Darcadedb.server.rootPassword=playwithdata -Darcadedb.server.defaultDatabases=gpml[root]" \
   arcadedata/arcadedb:26.9.1 >/dev/null
 docker run -d --name cf-falkor -p 6380:6379 falkordb/falkordb:latest >/dev/null
+# Grafeo is capped and set to restart: an ill-formed unbounded pattern OOM-kills it
+# (reproducers/grafeo-walk-unbounded-oom.py), and without the restart every later cell
+# in its column would read ENGINE_UNAVAILABLE instead of being measured. The cap keeps
+# the kill inside the container rather than on the host.
+docker run -d --name cf-grafeo --memory=3g --restart=unless-stopped \
+  -p 7475:7474 grafeo/grafeo-server:latest >/dev/null
 docker run -d --name cf-surreal -p 8010:8000 surrealdb/surrealdb:latest \
   start --user root --pass root >/dev/null
 docker run -d --name cf-spanner -p 9010:9010 -p 9020:9020 \

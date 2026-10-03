@@ -34,8 +34,18 @@ def main() -> int:
     ap.add_argument("--out", default=os.path.join(HERE, "paper", "numbers.tex"))
     args = ap.parse_args()
 
-    S = json.load(open(os.path.join(HERE, "results", "summary.json")))
-    M = json.load(open(os.path.join(HERE, "results", "map.json")))
+    spath = os.path.join(HERE, "results", "summary.json")
+    mpath = os.path.join(HERE, "results", "map.json")
+    # The macros are read from both files, so a stale summary silently mixes two runs:
+    # the engine count from one and the cell details from the other. That is how a
+    # paper comes to quote figures its own artifact contradicts.
+    if os.path.getmtime(spath) < os.path.getmtime(mpath):
+        raise SystemExit(
+            "results/summary.json is older than results/map.json. Run "
+            "src/summarise.py first; emitting macros from two different runs would "
+            "put numbers in the paper that the artifact does not support.")
+    S = json.load(open(spath))
+    M = json.load(open(mpath))
     MM = json.load(open(os.path.join(HERE, "results", "metamorphic.json")))
     sep = S.get("s6_separation") or {}
     agg = S["aggregates"]
@@ -139,6 +149,12 @@ def main() -> int:
     m["nComboAsked"] = combo_asked
     m["nComboAnswered"] = combo_answered
     m["nComboEngines"] = len(combo_engines)
+
+    # Our own row's version, so the prose never types it. The paper reports one
+    # version of our engine -- the current release -- like every other row.
+    ours = next((e for e in M["engines"] if e["name"] == "samyama-graph"), None)
+    if ours:
+        m["oursVersion"] = ours["version"].replace("samyama ", "")
 
     # The per-engine table, generated for the same reason the macros are: a table of
     # eleven rows retyped into a manuscript is eleven chances for a number to drift.

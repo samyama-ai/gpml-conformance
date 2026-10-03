@@ -11,33 +11,33 @@
   "by_group": {
     "G1": {
       "constructs": 32,
-      "cells": 320,
-      "conforms": 68,
-      "diverges": 28,
+      "cells": 352,
+      "conforms": 88,
+      "diverges": 40,
       "rejects": 104,
       "inexpressible": 120,
-      "s1": 0.2917,
-      "s2": 0.2121
+      "s1": 0.3125,
+      "s2": 0.2778
     },
     "G2": {
       "constructs": 14,
-      "cells": 140,
-      "conforms": 111,
+      "cells": 154,
+      "conforms": 125,
       "diverges": 17,
       "rejects": 12,
       "inexpressible": 0,
-      "s1": 0.1328,
+      "s1": 0.1197,
       "s2": 0.5862
     },
     "G3": {
       "constructs": 12,
-      "cells": 120,
-      "conforms": 75,
-      "diverges": 34,
+      "cells": 132,
+      "conforms": 86,
+      "diverges": 35,
       "rejects": 11,
       "inexpressible": 0,
-      "s1": 0.3119,
-      "s2": 0.7556
+      "s1": 0.2893,
+      "s2": 0.7609
     },
     "G4": {
       "constructs": 6,
@@ -51,23 +51,23 @@
     },
     "G5": {
       "constructs": 3,
-      "cells": 30,
-      "conforms": 14,
-      "diverges": 10,
+      "cells": 33,
+      "conforms": 16,
+      "diverges": 11,
       "rejects": 6,
       "inexpressible": 0,
-      "s1": 0.4167,
-      "s2": 0.625
+      "s1": 0.4074,
+      "s2": 0.6471
     },
     "v1": {
       "constructs": 17,
-      "cells": 170,
-      "conforms": 74,
-      "diverges": 24,
-      "rejects": 13,
+      "cells": 187,
+      "conforms": 86,
+      "diverges": 28,
+      "rejects": 14,
       "inexpressible": 59,
-      "s1": 0.2449,
-      "s2": 0.6486
+      "s1": 0.2456,
+      "s2": 0.6667
     }
   },
   "s4_wellformedness": {
@@ -148,6 +148,13 @@
       "controls_accepted": 0,
       "controls_total": 3
     },
+    "grafeo": {
+      "refused": 0,
+      "answered": 0,
+      "not_askable": 0,
+      "controls_accepted": 2,
+      "controls_total": 3
+    },
     "samyama-graph": {
       "refused": 3,
       "answered": 0,
@@ -200,6 +207,10 @@
     "spanner": {
       "g5-star-bare|g5-star-explicit": null,
       "g5-plus-bare|g5-plus-explicit": null
+    },
+    "grafeo": {
+      "g5-star-bare|g5-star-explicit": false,
+      "g5-plus-bare|g5-plus-explicit": true
     },
     "samyama-graph": {
       "g5-star-bare|g5-star-explicit": false,
@@ -281,27 +292,28 @@
       "pattern_probes": 350580
     }
   },
-  "n_engines": 12,
-  "n_engines_external": 10,
-  "n_cells": 1008,
-  "n_cells_external": 780,
+  "n_engines": 13,
+  "n_engines_external": 11,
+  "n_cells": 1092,
+  "n_cells_external": 858,
   "repeats": 3,
-  "conforms": 342,
-  "diverges": 113,
-  "rejects": 146,
+  "conforms": 401,
+  "diverges": 131,
+  "rejects": 147,
   "inexpressible": 179,
   "nondeterministic": 0,
-  "s1_divergence_rate": 0.2484,
-  "s2_silence_ratio": 0.4363,
-  "disagreements": 259,
+  "s1_divergence_rate": 0.2462,
+  "s2_silence_ratio": 0.4712,
+  "disagreements": 278,
   "divergences_specified": 62,
-  "divergences_defect": 51,
-  "constructs_multi_class": 43,
-  "constructs_single_class": 24,
+  "divergences_defect": 69,
+  "constructs_multi_class": 44,
+  "constructs_single_class": 40,
   "classes_per_construct": {
     "mode-walk-bounded": 3,
     "mode-trail-bounded": 2,
     "mode-acyclic-bounded": 1,
+    "mode-simple-bounded": 1,
     "walk-revisits-same-edge": 2,
     "quant-zero-lower-bound": 2,
     "quant-zero-zero": 2,
@@ -313,24 +325,40 @@
     "interior-node-unconstrained": 1,
     "selector-all-shortest": 1,
     "selector-any-shortest": 3,
-    "selector-any": 3,
+    "selector-any": 4,
     "paper-trail-unbounded": 2,
     "g1-fig1-walk-all": 3,
-    "g1-fig1-walk-any": 3,
+    "g1-fig1-walk-any": 4,
     "g1-fig1-walk-all-shortest": 2,
     "g1-fig1-walk-any-shortest": 3,
     "g1-fig1-trail-all": 2,
+    "g1-fig1-trail-any": 1,
     "g1-fig1-trail-all-shortest": 1,
+    "g1-fig1-trail-any-shortest": 1,
     "g1-fig1-acyclic-all": 1,
+    "g1-fig1-acyclic-any": 1,
+    "g1-fig1-acyclic-all-shortest": 1,
+    "g1-fig1-acyclic-any-shortest": 1,
     "g1-fig1-simple-all": 1,
+    "g1-fig1-simple-any": 1,
+    "g1-fig1-simple-all-shortest": 1,
+    "g1-fig1-simple-any-shortest": 1,
     "g1-loop-walk-all": 3,
-    "g1-loop-walk-any": 3,
+    "g1-loop-walk-any": 4,
     "g1-loop-walk-all-shortest": 2,
     "g1-loop-walk-any-shortest": 3,
     "g1-loop-trail-all": 2,
+    "g1-loop-trail-any": 1,
     "g1-loop-trail-all-shortest": 1,
+    "g1-loop-trail-any-shortest": 1,
     "g1-loop-acyclic-all": 1,
-    "g1-loop-simple-all": 1,
+    "g1-loop-acyclic-any": 1,
+    "g1-loop-acyclic-all-shortest": 1,
+    "g1-loop-acyclic-any-shortest": 1,
+    "g1-loop-simple-all": 2,
+    "g1-loop-simple-any": 1,
+    "g1-loop-simple-all-shortest": 1,
+    "g1-loop-simple-any-shortest": 1,
     "g2-none-walk": 1,
     "g2-none-trail": 1,
     "g2-0-0-walk": 2,
@@ -367,8 +395,8 @@
     "g5-plus-bare": 2,
     "g5-plus-explicit": 2
   },
-  "nondeterministic_selector_cells": 26,
-  "constructs_measured": 67,
+  "nondeterministic_selector_cells": 44,
+  "constructs_measured": 84,
   "metamorphic_violations_total": 44,
   "metamorphic_violations_external": 44,
   "s2b": {
@@ -449,6 +477,13 @@
       "channel": false,
       "irrelevant": 0
     },
+    "grafeo": {
+      "divergences": 18,
+      "spoke": 0,
+      "s2b": 1.0,
+      "channel": false,
+      "irrelevant": 0
+    },
     "samyama-graph": {
       "divergences": 10,
       "spoke": 9,
@@ -465,6 +500,7 @@
         "arcadedb",
         "duckpgq",
         "falkordb",
+        "grafeo",
         "kuzu",
         "ladybugdb",
         "memgraph",
@@ -472,13 +508,13 @@
         "spanner",
         "surrealdb"
       ],
-      "cells": 780,
-      "conforms": 342,
-      "diverges": 113,
-      "rejects": 146,
+      "cells": 858,
+      "conforms": 401,
+      "diverges": 131,
+      "rejects": 147,
       "inexpressible": 179,
-      "s1": 0.2484,
-      "s2": 0.4363
+      "s1": 0.2462,
+      "s2": 0.4712
     },
     "all_external_rows": {
       "engines": [
@@ -486,6 +522,7 @@
         "arcadedb",
         "duckpgq",
         "falkordb",
+        "grafeo",
         "kuzu",
         "ladybugdb",
         "memgraph",
@@ -494,13 +531,13 @@
         "spanner",
         "surrealdb"
       ],
-      "cells": 858,
-      "conforms": 387,
-      "diverges": 123,
-      "rejects": 146,
+      "cells": 936,
+      "conforms": 446,
+      "diverges": 141,
+      "rejects": 147,
       "inexpressible": 202,
-      "s1": 0.2412,
-      "s2": 0.4572
+      "s1": 0.2402,
+      "s2": 0.4896
     },
     "v1_constructs_v1_engines": {
       "engines": [
@@ -524,6 +561,7 @@
         "arcadedb",
         "duckpgq",
         "falkordb",
+        "grafeo",
         "kuzu",
         "ladybugdb",
         "memgraph",
@@ -532,13 +570,13 @@
         "spanner",
         "surrealdb"
       ],
-      "cells": 187,
-      "conforms": 86,
-      "diverges": 26,
-      "rejects": 13,
+      "cells": 204,
+      "conforms": 98,
+      "diverges": 30,
+      "rejects": 14,
       "inexpressible": 62,
-      "s1": 0.2321,
-      "s2": 0.6667
+      "s1": 0.2344,
+      "s2": 0.6818
     },
     "all_constructs_v1_engines": {
       "engines": [
@@ -569,6 +607,7 @@
     "falkordb": 0,
     "surrealdb": 0,
     "spanner": 0,
+    "grafeo": 53,
     "samyama-graph": 46
   },
   "metamorphic_dropped_by_engine": {
@@ -583,6 +622,7 @@
     "falkordb": 0,
     "surrealdb": 0,
     "spanner": 6,
+    "grafeo": 0,
     "samyama-graph": 0
   },
   "metamorphic_lo0_by_engine": {
@@ -597,15 +637,16 @@
     "falkordb": 0,
     "surrealdb": 0,
     "spanner": 0,
+    "grafeo": 0,
     "samyama-graph": 0
   },
   "level2": {
-    "comparable_cells": 112,
-    "conforms_both": 65,
-    "diverges_both": 15,
-    "refined_by_level2": 0,
+    "comparable_cells": 128,
+    "conforms_both": 66,
+    "diverges_both": 17,
+    "refined_by_level2": 7,
     "contradicts_level1": 2,
-    "not_projectable": 30
+    "not_projectable": 35
   },
   "metamorphic_violations_ours": 0,
   "snapshot_2026_09_07": {
@@ -660,6 +701,7 @@
     "falkordb": 0,
     "surrealdb": 0,
     "spanner": 0,
+    "grafeo": 0,
     "samyama-graph": 0
   },
   "metamorphic_clean_engines": [
@@ -671,6 +713,7 @@
     "falkordb",
     "surrealdb",
     "spanner",
+    "grafeo",
     "samyama-graph"
   ],
   "engines": {
@@ -685,7 +728,8 @@
     "falkordb": "falkordb 8.10.2",
     "surrealdb": "surrealdb-3.3.0",
     "spanner": "cloud-spanner-emulator 1.5.58",
-    "samyama-graph": "samyama v1.8.0 (reports 1.10.0)"
+    "grafeo": "grafeo 0.5.40",
+    "samyama-graph": "samyama v1.10.0"
   },
   "per_engine": {
     "kuzu": {
@@ -775,6 +819,14 @@
       "inexpressible": 17,
       "s1": 0.0,
       "s2": 0.0
+    },
+    "grafeo": {
+      "conforms": 59,
+      "diverges": 18,
+      "rejects": 1,
+      "inexpressible": 0,
+      "s1": 0.2338,
+      "s2": 0.9474
     },
     "samyama-graph": {
       "conforms": 50,

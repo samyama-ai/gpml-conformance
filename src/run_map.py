@@ -18,8 +18,10 @@ from gpml_ref import Path, match
 from suite_all import CASES, ALIASES, GROUPS
 from capabilities import probe
 from engines_adapters import (AgeAdapter, ArcadeAdapter, BoltAdapter,
-                              DuckPGQAdapter, EngineError, FalkorAdapter,
-                              IsolatedKuzuAdapter, KuzuAdapter, SamyamaAdapter,
+                              DuckPGQAdapter, EngineError, EngineUnavailable,
+                              FalkorAdapter,
+                              GrafeoAdapter, IsolatedKuzuAdapter, KuzuAdapter,
+                              SamyamaAdapter,
                               SpannerAdapter, SurrealAdapter)
 
 REPEATS = 3
@@ -63,6 +65,9 @@ DECLARED_MODE = {
     # LadybugDB continues the Kuzu codebase, and inherits its documented WALK
     # semantics until it says otherwise.
     "ladybugdb": "WALK",
+    # Grafeo implements the standard's prefixes and its unprefixed pattern measures as
+    # WALK, the standard's own default, so there is no second axis.
+    "grafeo": None,
 }
 
 def pick_cypher_rendering(case, cap):
@@ -208,11 +213,15 @@ def build_engines(workdir):
         engines.append(SpannerAdapter())
     except Exception as e:
         print(f"  spanner unavailable: {e}", file=sys.stderr)
+    try:
+        engines.append(GrafeoAdapter())
+    except Exception as e:
+        print(f"  grafeo unavailable: {e}", file=sys.stderr)
     # The authors' own engine, measured at the release a user can install, like every
     # other row. SAMYAMA_BIN points at the newest release build. No development head is
     # measured: no other vendor's unreleased work is, and measuring ours would flatter us.
     try:
-        engines.append(SamyamaAdapter(build=os.environ.get("SAMYAMA_BUILD", "v1.8.0")))
+        engines.append(SamyamaAdapter(build=os.environ.get("SAMYAMA_BUILD", "v1.10.0")))
     except Exception as e:
         print(f"  samyama-graph unavailable: {e}", file=sys.stderr)
     return engines
@@ -260,15 +269,26 @@ def main():
                 cells.append(dict(case=case.id, engine=eng.name, verdict="LOAD_FAILED", surface=surface,
                                   detail=str(e)[:300], query=query))
                 continue
-            answers, diags, err = [], None, None
+            answers, diags, err, gone = [], None, None, None
             for _ in range(REPEATS):
                 try:
                     a = eng.run(query)
                     answers.append(a.pairs)
                     diags = a.diagnostics
+                except EngineUnavailable as e:
+                    # The engine died or became unreachable. That is not a verdict
+                    # about this query, and scoring it REJECTS would publish a dead
+                    # process as an engine that correctly refused.
+                    gone = str(e)[:300]
+                    break
                 except EngineError as e:
                     err = str(e)[:300]
                     break
+            if gone is not None:
+                cells.append(dict(case=case.id, engine=eng.name,
+                                  verdict="ENGINE_UNAVAILABLE", surface=surface,
+                                  detail=gone, query=query))
+                continue
             if err is not None:
                 # For a pattern the standard makes ill-formed, refusing it is the
                 # conforming act and running it is the defect. Scoring a rejection
