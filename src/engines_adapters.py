@@ -407,3 +407,139 @@ class SamyamaAdapter:
                   "severity": n.get("severity", "")}
                  for n in (res.get("notifications") or [])]
         return _counter(res.get("records") or [], diags)
+
+
+class ArcadeAdapter:
+    """ArcadeDB, over its HTTP command API.
+
+    ArcadeDB ships GQL path modes -- WALK, TRAIL and ACYCLIC -- with TRAIL as the
+    default, which is a documented departure from the standard's WALK. It has no
+    SIMPLE and no selector keywords. It is in the matrix because it is the second
+    engine whose default path mode is not the standard's, and because its GQL surface
+    is moving fast enough to be worth a gate.
+
+    Bolt would have cost no adapter at all, but the shipped image starts no Bolt
+    plugin, and configuring one is a deployment choice we would then be measuring
+    instead of the engine.
+    """
+
+    name = "arcadedb"
+    dialect = "cypher"
+
+    def __init__(self, base="http://localhost:2480", db="gpml",
+                 auth=("root", "playwithdata")):
+        import requests
+        self._requests = requests
+        self.base, self.db, self.auth = base.rstrip("/"), db, auth
+        self.version = self._version()
+
+    def _post(self, path, payload):
+        r = self._requests.post(f"{self.base}{path}", json=payload, auth=self.auth,
+                                timeout=60)
+        if r.status_code >= 400:
+            raise EngineError(f"HTTP {r.status_code}: {r.text[:300]}")
+        return r.json()
+
+    def _command(self, command, language="opencypher"):
+        return self._post(f"/api/v1/command/{self.db}",
+                          {"language": language, "command": command})
+
+    def _version(self):
+        try:
+            return self._post("/api/v1/server", {}).get("version", "unknown")
+        except Exception:
+            try:
+                return str(self._requests.get(f"{self.base}/api/v1/server",
+                                              auth=self.auth, timeout=20).json()
+                           .get("version", "unknown"))
+            except Exception:
+                return "unknown"
+
+    def load(self, g: PropertyGraph, primary: str, edge_label: str):
+        # ArcadeDB is schema-full: a type has to exist before a row can carry it.
+        for stmt in (f"DELETE FROM `{edge_label}` UNSAFE", f"DELETE FROM `{primary}` UNSAFE"):
+            try:
+                self._command(stmt, language="sql")
+            except EngineError:
+                pass                      # first run: the type does not exist yet
+        extra = sorted({lbl for n in g.nodes.values() for lbl in n.labels} - {primary})
+        for t in [primary] + extra:
+            try:
+                self._command(f"CREATE VERTEX TYPE `{t}` IF NOT EXISTS", language="sql")
+            except EngineError:
+                pass
+        try:
+            self._command(f"CREATE EDGE TYPE `{edge_label}` IF NOT EXISTS", language="sql")
+        except EngineError:
+            pass
+        for n in g.nodes.values():
+            labels = "".join(f":`{l}`" for l in sorted(n.labels))
+            props = ", ".join(f"{k}: '{v}'" for k, v in n.props)
+            sep = ", " if props else ""
+            self._command(f"CREATE (x{labels} {{eid: '{n.id}'{sep}{props}}})")
+        for e in g.edges.values():
+            lbl = sorted(e.labels)[0] if e.labels else "REL"
+            self._command(f"MATCH (a),(b) WHERE a.eid='{e.src}' AND b.eid='{e.dst}' "
+                          f"CREATE (a)-[:`{lbl}` {{eid:'{e.id}'}}]->(b)")
+
+    def run(self, q: str) -> Answer:
+        res = self._command(q)
+        rows = []
+        for r in res.get("result", []):
+            vals = [r.get("s"), r.get("t")]
+            rows.append(tuple(vals))
+        return _counter(rows, None)
+
+
+class FalkorAdapter:
+    """FalkorDB, over its own client.
+
+    openCypher only -- no path modes, no selectors. It is in the matrix for one
+    reason: its uniqueness semantics for `*m..n` are undocumented, so measuring it
+    produces a fact rather than a restatement of a manual. Every other engine in the
+    matrix has a documented mode to be held to; this one has none, so its row carries
+    no declared-mode column.
+    """
+
+    name = "falkordb"
+    dialect = "cypher"
+
+    def __init__(self, host="localhost", port=6380):
+        from falkordb import FalkorDB
+        self._db = FalkorDB(host=host, port=port)
+        self._graph = None
+        self.version = self._version()
+
+    def _version(self):
+        try:
+            info = self._db.connection.execute_command("INFO", "server")
+            if isinstance(info, dict):
+                return f"falkordb {info.get('redis_version', 'unknown')}"
+            return "falkordb unknown"
+        except Exception:
+            return "unknown"
+
+    def load(self, g: PropertyGraph, primary: str, edge_label: str):
+        self._graph = self._db.select_graph("gpml")
+        try:
+            self._graph.delete()
+        except Exception:
+            pass                          # nothing to drop on the first fixture
+        self._graph = self._db.select_graph("gpml")
+        for n in g.nodes.values():
+            labels = "".join(f":{l}" for l in sorted(n.labels))
+            props = ", ".join(f"{k}: '{v}'" for k, v in n.props)
+            sep = ", " if props else ""
+            self._graph.query(f"CREATE (x{labels} {{eid: '{n.id}'{sep}{props}}})")
+        for e in g.edges.values():
+            lbl = sorted(e.labels)[0] if e.labels else "REL"
+            self._graph.query(
+                f"MATCH (a),(b) WHERE a.eid='{e.src}' AND b.eid='{e.dst}' "
+                f"CREATE (a)-[:{lbl} {{eid:'{e.id}'}}]->(b)")
+
+    def run(self, q: str) -> Answer:
+        try:
+            res = self._graph.query(q)
+        except Exception as ex:
+            raise EngineError(f"{type(ex).__name__}: {ex}") from ex
+        return _counter([tuple(r) for r in res.result_set], None)

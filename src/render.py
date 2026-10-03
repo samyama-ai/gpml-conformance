@@ -41,9 +41,22 @@ def _bounds(lo: int, hi: int, unbounded_as: int | None):
 
 
 def quant_legacy(lo, hi, unbounded_as=None) -> str:
-    """`*lo..hi`, or '' where the construct has no quantifier at all."""
+    """`*lo..hi`, or '' where the construct has no quantifier at all.
+
+    An unbounded quantifier is rendered unbounded -- `*` or `*lo..` -- unless the
+    caller supplied a finite bound to substitute. Substituting a bound silently would
+    turn a question about unboundedness into a question about a number.
+    """
     if lo is None:
         return ""
+    if hi == UNBOUNDED and unbounded_as is None:
+        # Always write the lower bound. The bare `*` is not the same quantifier in
+        # every dialect -- GQL and SQL/PGQ define it as {0,}, openCypher as {1,} --
+        # so a generated case that used it would be asking two different questions
+        # and calling the difference a divergence. `*0..` and `*1..` are unambiguous
+        # and both dialects take them. The bare forms are measured deliberately, as
+        # their own construct, in G5.
+        return f"*{lo}.."
     lo, hi = _bounds(lo, hi, unbounded_as)
     return f"*{lo}..{hi}"
 
@@ -52,14 +65,21 @@ def quant_pgq(lo, hi) -> str:
     if lo is None:
         return ""
     if hi == UNBOUNDED:
-        return "*" if lo == 0 else ("+" if lo == 1 else f"{{{lo},}}")
+        return f"{{{lo},}}"
     return f"{{{lo},{hi}}}"
 
 
-def prefix(restrictor: str, selector: str) -> str:
+def prefix(restrictor: str, selector: str, explicit_walk: bool = False) -> str:
     """The standard's prefix keywords. WALK and ALL are the defaults and are written
-    by saying nothing, which is how the standard's own examples write them."""
-    parts = [p for p in (("" if restrictor == "WALK" else restrictor),
+    by saying nothing, which is how the standard's own examples write them.
+
+    explicit_walk writes WALK anyway. That matters for exactly one question: whether an
+    engine enforces the rule that an unbounded quantifier needs a restrictor or a
+    selector in scope. Written without the keyword, the query is indistinguishable from
+    the dialect's own default mode -- for openCypher that default is TRAIL, which makes
+    the pattern well-formed and the question unasked. WALK has to be said out loud.
+    """
+    parts = [p for p in (("" if restrictor == "WALK" and not explicit_walk else restrictor),
                          ("" if selector == "ALL" else selector)) if p]
     return (" ".join(parts) + " ") if parts else ""
 
@@ -87,8 +107,14 @@ def qpp_pattern(segs, edge_label, node_label, unbounded_as=None) -> str:
     out = [f"(x:{node_label})"]
     for i, s in enumerate(segs):
         step = QPP_ARROW[s["direction"]].format(e=edge_label)
-        lo, hi = _bounds(s["lo"], s["hi"], unbounded_as) if s["lo"] is not None else (None, None)
-        q = "" if lo is None else f"{{{lo},{hi}}}"
+        if s["lo"] is None:
+            q = ""
+        elif s["hi"] == UNBOUNDED and unbounded_as is None:
+            # Explicit, for the same reason as the legacy spelling above.
+            q = f"{{{s['lo']},}}"
+        else:
+            lo, hi = _bounds(s["lo"], s["hi"], unbounded_as)
+            q = f"{{{lo},{hi}}}"
         end = "y" if i == len(segs) - 1 else f"m{i}"
         lab = f":{node_label}" if s.get("end_label") is None else f":{s['end_label']}"
         out.append(f"({step}){q} ({end}{lab})")
@@ -113,7 +139,7 @@ PGQ_COLS = "COLUMNS (x.eid AS s, y.eid AS t)) SELECT s, t"
 
 def cypher_query(segs, *, edge_label, node_label, key, start_val,
                  restrictor="WALK", selector="ALL", extra_where=None,
-                 unbounded_as=None, spelling="legacy") -> str | None:
+                 unbounded_as=None, spelling="legacy", explicit_walk=False) -> str | None:
     """The openCypher text, or None where the dialect cannot say it.
 
     None is not a failing grade. A dialect with no ACYCLIC keyword is not wrong about
@@ -122,7 +148,8 @@ def cypher_query(segs, *, edge_label, node_label, key, start_val,
     pat = (cypher_pattern if spelling == "legacy" else qpp_pattern)(
         segs, edge_label, node_label, unbounded_as)
     where = _where(key, start_val, extra_where)
-    return f"MATCH {prefix(restrictor, selector)}{pat} WHERE {where} {RETURN_COLS}"
+    return (f"MATCH {prefix(restrictor, selector, explicit_walk)}{pat} "
+            f"WHERE {where} {RETURN_COLS}")
 
 
 def cypher_common(segs, *, edge_label, node_label, key, start_val,
@@ -153,8 +180,9 @@ def cypher_common(segs, *, edge_label, node_label, key, start_val,
 
 
 def pgq_query(segs, *, edge_label, node_label, key, start_val,
-              restrictor="WALK", selector="ALL", extra_where=None) -> str:
+              restrictor="WALK", selector="ALL", extra_where=None,
+              explicit_walk=False) -> str:
     pat = pgq_pattern(segs, edge_label, node_label)
     where = _where(key, start_val, extra_where)
-    return (f"FROM GRAPH_TABLE(g MATCH {prefix(restrictor, selector)}{pat} "
+    return (f"FROM GRAPH_TABLE(g MATCH {prefix(restrictor, selector, explicit_walk)}{pat} "
             f"WHERE {where} {PGQ_COLS}")

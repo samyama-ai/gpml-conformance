@@ -238,5 +238,139 @@ def g3() -> list[Case]:
     return out
 
 
-ALL_V2 = g1() + g2() + g3()
+# ---------------------------------------------------------------------------
+# G4 -- what the standard requires to be rejected
+# ---------------------------------------------------------------------------
+
+# Sec. 5: "every unbounded quantifier must be contained in the scope of either a
+# restrictor or a selector or both". A pattern that breaks the rule is ill-formed, and
+# an engine that runs it anyway is non-conforming in a direction no answer comparison
+# can see. The controls are not decoration: a grid where every case must be rejected is
+# passed perfectly by an engine that rejects everything.
+G4_CASES = (
+    # (name, lo, hi, restrictor, selector, expect, why)
+    ("star-walk-all", 0, UNBOUNDED, "WALK", "ALL", "REJECT",
+     "unbounded `*` with neither a restrictor nor a selector in scope"),
+    ("plus-walk-all", 1, UNBOUNDED, "WALK", "ALL", "REJECT",
+     "unbounded `+` with neither a restrictor nor a selector in scope"),
+    ("lower-bound-open-walk-all", 2, UNBOUNDED, "WALK", "ALL", "REJECT",
+     "unbounded `{2,}` with neither a restrictor nor a selector in scope"),
+    ("star-trail-all", 0, UNBOUNDED, "TRAIL", "ALL", "ACCEPT",
+     "control: the restrictor bounds the answer, so this is well-formed"),
+    ("star-walk-any-shortest", 0, UNBOUNDED, "WALK", "ANY SHORTEST", "ACCEPT",
+     "control: the selector bounds the answer, so this is well-formed"),
+    ("star-walk-any", 0, UNBOUNDED, "WALK", "ANY", "ACCEPT",
+     "control: a selector is in scope, so the standard admits it. Its admissible set "
+     "is infinite, so no reference answer exists and acceptance is the whole test"),
+)
+
+
+def g4() -> list[Case]:
+    fixture, anchor = "micro", "a"
+    edge_label, node_label, key = _meta(fixture)
+    kw = dict(edge_label=edge_label, node_label=node_label, key=key, start_val=anchor)
+    out: list[Case] = []
+    for name, lo, hi, restrictor, selector, expect, why in G4_CASES:
+        segs = [dict(lo=lo, hi=hi, direction="right")]
+        # An ill-formed case must name WALK out loud. Written with no keyword the query
+        # is the dialect's default mode, which for openCypher is TRAIL -- well-formed,
+        # and a different question. Common-dialect openCypher has no WALK keyword, so
+        # those cells are INEXPRESSIBLE rather than counted against the engine.
+        ill = expect == "REJECT"
+        kw4 = dict(kw, explicit_walk=ill)
+        out.append(Case(
+            id=f"g4-{name}",
+            construct=f"well-formedness: {why}",
+            fixture=fixture,
+            ref=PathPattern(start=_start(fixture, anchor),
+                            segments=(_seg(fixture, lo, hi),),
+                            restrictor=restrictor, selector=selector),
+            cypher=(None if ill else
+                    render.cypher_common(segs, restrictor=restrictor,
+                                         selector=selector, **kw)),
+            cypher_gql=render.cypher_query(segs, restrictor=restrictor,
+                                           selector=selector, **kw4),
+            cypher_qpp=render.cypher_query(segs, restrictor=restrictor,
+                                           selector=selector, spelling="qpp", **kw4),
+            pgq=render.pgq_query(segs, restrictor=restrictor, selector=selector, **kw4),
+            group="G4",
+            clause=CLAUSE_UNBOUNDED,
+            expect=expect,
+            note=f"G4 {why}.",
+        ))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# G5 -- spelling equivalences
+# ---------------------------------------------------------------------------
+
+# Two ways of writing one quantifier. The standard fixes what each means, so an
+# engine that answers them differently contradicts itself, and the contradiction is
+# visible without any reference semantics at all.
+#
+# The bare `*` is the case that matters. GQL and SQL/PGQ define it as {0,}; openCypher
+# defines it as {1,}. A query ported across that line silently gains or loses every
+# zero-length path, which is exactly one row per starting node -- small enough to look
+# like a rounding difference and large enough to change a COUNT.
+G5_CASES = (
+    ("star-bare", 0, "bare", "`*` -- {0,} in GQL and SQL/PGQ, {1,} in openCypher"),
+    ("star-explicit", 0, "explicit", "`*0..` / `{0,}` -- unambiguous in both"),
+    ("plus-bare", 1, "bare", "`+` -- {1,} in GQL and SQL/PGQ"),
+    ("plus-explicit", 1, "explicit", "`*1..` / `{1,}` -- unambiguous in both"),
+)
+
+_BARE_LEGACY = {0: "*", 1: "*"}          # openCypher writes both as a bare `*`
+_BARE_QPP = {0: "*", 1: "+"}
+_BARE_PGQ = {0: "*", 1: "+"}
+
+
+def g5() -> list[Case]:
+    fixture, anchor, restrictor = "micro", "a", "TRAIL"
+    edge_label, node_label, key = _meta(fixture)
+    kw = dict(edge_label=edge_label, node_label=node_label, key=key, start_val=anchor)
+    out: list[Case] = []
+    for name, lo, spelling, why in G5_CASES:
+        segs = [dict(lo=lo, hi=UNBOUNDED, direction="right")]
+        if spelling == "explicit":
+            cy = render.cypher_common(segs, restrictor=restrictor, **kw)
+            gql = render.cypher_query(segs, restrictor=restrictor, **kw)
+            qpp = render.cypher_query(segs, restrictor=restrictor, spelling="qpp", **kw)
+            pgq = render.pgq_query(segs, restrictor=restrictor, **kw)
+        else:
+            # Hand-written on purpose: the point of the case is the exact symbol.
+            cy = (f"MATCH p=(x:{node_label})-[:{edge_label}{_BARE_LEGACY[lo]}]->"
+                  f"(y:{node_label}) WHERE x.{key}='{anchor}' {render.RETURN_COLS}")
+            gql = (f"MATCH {restrictor} (x:{node_label})-[:{edge_label}"
+                   f"{_BARE_LEGACY[lo]}]->(y:{node_label}) "
+                   f"WHERE x.{key}='{anchor}' {render.RETURN_COLS}")
+            qpp = (f"MATCH {restrictor} (x:{node_label}) "
+                   f"(()-[:{edge_label}]->()){_BARE_QPP[lo]} (y:{node_label}) "
+                   f"WHERE x.{key}='{anchor}' {render.RETURN_COLS}")
+            pgq = (f"FROM GRAPH_TABLE(g MATCH {restrictor} (x:{node_label})"
+                   f"-[e0:{edge_label}]->{_BARE_PGQ[lo]}(y:{node_label}) "
+                   f"WHERE x.{key}='{anchor}' {render.PGQ_COLS}")
+        out.append(Case(
+            id=f"g5-{name}",
+            construct=f"quantifier spelling: {why}",
+            fixture=fixture,
+            ref=PathPattern(start=_start(fixture, anchor),
+                            segments=(_seg(fixture, lo, UNBOUNDED),),
+                            restrictor=restrictor, selector="ALL"),
+            cypher=cy, cypher_gql=gql, cypher_qpp=qpp, pgq=pgq,
+            group="G5",
+            clause="Deutsch et al. Sec. 5: `*` abbreviates {0,} and `+` abbreviates {1,}",
+            note=f"G5 {why}. Paired with its sibling: an engine that answers the two "
+                 f"differently contradicts itself.",
+        ))
+    return out
+
+
+# Pairs whose two members must return the same answer, whatever that answer is. Ids
+# are resolved through suite_all.resolve() before use: `g5-star-explicit` is the same
+# query as the G4 control and is run under that id.
+G5_PAIRS = (("g5-star-bare", "g5-star-explicit"),
+            ("g5-plus-bare", "g5-plus-explicit"))
+
+ALL_V2 = g1() + g2() + g3() + g4() + g5()
 BY_ID_V2 = {c.id: c for c in ALL_V2}

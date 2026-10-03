@@ -17,8 +17,9 @@ import fixtures
 from gpml_ref import Path, match
 from suite_all import CASES, ALIASES, GROUPS
 from capabilities import probe
-from engines_adapters import (AgeAdapter, BoltAdapter, DuckPGQAdapter,
-                              EngineError, KuzuAdapter, SamyamaAdapter)
+from engines_adapters import (AgeAdapter, ArcadeAdapter, BoltAdapter,
+                              DuckPGQAdapter, EngineError, FalkorAdapter,
+                              KuzuAdapter, SamyamaAdapter)
 
 REPEATS = 3
 
@@ -45,6 +46,12 @@ DECLARED_MODE = {
     "duckpgq": None,        # None = the dialect *is* the standard; no second axis
     "neo4j-2026": "TRAIL",
     "samyama-graph": "TRAIL",
+    "arcadedb": "TRAIL",     # ArcadeDB documents TRAIL as its default path mode
+    # FalkorDB publishes no uniqueness rule for `*m..n` at all. That is a third
+    # state, not a missing entry: duckpgq's None means "the dialect is the standard,
+    # so there is no second axis", while this means the engine has no documented
+    # semantics to be held to, so a divergence here cannot be excused by a manual.
+    "falkordb": "UNDOCUMENTED",
 }
 
 def pick_cypher_rendering(case, cap):
@@ -78,8 +85,18 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def reference_pairs(case):
+    """The reference answer, or None where none exists.
+
+    An unbounded quantifier under WALK with a non-shortest selector has an infinite
+    admissible set, so there is no finite answer to compare against. The standard
+    still says whether the query is well-formed, so the case is kept and scored on
+    acceptance alone rather than quietly dropped.
+    """
     g = fixtures.FIXTURES[case.fixture]()
-    res = match(g, case.ref)
+    try:
+        res = match(g, case.ref)
+    except ValueError:
+        return None, None
     if res.deterministic:
         return res, Counter((p.start, p.end) for p in res.exact)
     return res, None
@@ -116,7 +133,7 @@ def declared_reference(case, engine_name):
     to that, so the declared reference is the ISO reference.
     """
     mode = DECLARED_MODE.get(engine_name)
-    if mode is None or case.ref.restrictor not in ("WALK", "TRAIL"):
+    if mode in (None, "UNDOCUMENTED") or case.ref.restrictor not in ("WALK", "TRAIL"):
         return None
     from dataclasses import replace as _replace
     from gpml_ref import UNBOUNDED
@@ -158,6 +175,14 @@ def build_engines(workdir):
                                   "user=postgres password=postgres"))
     except Exception as e:
         print(f"  apache-age unavailable: {e}", file=sys.stderr)
+    try:
+        engines.append(ArcadeAdapter())
+    except Exception as e:
+        print(f"  arcadedb unavailable: {e}", file=sys.stderr)
+    try:
+        engines.append(FalkorAdapter())
+    except Exception as e:
+        print(f"  falkordb unavailable: {e}", file=sys.stderr)
     # The authors' own engine, measured at the release a user can install, like every
     # other row. SAMYAMA_BIN points at the newest release build. No development head is
     # measured: no other vendor's unreleased work is, and measuring ours would flatter us.
@@ -214,8 +239,50 @@ def main():
                     err = str(e)[:300]
                     break
             if err is not None:
-                cells.append(dict(case=case.id, engine=eng.name, verdict="REJECTS", surface=surface,
-                                  detail=err, query=query))
+                # For a pattern the standard makes ill-formed, refusing it is the
+                # conforming act and running it is the defect. Scoring a rejection
+                # as REJECTS here would mark the only correct behaviour as a
+                # non-answer and leave the rule unmeasured.
+                if case.expect == "REJECT":
+                    cells.append(dict(case=case.id, engine=eng.name, verdict="CONFORMS",
+                                      surface=surface, expect="REJECT",
+                                      detail=f"rejected, as the standard requires: {err}",
+                                      query=query))
+                elif case.expect == "ACCEPT":
+                    # A refusal here is scored REJECTS, not DIVERGES. An engine that
+                    # has not implemented TRAIL at all refuses this for a reason that
+                    # has nothing to do with the well-formedness rule, and calling
+                    # that a divergence would charge it twice for one gap. The
+                    # control is still doing its job: an engine that refuses
+                    # everything shows up as REJECTS here rather than as a clean
+                    # sweep of the ill-formed cases.
+                    cells.append(dict(case=case.id, engine=eng.name, verdict="REJECTS",
+                                      surface=surface, expect="ACCEPT",
+                                      detail=err, query=query))
+                else:
+                    cells.append(dict(case=case.id, engine=eng.name, verdict="REJECTS",
+                                      surface=surface, detail=err, query=query))
+                continue
+            if case.expect == "REJECT":
+                cells.append(dict(case=case.id, engine=eng.name, verdict="DIVERGES",
+                                  surface=surface, expect="REJECT",
+                                  detail="ran a pattern the standard makes ill-formed: "
+                                         "an unbounded quantifier with neither a "
+                                         "restrictor nor a selector in scope",
+                                  query=query,
+                                  observed={f"{k[0]}->{k[1]}": v
+                                            for k, v in sorted(answers[0].items())}))
+                continue
+            if res is None:
+                # Accepted, and no finite reference exists to compare against.
+                # Acceptance was the whole test.
+                cells.append(dict(case=case.id, engine=eng.name, verdict="CONFORMS",
+                                  surface=surface, expect=case.expect,
+                                  detail="accepted; no finite reference answer exists "
+                                         "for this pattern, so acceptance is the test",
+                                  query=query,
+                                  observed={f"{k[0]}->{k[1]}": v
+                                            for k, v in sorted(answers[0].items())}))
                 continue
             if any(a != answers[0] for a in answers[1:]):
                 cells.append(dict(case=case.id, engine=eng.name,
@@ -240,7 +307,7 @@ def main():
                 declared_mode=DECLARED_MODE.get(eng.name),
                 verdict_vs_declared=declared_verdict,
                 detail_vs_declared=declared_detail,
-                case=case.id, engine=eng.name, surface=surface,
+                case=case.id, engine=eng.name, surface=surface, expect=case.expect,
                 verdict="CONFORMS" if ok else "DIVERGES",
                 detail=why, query=query,
                 observed={f"{k[0]}->{k[1]}": v for k, v in sorted(answers[0].items())},

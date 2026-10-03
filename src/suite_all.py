@@ -43,3 +43,14 @@ for _c in CASES:
 _no_clause = [c.id for c in CASES if not c.clause.strip()]
 if _no_clause:
     raise AssertionError(f"cases with no clause: {_no_clause}")
+
+
+def resolve(case_id: str) -> str:
+    """The id a case is actually run under.
+
+    A v2 dimension can regenerate a construct another group already produced -- the
+    `*0..` spelling under TRAIL is the same query as the G4 well-formedness control --
+    so analyses that name a case by id have to follow the alias or they will look for a
+    cell that was deliberately not duplicated.
+    """
+    return ALIASES.get(case_id, case_id)

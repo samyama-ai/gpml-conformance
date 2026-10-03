@@ -52,6 +52,13 @@ class Case:
     # (samyama-ai/samyama-graph#1141), so those cells can now be measured rather than
     # excused. Engines that declare support get this text; the rest still get `cypher`.
     cypher_gql: Optional[str] = None
+    # What a conforming engine must do with this query.
+    #   ANSWER  compare the answer to the reference -- the default, and every v1 case
+    #   REJECT  the standard makes this pattern ill-formed; running it is the defect
+    #   ACCEPT  the pattern is well-formed and must not be refused. Where a reference
+    #           answer exists it is also compared; where none does (an unbounded WALK
+    #           under ANY has an infinite admissible set) acceptance is the whole test
+    expect: str = "ANSWER"
     # Which dimension group generated this case (see docs/MATRIX-v2.md). v1's
     # hand-picked cases are group "v1"; everything else names the group whose
     # enumeration produced it, so the map can report coverage per dimension.
