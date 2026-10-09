@@ -488,6 +488,11 @@ class ArcadeAdapter:
         import requests
         self._requests = requests
         self.base, self.db, self.auth = base.rstrip("/"), db, auth
+        # Refuse to construct when nothing is listening. `_version` swallows every
+        # error, so without this an absent ArcadeDB joined the run and scored a
+        # LOAD_FAILED row per case instead of being left out like the others.
+        self._http(self._requests.get, f"{self.base}/api/v1/server",
+                   auth=self.auth, timeout=20)
         self.version = self._version()
 
 
@@ -894,6 +899,10 @@ class GrafeoAdapter:
         import requests
         self._requests = requests
         self.base = base.rstrip("/")
+        # Refuse to construct when nothing answers, as every other adapter does. This
+        # used to succeed with "grafeo unknown", so an absent engine joined the run and
+        # `load` waited a minute for it on every case: 84 cases, 84 minutes.
+        self._query("RETURN 1")
         self.version = self._version()
 
     def _version(self):
