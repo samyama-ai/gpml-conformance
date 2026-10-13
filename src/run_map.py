@@ -8,7 +8,7 @@ Verdicts, as pre-registered:
   NONDETERMINISTIC  the engine did not agree with itself across repeats
 """
 from __future__ import annotations
-import json, os, sys, traceback
+import json, os, sys, time, traceback
 from collections import Counter
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -261,12 +261,28 @@ def main():
             print(f"  {n}: GQL prefixes {c.as_dict()}")
 
     cells = []
+    # One stderr line per (case, engine) pair, as the pair starts.
+    #
+    # Without this a run that is killed -- by a CI job timeout, or by hand --
+    # leaves no record of where it was. The 45-minute conformance job in
+    # samyama-graph was cancelled mid-map three times before anyone could say
+    # which case it was on, because the loop below prints nothing until it has
+    # finished all of them. The mark goes out BEFORE the work, so the last line
+    # in a truncated log names the pair that did not finish; consecutive marks
+    # give each pair's duration by subtraction, and the summary at the end does
+    # that arithmetic for the runs that do complete.
+    _marks: list[tuple[float, str]] = []
+    _total = len(CASES) * len(engines)
     for case in CASES:
         res, _ = reference_pairs(case)
         g = fixtures.FIXTURES[case.fixture]()
         primary = fixtures.PRIMARY_LABEL[case.fixture]
         edge_label = fixtures.EDGE_LABEL[case.fixture]
         for eng in engines:
+            _marks.append((time.monotonic(), f"{case.fixture}/{case.id} {eng.name}"))
+            print(f"  [{len(_marks):4d}/{_total}] {_marks[-1][1]}"
+                  f"  (+{_marks[-1][0] - _marks[0][0]:7.1f}s)",
+                  file=sys.stderr, flush=True)
             if eng.dialect == "cypher":
                 query, surface = pick_cypher_rendering(case, caps.get(eng.name))
             elif eng.dialect == "gql":
@@ -416,6 +432,19 @@ def main():
                            {f"{p.start}->{p.end}": c for p, c in
                             _ref_counter(res).items()}),
             ))
+
+    # Where the time went. A run that completes should still say this, so the
+    # next person to look at a slow job has a baseline to compare against
+    # rather than a single number.
+    if _marks:
+        _marks.append((time.monotonic(), "<end of map>"))
+        _durations = sorted(((_marks[i + 1][0] - _marks[i][0], _marks[i][1])
+                             for i in range(len(_marks) - 1)), reverse=True)
+        print(f"  map: {_marks[-1][0] - _marks[0][0]:.1f}s over "
+              f"{len(_marks) - 1} (case, engine) pair(s); slowest:",
+              file=sys.stderr)
+        for _d, _lbl in _durations[:10]:
+            print(f"    {_d:7.2f}s  {_lbl}", file=sys.stderr)
 
     out = dict(
         engines=[dict(name=e.name, dialect=e.dialect, version=str(e.version),
