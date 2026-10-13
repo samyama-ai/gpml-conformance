@@ -488,6 +488,14 @@ class ArcadeAdapter:
         import requests
         self._requests = requests
         self.base, self.db, self.auth = base.rstrip("/"), db, auth
+        # Reachability, probed so that it propagates -- see GrafeoAdapter. Both
+        # `_version` fallbacks below swallow, so the constructor would otherwise
+        # succeed with version "unknown" against a host running no ArcadeDB, and
+        # the map would carry 84 rows of ENGINE_UNAVAILABLE for an engine that was
+        # never there. This one fails fast rather than slowly, so it costs the
+        # suite no time -- it costs it a column.
+        self._http(self._requests.get, f"{self.base}/api/v1/server",
+                   auth=self.auth, timeout=20)
         self.version = self._version()
 
 
@@ -894,6 +902,22 @@ class GrafeoAdapter:
         import requests
         self._requests = requests
         self.base = base.rstrip("/")
+        # Reachability, probed so that it PROPAGATES.
+        #
+        # `_version` below swallows every exception and reports "grafeo unknown",
+        # so without this the constructor succeeds against a host where nothing
+        # is listening on this port at all, and `build_engines` admits a dead
+        # engine to the matrix. That is not merely a wrong row: `load` waits 30 x
+        # 2s for the engine to come back from the OOM-restart documented there,
+        # so each case then costs a full minute of retrying a connection that was
+        # refused instantly and will stay refused. Over the suite that is upwards
+        # of an hour spent measuring an engine that was never installed, which is
+        # what cancelled samyama-graph's conformance job mid-map.
+        #
+        # Any status code counts as reachable -- a 404 or a 401 is the engine
+        # answering. Only a transport failure means it is not there, and `_http`
+        # turns exactly those into EngineUnavailable.
+        self._http(self._requests.get, f"{self.base}/health", timeout=10)
         self.version = self._version()
 
     def _version(self):
